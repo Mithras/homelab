@@ -1,0 +1,16 @@
+(master toilet):hue_white_ambiance_20
+(hallway upstairs):hallway_upstairs
+(hallway [downstairs]):hallway_downstairs
+(porch):porch
+([master] bedroom):master_bedroom
+(living room [main]):living_room_main
+([master] bathroom):hue_white_ambiance_21
+(driveway):driveway
+(backyard door):hue_white_ambiance_19
+(laundry [room]):landry_room
+(kitchen):kitchen
+(staircase):staircase
+(toilet):toilet
+(living room back):living_room_back
+(backyard):backyard
+(garage):garage

@@ -1,0 +1,28 @@
+services:
+  rhasspy:
+    image: rhasspy/rhasspy
+    container_name: rhasspy
+    restart: unless-stopped
+    volumes:
+      - /home/mithras/homelab/rhasspy/profiles:/profiles
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 12101:12101
+    networks:
+      - homelab
+    command: --user-profiles /profiles --profile en
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer:/data
+    ports:
+      - 9443:9443
+networks:
+  homelab:
+    name: homelab
+volumes:
+  portainer:
+    name: portainer
