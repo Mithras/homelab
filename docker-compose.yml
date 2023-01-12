@@ -11,18 +11,41 @@ services:
     networks:
       - homelab
     command: --user-profiles /profiles --profile en
+    user: "${UID}:${GID}"
   portainer:
     image: portainer/portainer-ce
     container_name: portainer
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - portainer:/data
+      - /home/mithras/homelab/portainer:/data
     ports:
       - 9443:9443
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    restart: unless-stopped
+    volumes:
+      - /home/mithras/homelab/mosquitto/config:/mosquitto/config
+      - /home/mithras/homelab/mosquitto/data:/mosquitto/data
+      - /home/mithras/homelab/mosquitto/log:/mosquitto/log
+    ports:
+      - 1883:1883
+    networks:
+      - homelab
+    user: "${UID}:${GID}"
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    restart: unless-stopped
+    volumes:
+      - /home/mithras/homelab/adguard/work:/opt/adguardhome/work
+      - /home/mithras/homelab/adguard/conf:/opt/adguardhome/conf
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 3000:3000
+    user: "${UID}:${GID}"
 networks:
   homelab:
     name: homelab
-volumes:
-  portainer:
-    name: portainer
