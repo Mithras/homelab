@@ -1,4 +1,4 @@
-- adguard
+- adguardhome
   - disable DNSStubListener
     sudo nano /etc/systemd/resolved.conf
       DNS=127.0.0.1
@@ -15,3 +15,5 @@
 - mosquitto
 - portainer
 - rhasspy
+- swag
+- homeassistant

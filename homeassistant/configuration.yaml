@@ -1,0 +1,22 @@
+# https://www.home-assistant.io/integrations/default_config/
+backup:
+config:
+frontend:
+hardware:
+history:
+homeassistant_alerts:
+logbook:
+map:
+mobile_app:
+my:
+person:
+stream:
+sun:
+system_health:
+zone: !include zone.yaml
+
+# ---
+
+http:
+  ssl_certificate: !secret ssl_certificate
+  ssl_key: !secret ssl_key

@@ -1,7 +1,5 @@
+~ AppDaemon
 ---
-- Hass (barebone)
-- Duck DNS / let's encrypt
-- AppDaemon
 - Z-Wave JS
 - Zigbee2MQTT
 - Hass (migration)

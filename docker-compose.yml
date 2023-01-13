@@ -46,6 +46,36 @@ services:
       - 53:53/udp
       - 3000:3000
     user: "${UID}:${GID}"
+  swag:
+    image: lscr.io/linuxserver/swag
+    container_name: swag
+    restart: unless-stopped
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=America/Los_Angeles
+      - URL=${DOMAIN}
+      - VALIDATION=dns
+      - DNSPLUGIN=duckdns
+      - EMAIL=${EMAIL}
+    volumes:
+      - /home/mithras/homelab/swag:/config
+      - /etc/localtime:/etc/localtime:ro
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: unless-stopped
+    volumes:
+      - /home/mithras/homelab/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /home/mithras/homelab/swag/etc/letsencrypt:/letsencrypt
+    ports:
+      - 8123:8123
+    # devices:
+    #   - /dev/ttyUSB0:/dev/ttyUSB0
+    user: "${UID}:${GID}"
+    networks:
+      - homelab
 networks:
   homelab:
     name: homelab
