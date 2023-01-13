@@ -1,0 +1,93 @@
+SensorAlarmArmedAway:
+  module: sensor_alarm
+  class: SensorAlarm
+  constrain_arm: Armed Away
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    - binary_sensor.porch_camera_motion # Porch Camera Motion Sensor
+    - binary_sensor.living_room_camera_motion # Living Room Camera Motion Sensor
+    - binary_sensor.motion_sensor_01_occupancy # Kitchen Motion Sensor
+    - binary_sensor.motion_sensor_02_occupancy # Garage Motion Sensor
+    - binary_sensor.motion_sensor_03_occupancy # Hallway Downstairs Motion Sensor
+    - binary_sensor.motion_sensor_04_occupancy # Staircase Bottom Motion Sensor
+    - binary_sensor.motion_sensor_05_occupancy # Staircase Top Motion Sensor
+    - binary_sensor.motion_sensor_06_occupancy # Master Bedroom Motion Sensor
+    - binary_sensor.motion_sensor_07_occupancy # Master Bathroom Motion Sensor
+    - binary_sensor.motion_sensor_08_occupancy # Master Toilet Motion Sensor
+    - binary_sensor.motion_sensor_10_occupancy # Toilet Motion Sensor
+    - binary_sensor.motion_sensor_11_occupancy # Laundry Room Motion Sensor
+    - binary_sensor.motion_sensor_12_occupancy # Hallway Downstairs Upstairs Motion Sensor
+    - binary_sensor.door_sensor_03_contact # Front Door Sensor
+    - binary_sensor.door_sensor_01_contact # Garage Door Sensor
+    - binary_sensor.door_sensor_02_contact # Backyard Door Sensor
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_access_control_lock_jammed
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_home_security_intrusion
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_low_battery_level
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_power_management_replace_battery_now
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_power_management_replace_battery_soon
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_system_system_hardware_failure
+    - cover.z_wave_garage_door_controller
+    - binary_sensor.z_wave_garage_door_controller_access_control_barrier_sensor_low_battery_warning
+    - binary_sensor.z_wave_garage_door_controller_access_control_barrier_sensor_not_detected_supervisory_error
+    - binary_sensor.z_wave_garage_door_controller_access_control_barrier_unattended_operation_has_been_disabled_per_ul_requirements
+    - binary_sensor.z_wave_garage_door_controller_home_security_tampering_product_cover_removed
+    - binary_sensor.hue_sensor_01_occupancy
+SensorAlarmArmedHome:
+  module: sensor_alarm
+  class: SensorAlarm
+  constrain_arm: Armed Home
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    - binary_sensor.porch_camera_motion # Porch Camera Motion Sensor
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_access_control_lock_jammed
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_home_security_intrusion
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_low_battery_level
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_power_management_replace_battery_now
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_power_management_replace_battery_soon
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_system_system_hardware_failure
+    - cover.z_wave_garage_door_controller
+    - binary_sensor.z_wave_garage_door_controller_access_control_barrier_sensor_low_battery_warning
+    - binary_sensor.z_wave_garage_door_controller_access_control_barrier_sensor_not_detected_supervisory_error
+    - binary_sensor.z_wave_garage_door_controller_access_control_barrier_unattended_operation_has_been_disabled_per_ul_requirements
+    - binary_sensor.z_wave_garage_door_controller_home_security_tampering_product_cover_removed
+    - binary_sensor.hue_sensor_01_occupancy
+SensorAlarmArmedSleep:
+  module: sensor_alarm
+  class: SensorAlarm
+  constrain_arm: Armed Sleep
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    - binary_sensor.porch_camera_motion # Porch Camera Motion Sensor
+    - binary_sensor.living_room_camera_motion # Living Room Camera Motion Sensor
+    - binary_sensor.motion_sensor_01_occupancy # Kitchen Motion Sensor
+    - binary_sensor.motion_sensor_02_occupancy # Garage Motion Sensor
+    - binary_sensor.motion_sensor_03_occupancy # Hallway Motion Sensor
+    - binary_sensor.motion_sensor_04_occupancy # Staircase Bottom Motion Sensor
+    - binary_sensor.motion_sensor_05_occupancy # Staircase Top Motion Sensor
+    - binary_sensor.motion_sensor_10_occupancy # Toilet Motion Sensor
+    - binary_sensor.motion_sensor_11_occupancy # Laundry Room Motion Sensor
+    - binary_sensor.motion_sensor_12_occupancy # Hallway Upstairs Motion Sensor
+    - binary_sensor.door_sensor_03_contact # Front Door Sensor
+    - binary_sensor.door_sensor_01_contact # Garage Door Sensor
+    - binary_sensor.door_sensor_02_contact # Backyard Door Sensor
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_access_control_lock_jammed
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_home_security_intrusion
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_low_battery_level
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_power_management_replace_battery_now
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_power_management_replace_battery_soon
+    - binary_sensor.touchscreen_deadbolt_z_wave_plus_system_system_hardware_failure
+    - cover.z_wave_garage_door_controller
+    - binary_sensor.z_wave_garage_door_controller_access_control_barrier_sensor_low_battery_warning
+    - binary_sensor.z_wave_garage_door_controller_access_control_barrier_sensor_not_detected_supervisory_error
+    - binary_sensor.z_wave_garage_door_controller_access_control_barrier_unattended_operation_has_been_disabled_per_ul_requirements
+    - binary_sensor.z_wave_garage_door_controller_home_security_tampering_product_cover_removed
+    - binary_sensor.hue_sensor_01_occupancy

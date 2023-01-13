@@ -1,0 +1,26 @@
+LivingRoomCameraMotionRecording:
+  module: camera_recording_mode
+  class: CameraRecordingMode
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    recording_mode: select.living_room_camera_recording_mode
+    armed_away: Detections
+    armed_home: Never
+    armed_sleep: Detections
+    disarmed: Never
+PorchCameraMotionRecording:
+  module: camera_recording_mode
+  class: CameraRecordingMode
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    recording_mode: select.porch_camera_recording_mode
+    armed_away: Detections
+    armed_home: Detections
+    armed_sleep: Detections
+    disarmed: Never

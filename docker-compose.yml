@@ -76,6 +76,18 @@ services:
     user: "${UID}:${GID}"
     networks:
       - homelab
+  appdaemon:
+    image: acockburn/appdaemon:dev
+    container_name: appdaemon
+    restart: unless-stopped
+    volumes:
+      - /home/mithras/homelab/appdaemon:/conf
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 5050:5050
+    user: "${UID}:${GID}"
+    networks:
+      - homelab
 networks:
   homelab:
     name: homelab

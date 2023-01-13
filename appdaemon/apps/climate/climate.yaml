@@ -1,0 +1,21 @@
+Climate:
+  module: climate
+  class: Climate
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    climate: climate.z_wave_plus_thermostat
+    temperature: sensor.z_wave_plus_thermostat_air_temperature
+    person: person.mithras
+    sleep_input: input_boolean.sleep
+    home_params:
+      hvac_mode: heat
+      temperature: 21
+    not_home_params:
+      hvac_mode: heat
+      temperature: 12
+    sleep_params:
+      hvac_mode: heat
+      temperature: 17

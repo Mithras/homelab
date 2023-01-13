@@ -1,0 +1,243 @@
+LightMasterBedroom:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_06_occupancy
+    light_group: light.master_bedroom
+    sun_up_on_profile: bright
+    sun_down_on_profile: bright
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+LightKitchen:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_01_occupancy
+        additional_delay: 60
+    light_group: light.kitchen
+    sun_up_on_profile: bright
+    sun_down_on_profile: bright
+    sleep_on_profile: nightlight
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+    sleep_off_profile: "off"
+LightGarage:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_02_occupancy
+      - entity: binary_sensor.door_sensor_01_contact
+        additional_delay: 60
+      - entity: cover.z_wave_garage_door_controller
+        additional_delay: 60
+        on_state: open
+    light_group: light.garage
+    sun_up_on_profile: bright
+    sun_down_on_profile: bright
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+    ignore_sleep: True
+LightMasterBathroom:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_07_occupancy
+    light_group: light.hue_white_ambiance_21
+    sun_up_on_profile: bright
+    sun_down_on_profile: bright
+    sleep_on_profile: nightlight
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+    sleep_off_profile: "off"
+LightMasterToilet:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_08_occupancy
+        additional_delay: 60
+    light_group: light.hue_white_ambiance_20
+    sun_up_on_profile: bright
+    sun_down_on_profile: bright
+    sleep_on_profile: nightlight
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+    sleep_off_profile: "off"
+LightPorch:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.porch_camera_motion
+        additional_delay: 60
+      - entity: binary_sensor.door_sensor_03_contact
+        additional_delay: 60
+    light_group: light.porch
+    sun_down_on_profile: bright
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+    ignore_sleep: True
+LightDriveway:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.porch_camera_motion
+        additional_delay: 60
+      - entity: binary_sensor.door_sensor_03_contact
+        additional_delay: 60
+      - entity: cover.z_wave_garage_door_controller
+        additional_delay: 60
+        on_state: open
+    light_group: light.driveway
+    sun_down_on_profile: bright
+    sun_up_off_profile: "off"
+    sun_down_off_profile: nightlight
+    ignore_sleep: True
+LightStaircase:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_04_occupancy
+      - entity: binary_sensor.motion_sensor_05_occupancy
+    light_group: light.staircase
+    sun_down_on_profile: bright
+    sleep_on_profile: nightlight
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+    sleep_off_profile: "off"
+LightHallwayDownstairs:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_03_occupancy
+    light_group: light.hallway_downstairs
+    sun_down_on_profile: bright
+    sleep_on_profile: nightlight
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+    sleep_off_profile: "off"
+LightHallwayUpstairs:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_12_occupancy
+    light_group: light.hallway_upstairs
+    sun_down_on_profile: bright
+    sleep_on_profile: nightlight
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+    sleep_off_profile: "off"
+LightToilet:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_10_occupancy
+        additional_delay: 60
+    light_group: light.toilet
+    sun_up_on_profile: bright
+    sun_down_on_profile: bright
+    sleep_on_profile: nightlight
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+    sleep_off_profile: "off"
+LightLandryRoom:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_11_occupancy
+    light_group: light.landry_room
+    sun_down_on_profile: bright
+    sleep_on_profile: nightlight
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"
+    sleep_off_profile: "off"
+LightBackyardDoor:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.door_sensor_02_contact
+        additional_delay: 60
+    light_group: light.hue_white_ambiance_19
+    sun_down_on_profile: bright
+    sun_up_off_profile: "off"
+    sun_down_off_profile: nightlight
+    ignore_sleep: True
+LightMasterBathroomMain:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_07_occupancy
+        additional_delay: 1800
+    light_group: switch.smart_light_switch_02
+    sun_up_on_profile: "on"
+    sun_down_on_profile: "on"
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"

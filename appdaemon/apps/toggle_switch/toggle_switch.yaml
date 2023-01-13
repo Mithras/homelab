@@ -1,0 +1,34 @@
+ExhaustToggleSwitch:
+  module: toggle_switch
+  class: ToggleSwitch
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    input: input_boolean.fan
+    power: sensor.smart_plug_03_power
+    power_on_threshold: 1
+    check_interval: 60
+    toggle_service: remote/send_command
+    toggle_payload:
+      entity_id: remote.rm3_mini_remote
+      device: fan
+      command: Turn on/off
+TvToggleSwitch:
+  module: toggle_switch
+  class: ToggleSwitch
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    input: input_boolean.tv
+    power: sensor.smart_plug_01_power
+    power_on_threshold: 30
+    check_interval: 60
+    toggle_service: remote/send_command
+    toggle_payload:
+      entity_id: remote.rm3_mini_2_remote
+      device: samsung_tv
+      command: power

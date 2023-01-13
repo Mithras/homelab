@@ -1,0 +1,12 @@
+Lock:
+  module: lock
+  class: Lock
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    lock: lock.touchscreen_deadbolt_z_wave_plus
+    lock_device_id: 8a4df1b048b8e2e57068bcaf547bb514
+    state: front_door
+    code_slot: 1

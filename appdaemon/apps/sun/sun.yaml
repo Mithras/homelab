@@ -1,0 +1,18 @@
+SunFront:
+  module: sun
+  class: Sun
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    light: light.driveway
+SunBack:
+  module: sun
+  class: Sun
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    light: light.hue_white_ambiance_19

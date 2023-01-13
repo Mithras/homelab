@@ -1,0 +1,30 @@
+GlobalLight:
+  module: global_light
+  class: GlobalLight
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    input_sleep: input_boolean.sleep
+    entities:
+      - light.living_room_main
+      - light.living_room_back
+      - light.kitchen
+      - switch.smart_light_switch_01
+      - light.toilet
+      - light.hallway_downstairs
+      - light.hallway_upstairs
+      - light.staircase
+      - light.master_bedroom
+      - light.hue_white_ambiance_21
+      - switch.smart_light_switch_02
+      - light.hue_white_ambiance_20
+      - light.landry_room
+      - light.porch
+      - light.garage
+      - light.backyard
+      - switch.tradfri_control_outlet_02
+      - switch.tradfri_control_outlet_01
+      - media_player.samsung_9_series_65
+      - light.light_strip

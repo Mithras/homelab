@@ -1,0 +1,36 @@
+secrets: /conf/secrets.yaml
+logs:
+  main_log:
+    filename: /conf/logs/appdaemon.log
+  access_log:
+    filename: /conf/logs/access.log
+  error_log:
+    filename: /conf/logs/error.log
+  diag_log:
+    filename: /conf/logs/diag.log
+appdaemon:
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: !secret elevation
+  time_zone: America/Los_Angeles
+  # production_mode: true
+  total_threads: 5
+  pin_apps: false
+  qsize_warning_threshold: 10
+  plugins:
+    HASS:
+      type: hass
+      ha_url: https://192.168.0.3:8123
+      token: !secret ha_token
+      cert_verify: false
+    MQTT:
+      type: mqtt
+      namespace: mqtt
+      client_host: mosquitto
+      client_user: mosquitto
+      client_password: !secret mqtt_password
+      client_topics: NONE
+http:
+  url: http://0.0.0.0:5050
+admin:
+api:

@@ -1,0 +1,10 @@
+SleepSwitch:
+  module: sleep_switch
+  class: SleepSwitch
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    topic: zigbee2mqtt/smart_switch_01/action
+    input: input_boolean.sleep

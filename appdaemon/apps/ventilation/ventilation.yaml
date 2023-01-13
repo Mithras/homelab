@@ -1,0 +1,12 @@
+Ventilation:
+  module: ventilation
+  class: Ventilation
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    climate: climate.z_wave_plus_thermostat
+    on_low_interval: 1800 # 30m
+    on_auto_interval: 19800 # 5h 30m
+    sleep_input: input_boolean.sleep
