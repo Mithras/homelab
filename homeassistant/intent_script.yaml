@@ -1,0 +1,139 @@
+Light:
+  speech:
+    text: |
+      {% set entity = "light." + entity %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {{ friendly_name }} light is {{ state }}
+  action:
+    - service: "light.turn_{{ state }}"
+      target:
+        entity_id: "light.{{ entity }}"
+LightProfile:
+  speech:
+    text: |
+      {% set entity = "light." + entity %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {{ friendly_name }} light is set to {{ profile }}
+  action:
+    - service: "light.turn_on"
+      target:
+        entity_id: "light.{{ entity }}"
+      data:
+        profile: "{{ profile }}"
+Switch:
+  speech:
+    text: |
+      {% set entity = "switch." + entity %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {{ friendly_name }} is {{ state }}
+  action:
+    - service: "switch.turn_{{ state }}"
+      target:
+        entity_id: "switch.{{ entity }}"
+InputBoolean:
+  speech:
+    text: |
+      {% set entity = "input_boolean." + entity %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {{ friendly_name }} is {{ state }}
+  action:
+    - service: "input_boolean.turn_{{ state }}"
+      target:
+        entity_id: "input_boolean.{{ entity }}"
+AppDaemonApp:
+  speech:
+    text: |
+      {% set entity = "appdaemon_app." + entity %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {{ friendly_name }} app is {{ state }}
+  action:
+    - service: "appdaemon_app.turn_{{ state }}"
+      data:
+        entity_id: "appdaemon_app.{{ entity }}"
+Lock:
+  speech:
+    text: |
+      {% set entity = "lock.touchscreen_deadbolt_z_wave_plus" %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {% if service == "unlock" -%}
+        {% set state = "unlocking"  %}
+      {% elif service == "lock"  %}
+        {% set state = "locking"  %}
+      {%- else -%}
+        {% set state = "unknown"  %}
+      {%- endif %}
+      {{ friendly_name }} is {{ state }}
+  action:
+    - service: "lock.{{ service }}"
+      target:
+        entity_id: lock.touchscreen_deadbolt_z_wave_plus
+Garage:
+  speech:
+    text: |
+      {% set entity = "cover.z_wave_garage_door_controller" %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {% if service == "open_cover" -%}
+        {% set state = "opening"  %}
+      {% elif service == "close_cover"  %}
+        {% set state = "closing"  %}
+      {%- else -%}
+        {% set state = "unknown"  %}
+      {%- endif %}
+      {{ friendly_name }} is {{ state }}
+  action:
+    - service: "cover.{{ service }}"
+      target:
+        entity_id: cover.z_wave_garage_door_controller
+InputSelect:
+  speech:
+    text: |
+      {% set entity = "input_select." + entity %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {{ friendly_name }} is set to {{ option }}
+  action:
+    - service: input_select.select_option
+      data:
+        option: "{{ option }}"
+      target:
+        entity_id: "input_select.{{ entity }}"
+ClimateTemperature:
+  speech:
+    text: |
+      {% set entity = "climate.z_wave_plus_thermostat" %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {{ friendly_name }} is set to {{ temperature }} degrees
+  action:
+    - service: climate.set_temperature
+      data:
+        temperature: "{{ temperature }}"
+      target:
+        entity_id: climate.z_wave_plus_thermostat
+ClimateFanMode:
+  speech:
+    text: |
+      {% set entity = "climate.z_wave_plus_thermostat" %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {{ friendly_name }} fan mode is set to {{ fan_mode }}
+  action:
+    - service: climate.set_fan_mode
+      data:
+        fan_mode: "{{ fan_mode }}"
+      target:
+        entity_id: climate.z_wave_plus_thermostat
+Temperature:
+  speech:
+    text: |
+      {% set entity = "sensor." + sensor %}
+      {% set friendly_name = state_attr(entity, "friendly_name") %}
+      {% if is_state(entity, "unknown") -%}
+        {{ friendly_name }} is unknown
+      {%- else -%}
+        {% set temperature = states(entity) | float  %}
+        {% set temperature_d = temperature | int  %}
+        {% set temperature_f = ((temperature - temperature_d) * 100) | round %}
+        {{ friendly_name }} is {{ temperature_d }} point {{ temperature_f }} degree celsius
+      {%- endif %}
+# XXX:
+#   action:
+#     - event: INTENT_XXX
+#       event_data: {}

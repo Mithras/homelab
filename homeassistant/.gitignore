@@ -1,9 +1,10 @@
-/home-assistant_v2*
-/home-assistant.log*
-/secrets.yaml
 /.storage
-/zone.yaml
-/.google_maps_location_sharing.*
-/known_devices.yaml
-/whitelist_external_dirs.yaml
+/backups
 __pycache__
+
+/.google_maps_location_sharing.*
+/home-assistant_v2.db*
+/home-assistant.log*
+/known_devices.yaml
+/secrets.yaml
+/zone.yaml

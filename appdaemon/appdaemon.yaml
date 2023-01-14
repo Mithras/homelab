@@ -20,7 +20,7 @@ appdaemon:
   plugins:
     HASS:
       type: hass
-      ha_url: https://192.168.0.3:8123
+      ha_url: https://homeassistant:8123
       token: !secret ha_token
       cert_verify: false
     MQTT:

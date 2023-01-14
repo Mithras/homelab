@@ -41,5 +41,8 @@
 
 - z-wave
   - HUSBZB-1
-    - /dev/ttyUSB1 # z-wave
-      /dev/ttyUSB2 # zigbee
+      - /dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_51300097-if00-port0:/dev/zwave # z-wave
+      - /dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_51300097-if01-port0:/dev/zwave # zigbee
+- zigbee
+  - SONOFF Zigbee 3.0
+    - /dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_fa78108a5586ec11b33feb3719c2d21c-if00-port0

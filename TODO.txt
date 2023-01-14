@@ -1,14 +1,5 @@
-~ Hass (migration)
-
----
-
-- Z-Wave JS
-- Zigbee2MQTT
-
----
-
-- proxmox backup
 - rhaspby
+  - more alt sentences 
   - light switch not saying "light"
   - (Front Door Rotate)
     - trigger -> speak code
@@ -16,7 +7,3 @@
     - set a timer
     - set an alarm (tts + light)
 - split person_state
-- sidenav
-  - rhaspby default
-  - rhaspby01
-- move intents to a separate file

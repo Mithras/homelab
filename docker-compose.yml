@@ -4,7 +4,7 @@ services:
     container_name: rhasspy
     restart: unless-stopped
     volumes:
-      - /home/mithras/homelab/rhasspy/profiles:/profiles
+      - ./rhasspy/profiles:/profiles
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 12101:12101
@@ -17,8 +17,9 @@ services:
     container_name: portainer
     restart: unless-stopped
     volumes:
+      - ./portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
-      - /home/mithras/homelab/portainer:/data
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - 9443:9443
   mosquitto:
@@ -26,9 +27,10 @@ services:
     container_name: mosquitto
     restart: unless-stopped
     volumes:
-      - /home/mithras/homelab/mosquitto/config:/mosquitto/config
-      - /home/mithras/homelab/mosquitto/data:/mosquitto/data
-      - /home/mithras/homelab/mosquitto/log:/mosquitto/log
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - 1883:1883
     networks:
@@ -39,8 +41,9 @@ services:
     container_name: adguardhome
     restart: unless-stopped
     volumes:
-      - /home/mithras/homelab/adguard/work:/opt/adguardhome/work
-      - /home/mithras/homelab/adguard/conf:/opt/adguardhome/conf
+      - ./adguard/work:/opt/adguardhome/work
+      - ./adguard/conf:/opt/adguardhome/conf
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - 53:53/tcp
       - 53:53/udp
@@ -59,20 +62,18 @@ services:
       - DNSPLUGIN=duckdns
       - EMAIL=${EMAIL}
     volumes:
-      - /home/mithras/homelab/swag:/config
+      - ./swag:/config
       - /etc/localtime:/etc/localtime:ro
   homeassistant:
     image: ghcr.io/home-assistant/home-assistant:stable
     container_name: homeassistant
     restart: unless-stopped
     volumes:
-      - /home/mithras/homelab/homeassistant:/config
+      - ./homeassistant:/config
+      - ./swag/etc/letsencrypt:/letsencrypt
       - /etc/localtime:/etc/localtime:ro
-      - /home/mithras/homelab/swag/etc/letsencrypt:/letsencrypt
     ports:
       - 8123:8123
-    # devices:
-    #   - /dev/ttyUSB0:/dev/ttyUSB0
     user: "${UID}:${GID}"
     networks:
       - homelab
@@ -81,11 +82,48 @@ services:
     container_name: appdaemon
     restart: unless-stopped
     volumes:
-      - /home/mithras/homelab/appdaemon:/conf
+      - ./appdaemon:/conf
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 5050:5050
     user: "${UID}:${GID}"
+    networks:
+      - homelab
+  zwavejs:
+    image: zwavejs/zwave-js-ui
+    container_name: zwavejs
+    restart: unless-stopped
+    environment:
+      - TZ=America/Los_Angeles
+    volumes:
+      - ./zwavejs:/usr/src/app/store
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8091:8091
+      - 3001:3000 # TODO: remove
+    devices:
+      - /dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_51300097-if00-port0:/dev/zwave
+    user: "${UID}:${GID}"
+    group_add:
+      - dialout
+    networks:
+      - homelab
+  zigbee2mqtt:
+    image: koenkk/zigbee2mqtt
+    container_name: zigbee2mqtt
+    restart: unless-stopped
+    environment:
+      - TZ=America/Los_Angeles
+    volumes:
+      - ./zigbee2mqtt:/app/data
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8080:8080
+    devices:
+      - /dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_fa78108a5586ec11b33feb3719c2d21c-if00-port0:/dev/zigbee
+    user: "${UID}:${GID}"
+    group_add:
+      - dialout
     networks:
       - homelab
 networks:
