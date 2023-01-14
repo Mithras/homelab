@@ -1,0 +1,343 @@
+# Mithras
+person.mithras:
+  entity_picture: /local/mithras.jfif
+# Diana
+person.diana:
+  entity_picture: /local/diana.jpg
+
+# Living Room Camera
+camera.living_room_camera_high:
+  friendly_name: Living Room Camera
+binary_sensor.living_room_camera_motion:
+  friendly_name: Living Room Camera Motion Sensor
+select.living_room_camera_recording_mode:
+  friendly_name: Living Room Camera Recording Mode
+# Porch Camera
+camera.porch_camera_high:
+  friendly_name: Porch Camera
+binary_sensor.porch_camera_motion:
+  friendly_name: Porch Camera Motion Sensor
+select.porch_camera_recording_mode:
+  friendly_name: Porch Camera Recording Mode
+
+# Door Sensor 01
+binary_sensor.door_sensor_01_contact:
+  friendly_name: Garage Door Sensor
+sensor.door_sensor_01_battery:
+  friendly_name: Garage Door Sensor Battery
+sensor.door_sensor_01_temperature:
+  friendly_name: Garage Door Sensor Temperature
+# Door Sensor 02
+binary_sensor.door_sensor_02_contact:
+  friendly_name: Backyard Door Sensor
+sensor.door_sensor_02_battery:
+  friendly_name: Backyard Door Sensor Battery
+sensor.door_sensor_02_temperature:
+  friendly_name: Backyard Door Sensor Temperature
+# Door Sensor 03
+binary_sensor.door_sensor_03_contact:
+  friendly_name: Front Door Sensor
+sensor.door_sensor_03_battery:
+  friendly_name: Front Door Sensor Battery
+sensor.door_sensor_03_temperature:
+  friendly_name: Front Door Sensor Temperature
+
+# Motion Sensor 01
+binary_sensor.motion_sensor_01_occupancy:
+  friendly_name: Kitchen Motion Sensor
+sensor.motion_sensor_01_battery:
+  friendly_name: Kitchen Motion Sensor Battery
+sensor.motion_sensor_01_illuminance_lux:
+  friendly_name: Kitchen Motion Sensor Illuminance
+sensor.motion_sensor_01_temperature:
+  friendly_name: Kitchen Motion Sensor Temperature
+# Motion Sensor 02
+binary_sensor.motion_sensor_02_occupancy:
+  friendly_name: Garage Motion Sensor
+sensor.motion_sensor_02_battery:
+  friendly_name: Garage Motion Sensor Battery
+sensor.motion_sensor_02_illuminance_lux:
+  friendly_name: Garage Motion Sensor Illuminance
+sensor.motion_sensor_02_temperature:
+  friendly_name: Garage Motion Sensor Temperature
+# Motion Sensor 03
+binary_sensor.motion_sensor_03_occupancy:
+  friendly_name: Hallway Downstairs Motion Sensor
+sensor.motion_sensor_03_battery:
+  friendly_name: Hallway Downstairs Motion Sensor Battery
+sensor.motion_sensor_03_illuminance_lux:
+  friendly_name: Hallway Downstairs Motion Sensor Illuminance
+sensor.motion_sensor_03_temperature:
+  friendly_name: Hallway Downstairs Motion Sensor Temperature
+# Motion Sensor 04
+binary_sensor.motion_sensor_04_occupancy:
+  friendly_name: Staircase Bottom Motion Sensor
+sensor.motion_sensor_04_battery:
+  friendly_name: Staircase Bottom Motion Sensor Battery
+sensor.motion_sensor_04_illuminance_lux:
+  friendly_name: Staircase Bottom Motion Sensor Illuminance
+sensor.motion_sensor_04_temperature:
+  friendly_name: Staircase Bottom Motion Sensor Temperature
+# Motion Sensor 05
+binary_sensor.motion_sensor_05_occupancy:
+  friendly_name: Staircase Top Motion Sensor
+sensor.motion_sensor_05_battery:
+  friendly_name: Staircase Top Motion Sensor Battery
+sensor.motion_sensor_05_illuminance_lux:
+  friendly_name: Staircase Top Motion Sensor Illuminance
+sensor.motion_sensor_05_temperature:
+  friendly_name: Staircase Top Motion Sensor Temperature
+# Motion Sensor 06
+binary_sensor.motion_sensor_06_occupancy:
+  friendly_name: Master Bedroom Motion Sensor
+sensor.motion_sensor_06_battery:
+  friendly_name: Master Bedroom Motion Sensor Battery
+sensor.motion_sensor_06_illuminance_lux:
+  friendly_name: Master Bedroom Motion Sensor Illuminance
+sensor.motion_sensor_06_temperature:
+  friendly_name: Master Bedroom Motion Sensor Temperature
+# Motion Sensor 07
+binary_sensor.motion_sensor_07_occupancy:
+  friendly_name: Master Bathroom Motion Sensor
+sensor.motion_sensor_07_battery:
+  friendly_name: Master Bathroom Motion Sensor Battery
+sensor.motion_sensor_07_illuminance_lux:
+  friendly_name: Master Bathroom Motion Sensor Illuminance
+sensor.motion_sensor_07_temperature:
+  friendly_name: Master Bathroom Motion Sensor Temperature
+# Motion Sensor 08
+binary_sensor.motion_sensor_08_occupancy:
+  friendly_name: Master Toilet Motion Sensor
+sensor.motion_sensor_08_battery:
+  friendly_name: Master Toilet Motion Sensor Battery
+sensor.motion_sensor_08_illuminance_lux:
+  friendly_name: Master Toilet Motion Sensor Illuminance
+sensor.motion_sensor_08_temperature:
+  friendly_name: Master Toilet Motion Sensor Temperature
+# Motion Sensor 09
+# Motion Sensor 10
+binary_sensor.motion_sensor_10_occupancy:
+  friendly_name: Toilet Motion Sensor
+sensor.motion_sensor_10_battery:
+  friendly_name: Toilet Motion Sensor Battery
+sensor.motion_sensor_10_illuminance_lux:
+  friendly_name: Toilet Motion Sensor Illuminance
+sensor.motion_sensor_10_temperature:
+  friendly_name: Toilet Motion Sensor Temperature
+# Motion Sensor 11
+binary_sensor.motion_sensor_11_occupancy:
+  friendly_name: Laundry Room Motion Sensor
+sensor.motion_sensor_11_battery:
+  friendly_name: Laundry Room Motion Sensor Battery
+sensor.motion_sensor_11_illuminance_lux:
+  friendly_name: Laundry Room Motion Sensor Illuminance
+sensor.motion_sensor_11_temperature:
+  friendly_name: Laundry Room Motion Sensor Temperature
+# Motion Sensor 12
+binary_sensor.motion_sensor_12_occupancy:
+  friendly_name: Hallway Upstairs Motion Sensor
+sensor.motion_sensor_12_battery:
+  friendly_name: Hallway Upstairs Motion Sensor Battery
+sensor.motion_sensor_12_illuminance_lux:
+  friendly_name: Hallway Upstairs Motion Sensor Illuminance
+sensor.motion_sensor_12_temperature:
+  friendly_name: Hallway Upstairs Motion Sensor Temperature
+# Motion Sensor 13 (hardware mod)
+# ---
+# hue_sensor_01
+binary_sensor.hue_sensor_01_occupancy:
+  friendly_name: Porch Motion Sensor
+sensor.hue_sensor_01_battery:
+  friendly_name: Porch Motion Sensor Battery
+sensor.hue_sensor_01_illuminance_lux:
+  friendly_name: Porch Motion Sensor Illuminance
+sensor.hue_sensor_01_temperature:
+  friendly_name: Porch Motion Sensor Temperature
+
+# Smart Switch 01
+sensor.smart_switch_01_battery:
+  friendly_name: Sleep Switch Battery
+# TRÅDFRI on/off switch 01
+sensor.tradfri_on_off_switch_01_battery:
+  friendly_name: Master Bedroom Switch Battery
+# Mi Magic Cube 01
+sensor.mi_magic_cube_01_battery:
+  friendly_name: Magic Cube Battery
+sensor.mi_magic_cube_01_action_angle:
+  friendly_name: Magic Cube Action Angle
+sensor.mi_magic_cube_01_action_from_side:
+  friendly_name: Magic Cube Action From Side
+sensor.mi_magic_cube_01_action_side:
+  friendly_name: Magic Cube Action Side
+sensor.mi_magic_cube_01_action_to_side:
+  friendly_name: Magic Cube Action To Side
+
+# Multi Sensor 01
+sensor.multi_sensor_01_temperature:
+  friendly_name: Living Room Temperature
+sensor.multi_sensor_01_pressure:
+  friendly_name: Living Room Pressure
+sensor.multi_sensor_01_humidity:
+  friendly_name: Living Room Humidity
+sensor.multi_sensor_01_battery:
+  friendly_name: Living Room Weather Sensor Battery
+# Multi Sensor 02
+sensor.multi_sensor_02_temperature:
+  friendly_name: Master Bedroom Temperature
+sensor.multi_sensor_02_pressure:
+  friendly_name: Master Bedroom Pressure
+sensor.multi_sensor_02_humidity:
+  friendly_name: Master Bedroom Humidity
+sensor.multi_sensor_02_battery:
+  friendly_name: Master Bedroom Weather Sensor Battery
+
+# TRÅDFRI control outlet 01
+switch.tradfri_control_outlet_01:
+  friendly_name: Speakers
+sensor.tradfri_control_outlet_01_power_on_behavior:
+  friendly_name: Speakers Power On Behavior
+# TRÅDFRI control outlet 03
+switch.tradfri_control_outlet_02:
+  friendly_name: Jotunheim
+sensor.tradfri_control_outlet_02_power_on_behavior:
+  friendly_name: Jotunheim Power On Behavior
+# Smart Plug 01
+switch.smart_plug_01:
+  friendly_name: Samsung Smart TV
+sensor.smart_plug_01_energy:
+  friendly_name: Samsung Smart TV Energy
+sensor.smart_plug_01_power:
+  friendly_name: Samsung Smart TV Power
+sensor.smart_plug_01_temperature:
+  friendly_name: Samsung Smart TV Temperature
+# Smart Plug 02
+switch.smart_plug_02:
+  friendly_name: Mithras Desktop
+sensor.smart_plug_02_energy:
+  friendly_name: Mithras Desktop Energy
+sensor.smart_plug_02_power:
+  friendly_name: Mithras Desktop Power
+sensor.smart_plug_02_temperature:
+  friendly_name: Mithras Desktop Temperature
+# Smart Plug 03
+switch.smart_plug_03:
+  friendly_name: Fan (upstairs)
+sensor.smart_plug_03_energy:
+  friendly_name: Fan (upstairs) Energy
+sensor.smart_plug_03_power:
+  friendly_name: Fan (upstairs) Power
+sensor.smart_plug_03_temperature:
+  friendly_name: Fan (upstairs) Power Temperature
+# Smart Plug 04
+# switch.smart_plug_04:
+#   friendly_name: Master Bedroom AC
+# sensor.smart_plug_04_energy:
+#   friendly_name: Master Bedroom AC Energy
+# sensor.smart_plug_04_power:
+#   friendly_name: Master Bedroom AC Power
+# sensor.smart_plug_04_temperature:
+#   friendly_name: Master Bedroom AC Temperature
+
+# Smart Light Switch 01
+switch.smart_light_switch_01:
+  friendly_name: Kitchen Main
+# Smart Light Switch 02
+switch.smart_light_switch_02:
+  friendly_name: Master Bathroom Main
+
+# Thermostat
+climate.z_wave_plus_thermostat:
+  friendly_name: Thermostat
+sensor.z_wave_plus_thermostat_battery_level:
+  friendly_name: Thermostat Battery
+sensor.z_wave_plus_thermostat_air_temperature:
+  friendly_name: Thermostat Temperature
+binary_sensor.z_wave_plus_thermostat_low_battery_level:
+  friendly_name: Thermostat Low Battery
+
+# Schlage Connect Smart Deadbolt
+lock.touchscreen_deadbolt_z_wave_plus:
+  friendly_name: Front Door
+sensor.touchscreen_deadbolt_z_wave_plus_battery_level:
+  friendly_name: Front Door Battery
+# sensor.touchscreen_deadbolt_z_wave_plus_access_control_keypad_state:
+# sensor.touchscreen_deadbolt_z_wave_plus_access_control_lock_state:
+# sensor.touchscreen_deadbolt_z_wave_plus_home_security_sensor_status:
+# sensor.touchscreen_deadbolt_z_wave_plus_power_management_battery_maintenance_status:
+# sensor.touchscreen_deadbolt_z_wave_plus_system_hardware_status:
+# binary_sensor.touchscreen_deadbolt_z_wave_plus_access_control_keypad_temporary_disabled:
+# binary_sensor.touchscreen_deadbolt_z_wave_plus_access_control_lock_jammed:
+# binary_sensor.touchscreen_deadbolt_z_wave_plus_home_security_intrusion:
+# binary_sensor.touchscreen_deadbolt_z_wave_plus_low_battery_level:
+# binary_sensor.touchscreen_deadbolt_z_wave_plus_power_management_replace_battery_now:
+# binary_sensor.touchscreen_deadbolt_z_wave_plus_power_management_replace_battery_soon:
+# binary_sensor.touchscreen_deadbolt_z_wave_plus_system_system_hardware_failure:
+# binary_sensor.touchscreen_deadbolt_z_wave_plus_the_current_status_of_the_door:
+
+# Garage Door Opener
+cover.z_wave_garage_door_controller:
+  friendly_name: Garage Door
+# binary_sensor.z_wave_garage_door_controller_access_control_barrier_sensor_low_battery_warning
+# binary_sensor.z_wave_garage_door_controller_access_control_barrier_sensor_not_detected_supervisory_error
+# binary_sensor.z_wave_garage_door_controller_access_control_barrier_unattended_operation_has_been_disabled_per_ul_requirements
+# binary_sensor.z_wave_garage_door_controller_home_security_tampering_product_cover_removed
+# switch.z_wave_garage_door_controller_signaling_state_audible
+# switch.z_wave_garage_door_controller_signaling_state_visual
+
+# Mithras' Pixel
+device_tracker.pixel_7:
+  friendly_name: Mithras' Pixel
+device_tracker.google_maps_105774318449945023361:
+  friendly_name: Mithras' Google Maps
+
+# Diana's Pixel
+device_tracker.diana_pixel:
+  friendly_name: Diana's Pixel
+device_tracker.google_maps_110641435314733431814:
+  friendly_name: Diana's Google Maps
+
+# Lights
+light.kitchen:
+  friendly_name: Kitchen
+light.living_room_back:
+  friendly_name: Living Room Back
+light.living_room_main:
+  friendly_name: Living Room Main
+light.driveway:
+  friendly_name: Driveway
+light.landry_room:
+  friendly_name: Laundry Room
+light.garage:
+  friendly_name: Garage
+light.master_bedroom:
+  friendly_name: Master Bedroom
+light.hallway_downstairs:
+  friendly_name: Hallway Downstairs
+light.porch:
+  friendly_name: Porch
+light.toilet:
+  friendly_name: Toilet
+light.staircase:
+  friendly_name: Staircase
+light.hallway_upstairs:
+  friendly_name: Hallway Upstairs
+light.backyard:
+  friendly_name: Backyard
+light.hue_white_ambiance_19:
+  friendly_name: Backyard Door
+light.hue_white_ambiance_20:
+  friendly_name: Master Toilet
+light.hue_white_ambiance_21:
+  friendly_name: Master Bathroom
+
+# appdaemon.dark
+appdaemon.dark:
+  friendly_name: Dark
+
+# appdaemon.dark
+sensor.air_quality_monitor_01_temperature:
+  friendly_name: Living Room Temperature
+sensor.air_quality_monitor_01_humidity:
+  friendly_name: Living Room Humidity
+sensor.air_quality_monitor_01_voc:
+  friendly_name: Living Room VOC

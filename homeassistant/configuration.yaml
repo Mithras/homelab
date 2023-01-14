@@ -15,8 +15,246 @@ sun:
 system_health:
 zone: !include zone.yaml
 
-# ---
+homeassistant:
+  external_url: !secret external_url
+  internal_url: https://ubuntu1:8123/
+  latitude: !secret latitude
+  longitude: !secret longitude
+  country: US
+  customize: !include customize.yaml
+  whitelist_external_dirs: !include whitelist_external_dirs.yaml
+  
+recorder: !include recorder.yaml
 
 http:
   ssl_certificate: !secret ssl_certificate
   ssl_key: !secret ssl_key
+
+device_tracker:
+  - platform: google_maps
+    username: !secret location_account
+    scan_interval: 30
+
+sensor:
+  - platform: command_line
+    name: CPU Temperature
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    unit_of_measurement: "°C"
+    value_template: "{{ value | multiply(0.001) | round(1) }}"
+  - platform: systemmonitor
+    resources:
+      - type: disk_use
+        arg: /
+      - type: disk_free
+        arg: /
+      - type: memory_use
+      - type: memory_free
+      - type: network_in
+        arg: eth0
+      - type: network_out
+        arg: eth0
+      - type: throughput_network_in
+        arg: eth0
+      - type: throughput_network_out
+        arg: eth0
+      - type: processor_use
+      - type: last_boot
+
+switch:
+  - platform: wake_on_lan
+    mac: !secret mithras_desktop_mac
+    name: Mithras Desktop
+    host: 192.168.0.2
+
+telegram_bot:
+  - platform: webhooks
+    parse_mode: markdown
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - !secret telegram_mithras
+      - !secret telegram_state_chat_mithras
+      - !secret telegram_state_chat_diana
+      - !secret telegram_debug_chat
+
+wake_on_lan:
+
+input_select:
+  security_override:
+    name: Security Override
+    options:
+      - Auto
+      - Armed Away
+      - Armed Home
+      - Armed Sleep
+      - Disarmed
+    initial: Auto
+    icon: mdi:shield-home
+
+input_boolean:
+  sleep:
+    name: Sleep
+    icon: mdi:sleep
+  fan:
+    name: Fan
+    icon: mdi:fan
+  tv:
+    name: Samsung Smart TV
+    icon: mdi:television
+
+lovelace:
+  mode: yaml
+  resources:
+    # https://github.com/thomasloven/lovelace-auto-entities
+    - url: /local/ui-lovelace/auto-entities/auto-entities.js
+      type: module
+
+appdaemon_app:
+
+# conversation:
+#   intents:
+#     Test:
+#      - Test
+intent:
+intent_script:
+  Light:
+    speech:
+      text: |
+        {% set entity = "light." + entity %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {{ friendly_name }} light is {{ state }}
+    action:
+      - service: "light.turn_{{ state }}"
+        target:
+          entity_id: "light.{{ entity }}"
+  LightProfile:
+    speech:
+      text: |
+        {% set entity = "light." + entity %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {{ friendly_name }} light is set to {{ profile }}
+    action:
+      - service: "light.turn_on"
+        target:
+          entity_id: "light.{{ entity }}"
+        data:
+          profile: "{{ profile }}"
+  Switch:
+    speech:
+      text: |
+        {% set entity = "switch." + entity %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {{ friendly_name }} is {{ state }}
+    action:
+      - service: "switch.turn_{{ state }}"
+        target:
+          entity_id: "switch.{{ entity }}"
+  InputBoolean:
+    speech:
+      text: |
+        {% set entity = "input_boolean." + entity %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {{ friendly_name }} is {{ state }}
+    action:
+      - service: "input_boolean.turn_{{ state }}"
+        target:
+          entity_id: "input_boolean.{{ entity }}"
+  AppDaemonApp:
+    speech:
+      text: |
+        {% set entity = "appdaemon_app." + entity %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {{ friendly_name }} app is {{ state }}
+    action:
+      - service: "appdaemon_app.turn_{{ state }}"
+        data:
+          entity_id: "appdaemon_app.{{ entity }}"
+  Lock:
+    speech:
+      text: |
+        {% set entity = "lock.touchscreen_deadbolt_z_wave_plus" %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {% if service == "unlock" -%}
+          {% set state = "unlocking"  %}
+        {% elif service == "lock"  %}
+          {% set state = "locking"  %}
+        {%- else -%}
+          {% set state = "unknown"  %}
+        {%- endif %}
+        {{ friendly_name }} is {{ state }}
+    action:
+      - service: "lock.{{ service }}"
+        target:
+          entity_id: lock.touchscreen_deadbolt_z_wave_plus
+  Garage:
+    speech:
+      text: |
+        {% set entity = "cover.z_wave_garage_door_controller" %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {% if service == "open_cover" -%}
+          {% set state = "opening"  %}
+        {% elif service == "close_cover"  %}
+          {% set state = "closing"  %}
+        {%- else -%}
+          {% set state = "unknown"  %}
+        {%- endif %}
+        {{ friendly_name }} is {{ state }}
+    action:
+      - service: "cover.{{ service }}"
+        target:
+          entity_id: cover.z_wave_garage_door_controller
+  InputSelect:
+    speech:
+      text: |
+        {% set entity = "input_select." + entity %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {{ friendly_name }} is set to {{ option }}
+    action:
+      - service: input_select.select_option
+        data:
+          option: "{{ option }}"
+        target:
+          entity_id: "input_select.{{ entity }}"
+  ClimateTemperature:
+    speech:
+      text: |
+        {% set entity = "climate.z_wave_plus_thermostat" %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {{ friendly_name }} is set to {{ temperature }} degrees
+    action:
+      - service: climate.set_temperature
+        data:
+          temperature: "{{ temperature }}"
+        target:
+          entity_id: climate.z_wave_plus_thermostat
+  ClimateFanMode:
+    speech:
+      text: |
+        {% set entity = "climate.z_wave_plus_thermostat" %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {{ friendly_name }} fan mode is set to {{ fan_mode }}
+    action:
+      - service: climate.set_fan_mode
+        data:
+          fan_mode: "{{ fan_mode }}"
+        target:
+          entity_id: climate.z_wave_plus_thermostat
+  Temperature:
+    speech:
+      text: |
+        {% set entity = "sensor." + sensor %}
+        {% set friendly_name = state_attr(entity, "friendly_name") %}
+        {% if is_state(entity, "unknown") -%}
+          {{ friendly_name }} is unknown
+        {%- else -%}
+          {% set temperature = states(entity) | float  %}
+          {% set temperature_d = temperature | int  %}
+          {% set temperature_f = ((temperature - temperature_d) * 100) | round %}
+          {{ friendly_name }} is {{ temperature_d }} point {{ temperature_f }} degree celsius
+        {%- endif %}
+  # XXX:
+  #   action:
+  #     - event: INTENT_XXX
+  #       event_data: {}
+
+# ffmpeg:
+# stream:

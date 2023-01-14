@@ -1,0 +1,268 @@
+title: Home Assistant
+views:
+  - title: Home
+    path: home
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            entity_id:
+              - appdaemon.security
+            content: >
+              **Security**:
+              {{ states("appdaemon.security") }}
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - input_boolean.sleep
+              - input_select.security_override
+              - lock.touchscreen_deadbolt_z_wave_plus
+              - cover.z_wave_garage_door_controller
+              - sensor.hue_sensor_01_temperature
+              - entity: appdaemon.dark
+                icon: mdi:theme-light-dark
+          - type: entities
+            title: Living Room
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - sensor.multi_sensor_01_temperature
+              - sensor.multi_sensor_01_pressure
+              - sensor.multi_sensor_01_humidity
+              # - sensor.air_quality_monitor_01_temperature
+              # - sensor.air_quality_monitor_01_humidity
+              - sensor.air_quality_monitor_01_voc
+              - sensor.smart_plug_02_power
+              - switch.smart_plug_02
+              - entity: switch.mithras_desktop
+                icon: mdi:desktop-tower
+              - input_boolean.tv
+              - sensor.smart_plug_01_power
+              - entity: switch.tradfri_control_outlet_02
+                icon: mdi:amplifier
+              - entity: switch.tradfri_control_outlet_01
+                icon: mdi:speaker-multiple
+              - vacuum.roborock_vacuum_s5
+          - type: entities
+            title: Upstairs
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - sensor.multi_sensor_02_temperature
+              - sensor.multi_sensor_02_pressure
+              - sensor.multi_sensor_02_humidity
+              - switch.smart_plug_03
+              - input_boolean.fan
+              - sensor.smart_plug_03_power
+
+      - type: vertical-stack
+        cards:
+          - type: thermostat
+            entity: climate.z_wave_plus_thermostat
+          - type: entities
+            title: Light
+            state_color: true
+            entities:
+              - light.living_room_main
+              - light.living_room_back
+              - light.kitchen
+              - entity: switch.smart_light_switch_01
+                icon: mdi:lightbulb-on
+              - light.toilet
+              - light.hallway_downstairs
+              - light.hallway_upstairs
+              - light.staircase
+              - light.master_bedroom
+              - light.hue_white_ambiance_21
+              - entity: switch.smart_light_switch_02
+                icon: mdi:lightbulb-on
+              - light.hue_white_ambiance_20
+              - light.landry_room
+              - light.porch
+              - light.driveway
+              - light.garage
+              - light.hue_white_ambiance_19
+              - light.backyard
+
+      - type: vertical-stack
+        cards:
+          - type: glance
+            show_state: false
+            entities:
+              - binary_sensor.porch_camera_motion
+              - binary_sensor.living_room_camera_motion
+              - binary_sensor.hue_sensor_01_occupancy
+              - binary_sensor.motion_sensor_06_occupancy
+              - binary_sensor.motion_sensor_10_occupancy
+              - binary_sensor.motion_sensor_11_occupancy
+              - binary_sensor.motion_sensor_01_occupancy
+              - binary_sensor.motion_sensor_02_occupancy
+              - binary_sensor.motion_sensor_07_occupancy
+              - binary_sensor.motion_sensor_08_occupancy
+              - binary_sensor.motion_sensor_03_occupancy
+              - binary_sensor.motion_sensor_04_occupancy
+              - binary_sensor.motion_sensor_05_occupancy
+              - binary_sensor.motion_sensor_12_occupancy
+              - binary_sensor.door_sensor_03_contact
+              - binary_sensor.door_sensor_02_contact
+              - binary_sensor.door_sensor_01_contact
+          - type: picture-entity
+            entity: camera.porch_camera_high
+          - type: picture-entity
+            entity: camera.living_room_camera_high
+
+  - title: Details
+    path: details
+    cards:
+      - type: entities
+        title: Person
+        show_header_toggle: false
+        entities:
+          - person.mithras
+          - person.diana
+      - type: entities
+        title: Device
+        show_header_toggle: false
+        entities:
+          - device_tracker.pixel_7
+          - device_tracker.google_maps_105774318449945023361
+          - device_tracker.diana_pixel
+          - device_tracker.google_maps_110641435314733431814
+      - type: entities
+        title: Camera
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - select.porch_camera_recording_mode
+          - select.living_room_camera_recording_mode
+      - type: entities
+        title: System Monitor
+        show_header_toggle: false
+        entities:
+          - sensor.last_boot
+          - sensor.processor_use
+          - sensor.cpu_temperature
+          - sensor.disk_use
+          - sensor.disk_free
+          - sensor.memory_use
+          - sensor.memory_free
+          - sensor.network_in_eth0
+          - sensor.network_out_eth0
+          - sensor.network_throughput_in_eth0
+          - sensor.network_throughput_out_eth0
+      - type: entities
+        title: Battery
+        show_header_toggle: false
+        entities:
+          - sensor.motion_sensor_06_battery
+          - sensor.motion_sensor_10_battery
+          - sensor.motion_sensor_11_battery
+          - sensor.motion_sensor_01_battery
+          - sensor.motion_sensor_02_battery
+          - sensor.motion_sensor_07_battery
+          - sensor.motion_sensor_08_battery
+          - sensor.motion_sensor_03_battery
+          - sensor.motion_sensor_04_battery
+          - sensor.motion_sensor_05_battery
+          - sensor.motion_sensor_12_battery
+          # - sensor.lumi_lumi_sensor_motion_aq2_5dae5302_power
+          - sensor.door_sensor_02_battery
+          - sensor.door_sensor_03_battery
+          - sensor.door_sensor_01_battery
+          - sensor.multi_sensor_01_battery
+          - sensor.multi_sensor_02_battery
+          - sensor.tradfri_on_off_switch_01_battery
+          - sensor.smart_switch_01_battery
+          - sensor.mi_magic_cube_01_battery
+          - sensor.touchscreen_deadbolt_z_wave_plus_battery_level
+          - sensor.hue_sensor_01_battery
+      - type: entities
+        title: Illuminance
+        show_header_toggle: false
+        entities:
+          - sensor.hue_sensor_01_illuminance_lux
+          - sensor.motion_sensor_06_illuminance_lux
+          - sensor.motion_sensor_10_illuminance_lux
+          - sensor.motion_sensor_11_illuminance_lux
+          - sensor.motion_sensor_01_illuminance_lux
+          - sensor.motion_sensor_02_illuminance_lux
+          - sensor.motion_sensor_07_illuminance_lux
+          - sensor.motion_sensor_08_illuminance_lux
+          - sensor.motion_sensor_03_illuminance_lux
+          - sensor.motion_sensor_04_illuminance_lux
+          - sensor.motion_sensor_05_illuminance_lux
+          - sensor.motion_sensor_12_illuminance_lux
+
+  - title: Graphs
+    path: graphs
+    cards:
+      - type: statistics-graph
+        title: Temperature
+        entities:
+          - entity: sensor.z_wave_plus_thermostat_air_temperature
+            name: Thermostat
+          - entity: sensor.multi_sensor_01_temperature
+            name: Living Room
+          - entity: sensor.multi_sensor_02_temperature
+            name: Master Bedroom
+      - type: statistics-graph
+        title: Humidity
+        entities:
+          - entity: sensor.multi_sensor_01_humidity
+            name: Living Room
+          - entity: sensor.multi_sensor_02_humidity
+            name: Master Bedroom
+      - type: statistics-graph
+        title: Pressure
+        entities:
+          - entity: sensor.multi_sensor_01_pressure
+            name: Living Room
+          - entity: sensor.multi_sensor_02_pressure
+            name: Master Bedroom
+
+  - title: AppDaemon
+    path: appdaemon
+    cards:
+      - type: entities
+        title: Front Door Lock
+        show_header_toggle: false
+        entities:
+          - entity: appdaemon.front_door
+            name: Code
+            icon: mdi:shield
+          - type: call-service
+            name: Rotate
+            service: appdaemon_app.fire_event
+            icon: mdi:shield-sync
+            service_data:
+              event: appdaemon_lock_rotate
+              state: front_door
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: AppDaemon
+          show_header_toggle: false
+        filter:
+          include:
+            - domain: appdaemon_app
+              options:
+                icon: mdi:language-python
+                type: custom:hui-toggle-entity-row
+        sort:
+          method: name
+
+  - title: Map
+    path: map
+    panel: true
+    cards:
+      - type: map
+        hours_to_show: 2
+        default_zoom: 12
+        entities:
+          - person.mithras
+          - person.diana
+          - zone.home
+          - zone.microsoft_building_41
+          - zone.pro_club
+          - zone.diana_s_home

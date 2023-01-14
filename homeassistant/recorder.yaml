@@ -1,0 +1,23 @@
+purge_keep_days: 30
+exclude:
+  domains:
+    - appdaemon_app
+  entity_globs:
+    - light.hue_*
+    - sensor.door_sensor_*_temperature
+    - sensor.motion_sensor_*_temperature
+    - sensor.smart_plug_*_temperature
+    - sensor.*battery
+    - sensor.*battery_level
+    - sensor.*illuminance_lux
+    - sensor.*power_on_behavior
+  entities:
+    - binary_sensor.updater
+    - sensor.last_boot
+    - sensor.daylight
+    - weather.home_assistant
+    - camera.living_room_camera_high
+    - camera.porch_camera_high
+include:
+  entities:
+    - sensor.hue_sensor_01_illuminance_lux

@@ -3,3 +3,7 @@
 /secrets.yaml
 /.storage
 /zone.yaml
+/.google_maps_location_sharing.*
+/known_devices.yaml
+/whitelist_external_dirs.yaml
+__pycache__

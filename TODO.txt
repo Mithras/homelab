@@ -8,3 +8,15 @@
 ---
 
 - proxmox backup
+- rhaspby
+  - light switch not saying "light"
+  - (Front Door Rotate)
+    - trigger -> speak code
+  - Time
+    - set a timer
+    - set an alarm (tts + light)
+- split person_state
+- sidenav
+  - rhaspby default
+  - rhaspby01
+- move intents to a separate file
