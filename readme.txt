@@ -36,9 +36,6 @@
       1. Hold reset until start flashing in 3 quick series
       2. Follow wifi setup guide
 - appdaemon
-
----
-
 - z-wave
   - HUSBZB-1
       - /dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_51300097-if00-port0:/dev/zwave # z-wave

@@ -70,6 +70,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./homeassistant:/config
+      - ./tmp:/config/tmp
       - ./swag/etc/letsencrypt:/letsencrypt
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -83,6 +84,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./appdaemon:/conf
+      - ./tmp:/conf/tmp
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 5050:5050
@@ -126,6 +128,47 @@ services:
       - dialout
     networks:
       - homelab
+  duckdns:
+    image: lscr.io/linuxserver/duckdns:latest
+    container_name: duckdns
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=America/Los_Angeles
+      - SUBDOMAINS=${DUCKDNS_SUBDOMAIN}
+      - TOKEN=${DUCKDNS_TOKEN}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+  # chatgpt:
+  #   image: ghcr.io/m1guelpf/chatgpt-telegram
+  #   container_name: chatgpt
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./chatgpt:/root/.config
+  #     - /etc/localtime:/etc/localtime:ro
+  #   environment:
+  #     - TELEGRAM_ID=${TELEGRAM_ID}
+  #     - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+  syncthing:
+    image: syncthing/syncthing
+    container_name: syncthing
+    restart: unless-stopped
+    hostname: my-syncthing
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - /etc/localtime:/etc/localtime:ro
+    volumes:
+      - ./syncthing:/var/syncthing
+      - ./swag/etc/letsencrypt:/etc/letsencrypt
+      - ./swag/etc/letsencrypt/live/mithras.duckdns.org/cert.pem:/var/syncthing/config/https-cert.pem
+      - ./swag/etc/letsencrypt/live/mithras.duckdns.org/privkey.pem:/var/syncthing/config/https-key.pem
+    ports:
+      - 8384:8384 # Web UI
+      - 22000:22000/tcp # TCP file transfers
+      - 22000:22000/udp # QUIC file transfers
+      # - 21027:21027/udp # Receive local discovery broadcasts
 networks:
   homelab:
     name: homelab

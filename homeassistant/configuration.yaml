@@ -22,6 +22,8 @@ homeassistant:
   longitude: !secret longitude
   country: US
   customize: !include customize.yaml
+  whitelist_external_dirs:
+    - /config/tmp
 
 recorder: !include recorder.yaml
 

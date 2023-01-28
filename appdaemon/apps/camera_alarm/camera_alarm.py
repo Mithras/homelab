@@ -6,7 +6,8 @@ import os
 
 
 SYMBOLS = string.ascii_lowercase + string.digits
-TMP_PATH = "/config/tmp"
+REMOTE_TMP_PATH = "/config/tmp"
+LOCAL_TMP_PATH = "/conf/tmp"
 
 
 class CameraAlarm(globals.Hass):
@@ -25,16 +26,17 @@ class CameraAlarm(globals.Hass):
 
     async def _send_snapshot_async(self):
         name = self._get_name()
-        filename = f"{TMP_PATH}/{name}.jpg"
+        remote_filename = f"{REMOTE_TMP_PATH}/{name}.jpg"
+        local_filename = f"{LOCAL_TMP_PATH}/{name}.jpg"
         await self.call_service("camera/snapshot",
                                 entity_id=self._camera,
-                                filename=filename,
+                                filename=remote_filename,
                                 return_result=True)
         await self.call_service("telegram_bot/send_photo",
                                 target=[self.common.telegram_alarm_chat],
-                                file=filename,
+                                file=remote_filename,
                                 return_result=True)
-        os.remove(filename)
+        os.remove(local_filename)
 
     def _get_name(self):
         now = datetime.now()
