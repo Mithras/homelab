@@ -22,19 +22,28 @@
     1. BIOS:
       APM Configuration\ErP Ready: DISABLED
       APM Configuration\Power on by PCI-E: ENABLED
-    2. Device Manager -> NetworkAdapter
-      2.1 Update driver
-      2.2 Power Management
-        Check everything
-      2.3 Advanced
-        Enable PME: Enabled
-        Wake on Magic Packet: Enabled
-    3. Power Options
-      Fast Startup: false
+    2. 
+      sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=0
+      sysctl -w net.ipv4.conf.all.bc_forwarding=1
+      sysctl -w net.ipv4.conf.XXX.bc_forwarding=1 # XXX is Iface from "route" where Destination matches container subnet (e.g. br-e01398b37d93)
+      nano /etc/sysctl.d/97-docker-broadcast.conf
+        net.ipv4.icmp_echo_ignore_broadcasts=0
+        net.ipv4.conf.all.bc_forwarding=1
+        net.ipv4.conf.XXX.bc_forwarding=1
   - RM3-Mini
     - https://play.google.com/store/apps/details?id=cn.com.broadlink.econtrol.plus
       1. Hold reset until start flashing in 3 quick series
       2. Follow wifi setup guide
+  - bluetooth
+    - host
+      sudo apt install bluez dbus-broker
+      ls /sys/class/bluetooth -l
+    - container
+      volumes:
+        - /run/dbus:/run/dbus:ro
+      privileged: true
+    - configuration
+      bluetooth:
 - appdaemon
 - z-wave
   - HUSBZB-1

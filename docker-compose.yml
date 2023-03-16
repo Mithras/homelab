@@ -73,8 +73,10 @@ services:
       - ./tmp:/config/tmp
       - ./swag/etc/letsencrypt:/letsencrypt
       - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
     ports:
       - 8123:8123
+    privileged: true
     user: "${UID}:${GID}"
     networks:
       - homelab
@@ -129,7 +131,7 @@ services:
     networks:
       - homelab
   duckdns:
-    image: lscr.io/linuxserver/duckdns:latest
+    image: lscr.io/linuxserver/duckdns
     container_name: duckdns
     environment:
       - PUID=${UID}

@@ -52,8 +52,7 @@ class LivingRoom(globals.Hass):
         await self.common.turn_on_async(self._jotunheim)
         await self.common.turn_on_async(self._speakers)
         await self.common.light_turn_bright_async(self._living_room_main_light)
-        if await self.get_state(self._mithras_desktop) == "on":
-            await self.common.turn_on_async(self._tv_input)
+        await self.common.turn_on_async(self._tv_input)
 
     async def _deactivate_async(self):
         await self.common.turn_off_async(self._jotunheim)

@@ -1,5 +1,6 @@
 - intall python and pip
 - rhaspby
+  - https://next.home-assistant.io/docs/assist/custom_sentences
   - more alt sentences 
   - light switch not saying "light"
   - (Front Door Rotate)

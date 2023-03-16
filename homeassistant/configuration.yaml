@@ -14,6 +14,7 @@ stream:
 sun:
 system_health:
 zone: !include zone.yaml
+# bluetooth:
 
 homeassistant:
   external_url: !secret external_url
@@ -37,11 +38,6 @@ device_tracker:
     scan_interval: 30
 
 sensor:
-  - platform: command_line
-    name: CPU Temperature
-    command: "cat /sys/class/thermal/thermal_zone0/temp"
-    unit_of_measurement: "°C"
-    value_template: "{{ value | multiply(0.001) | round(1) }}"
   - platform: systemmonitor
     resources:
       - type: disk_use
@@ -66,6 +62,7 @@ switch:
     mac: !secret mithras_desktop_mac
     name: Mithras Desktop
     host: 192.168.0.2
+    broadcast_address: 192.168.0.255
 
 telegram_bot:
   - platform: webhooks
@@ -116,4 +113,4 @@ intent_script: !include intent_script.yaml
 # conversation:
 #   intents:
 #     Test:
-#      - Test
+#       - Test

@@ -1,3 +1,6 @@
+# Test:
+#   speech:
+#     text: test
 Light:
   speech:
     text: |

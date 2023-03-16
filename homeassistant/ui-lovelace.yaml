@@ -27,12 +27,23 @@ views:
             show_header_toggle: false
             state_color: true
             entities:
-              - sensor.multi_sensor_01_temperature
-              - sensor.multi_sensor_01_pressure
-              - sensor.multi_sensor_01_humidity
+              # - sensor.multi_sensor_01_temperature
+              # - sensor.multi_sensor_01_pressure
+              # - sensor.multi_sensor_01_humidity
+              # ---
               # - sensor.air_quality_monitor_01_temperature
               # - sensor.air_quality_monitor_01_humidity
-              - sensor.air_quality_monitor_01_voc
+              # - sensor.air_quality_monitor_01_voc
+              # ---
+              - sensor.airthings_wave_temperature
+              - sensor.airthings_wave_humidity
+              - sensor.airthings_wave_voc
+              - sensor.airthings_wave_co2
+              # - sensor.airthings_wave_radon_1_day_average
+              # - sensor.airthings_wave_radon_longterm_average
+              # - sensor.airthings_wave_pressure
+              # - sensor.airthings_wave_illuminance
+              # ---
               - sensor.smart_plug_02_power
               - switch.smart_plug_02
               - entity: switch.mithras_desktop
@@ -143,7 +154,6 @@ views:
         entities:
           - sensor.last_boot
           - sensor.processor_use
-          - sensor.cpu_temperature
           - sensor.disk_use
           - sensor.disk_free
           - sensor.memory_use
