@@ -27,23 +27,10 @@ views:
             show_header_toggle: false
             state_color: true
             entities:
-              # - sensor.multi_sensor_01_temperature
-              # - sensor.multi_sensor_01_pressure
-              # - sensor.multi_sensor_01_humidity
-              # ---
-              # - sensor.air_quality_monitor_01_temperature
-              # - sensor.air_quality_monitor_01_humidity
-              # - sensor.air_quality_monitor_01_voc
-              # ---
-              - sensor.airthings_wave_temperature
-              - sensor.airthings_wave_humidity
-              - sensor.airthings_wave_voc
-              - sensor.airthings_wave_co2
-              # - sensor.airthings_wave_radon_1_day_average
-              # - sensor.airthings_wave_radon_longterm_average
-              # - sensor.airthings_wave_pressure
-              # - sensor.airthings_wave_illuminance
-              # ---
+              - sensor.airthings_wave_211131_temperature
+              - sensor.airthings_wave_211131_humidity
+              - sensor.airthings_wave_211131_vocs
+              - sensor.airthings_wave_211131_carbon_dioxide
               - sensor.smart_plug_02_power
               - switch.smart_plug_02
               - entity: switch.mithras_desktop
@@ -60,9 +47,10 @@ views:
             show_header_toggle: false
             state_color: true
             entities:
-              - sensor.multi_sensor_02_temperature
-              - sensor.multi_sensor_02_pressure
-              - sensor.multi_sensor_02_humidity
+              - sensor.airthings_wave_178276_temperature
+              - sensor.airthings_wave_178276_humidity
+              - sensor.airthings_wave_178276_vocs
+              - sensor.airthings_wave_178276_carbon_dioxide
               - switch.smart_plug_03
               - input_boolean.fan
               - sensor.smart_plug_03_power
@@ -177,15 +165,12 @@ views:
           - sensor.motion_sensor_04_battery
           - sensor.motion_sensor_05_battery
           - sensor.motion_sensor_12_battery
-          # - sensor.lumi_lumi_sensor_motion_aq2_5dae5302_power
           - sensor.door_sensor_02_battery
           - sensor.door_sensor_03_battery
           - sensor.door_sensor_01_battery
-          - sensor.multi_sensor_01_battery
-          - sensor.multi_sensor_02_battery
-          - sensor.tradfri_on_off_switch_01_battery
+          - sensor.airthings_wave_211131_battery
+          - sensor.airthings_wave_178276_battery
           - sensor.smart_switch_01_battery
-          - sensor.mi_magic_cube_01_battery
           - sensor.touchscreen_deadbolt_z_wave_plus_battery_level
           - sensor.hue_sensor_01_battery
       - type: entities
@@ -213,23 +198,23 @@ views:
         entities:
           - entity: sensor.z_wave_plus_thermostat_air_temperature
             name: Thermostat
-          - entity: sensor.multi_sensor_01_temperature
+          - entity: sensor.airthings_wave_211131_temperature
             name: Living Room
-          - entity: sensor.multi_sensor_02_temperature
+          - entity: sensor.airthings_wave_178276_temperature
             name: Master Bedroom
       - type: statistics-graph
         title: Humidity
         entities:
-          - entity: sensor.multi_sensor_01_humidity
+          - entity: sensor.airthings_wave_211131_humidity
             name: Living Room
-          - entity: sensor.multi_sensor_02_humidity
+          - entity: sensor.airthings_wave_178276_humidity
             name: Master Bedroom
       - type: statistics-graph
         title: Pressure
         entities:
-          - entity: sensor.multi_sensor_01_pressure
+          - entity: sensor.airthings_wave_211131_pressure
             name: Living Room
-          - entity: sensor.multi_sensor_02_pressure
+          - entity: sensor.airthings_wave_178276_pressure
             name: Master Bedroom
 
   - title: AppDaemon

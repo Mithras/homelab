@@ -21,7 +21,7 @@ class Exhaust(globals.Hass):
 
     async def _ensure_state_async(self):
         temperature_str = await self.get_state(self._temperature)
-        if temperature_str == "unknown":
+        if temperature_str == "unavailable" or temperature_str == "unknown":
             return
         temperature = float(temperature_str)
         input = await self.get_state(self._input)

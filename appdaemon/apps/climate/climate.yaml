@@ -15,7 +15,7 @@ Climate:
       temperature: 21
     not_home_params:
       hvac_mode: heat
-      temperature: 12
+      temperature: 21
     sleep_params:
       hvac_mode: heat
-      temperature: 17
+      temperature: 19

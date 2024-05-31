@@ -6,7 +6,6 @@ hardware:
 history:
 homeassistant_alerts:
 logbook:
-map:
 mobile_app:
 my:
 person:
@@ -14,7 +13,7 @@ stream:
 sun:
 system_health:
 zone: !include zone.yaml
-# bluetooth:
+bluetooth:
 
 homeassistant:
   external_url: !secret external_url

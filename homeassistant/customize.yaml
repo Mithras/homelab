@@ -172,25 +172,6 @@ sensor.mi_magic_cube_01_action_side:
 sensor.mi_magic_cube_01_action_to_side:
   friendly_name: Magic Cube Action To Side
 
-# Multi Sensor 01
-sensor.multi_sensor_01_temperature:
-  friendly_name: Living Room Temperature
-sensor.multi_sensor_01_pressure:
-  friendly_name: Living Room Pressure
-sensor.multi_sensor_01_humidity:
-  friendly_name: Living Room Humidity
-sensor.multi_sensor_01_battery:
-  friendly_name: Living Room Weather Sensor Battery
-# Multi Sensor 02
-sensor.multi_sensor_02_temperature:
-  friendly_name: Master Bedroom Temperature
-sensor.multi_sensor_02_pressure:
-  friendly_name: Master Bedroom Pressure
-sensor.multi_sensor_02_humidity:
-  friendly_name: Master Bedroom Humidity
-sensor.multi_sensor_02_battery:
-  friendly_name: Master Bedroom Weather Sensor Battery
-
 # TRÅDFRI control outlet 01
 switch.tradfri_control_outlet_01:
   friendly_name: Speakers
@@ -334,10 +315,49 @@ light.hue_white_ambiance_21:
 appdaemon.dark:
   friendly_name: Dark
 
-# appdaemon.dark
-sensor.air_quality_monitor_01_temperature:
-  friendly_name: Living Room Temperature
-sensor.air_quality_monitor_01_humidity:
-  friendly_name: Living Room Humidity
-sensor.air_quality_monitor_01_voc:
+# Airthings Wave+
+sensor.airthings_wave_178276_carbon_dioxide:
+  friendly_name: Master Bedroom CO2
+sensor.airthings_wave_178276_vocs:
+  friendly_name: Master Bedroom VOC
+sensor.airthings_wave_178276_humidity:
+  friendly_name: Master Bedroom Humidity
+sensor.airthings_wave_178276_illuminance:
+  friendly_name: Master Bedroom Illuminance
+sensor.airthings_wave_178276_pressure:
+  friendly_name: Master Bedroom Pressure
+sensor.airthings_wave_178276_radon_1_day_average:
+  friendly_name: Master Bedroom Radon 1 Day Average
+sensor.airthings_wave_178276_radon_1_day_level:
+  friendly_name: Master Bedroom Radon 1 Day Level
+sensor.airthings_wave_178276_radon_longterm_average:
+  friendly_name: Master Bedroom Radon Longterm Average
+sensor.airthings_wave_178276_radon_longterm_level:
+  friendly_name: Master Bedroom Radon Longterm Level
+sensor.airthings_wave_178276_temperature:
+  friendly_name: Master Bedroom Temperature
+sensor.airthings_wave_178276_battery:
+  friendly_name: Master Bedroom Airthings Battery
+
+sensor.airthings_wave_211131_carbon_dioxide:
+  friendly_name: Living Room CO2
+sensor.airthings_wave_211131_vocs:
   friendly_name: Living Room VOC
+sensor.airthings_wave_211131_humidity:
+  friendly_name: Living Room Humidity
+sensor.airthings_wave_211131_illuminance:
+  friendly_name: Living Room Illuminance
+sensor.airthings_wave_211131_pressure:
+  friendly_name: Living Room Pressure
+sensor.airthings_wave_211131_radon_1_day_average:
+  friendly_name: Living Room Radon 1 Day Average
+sensor.airthings_wave_211131_radon_1_day_level:
+  friendly_name: Living Room Radon 1 Day Level
+sensor.airthings_wave_211131_radon_longterm_average:
+  friendly_name: Living Room Radon Longterm Average
+sensor.airthings_wave_211131_radon_longterm_level:
+  friendly_name: Living Room Radon Longterm Level
+sensor.airthings_wave_211131_temperature:
+  friendly_name: Living Room Temperature
+sensor.airthings_wave_211131_battery:
+  friendly_name: Living Room Airthings Battery

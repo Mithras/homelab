@@ -24,6 +24,8 @@ class CameraRecordingMode(globals.Hass):
 
     async def _update_camera_motion_recording_async(self):
         security = await self.get_state("appdaemon.security")
+        if security is None:
+            return
         recording_mode = self._security_recording_mode_map[security]
         # self.log(f"recording_mode = {recording_mode}")
         await self.set_state(self._recording_mode,

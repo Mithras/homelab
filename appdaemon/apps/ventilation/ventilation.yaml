@@ -7,6 +7,6 @@ Ventilation:
     - Common
   config:
     climate: climate.z_wave_plus_thermostat
-    on_low_interval: 1800 # 30m
-    on_auto_interval: 19800 # 5h 30m
+    on_low_interval: 900 # 15m
+    on_auto_interval: 9900 # 2h 45m
     sleep_input: input_boolean.sleep
