@@ -15,16 +15,16 @@ class PersonState(globals.Hass):
         if old == new:
             return
         if new == "not_home":
-            await self.common.send_state_async(entity, f"*{await self.friendly_name(entity)}* has left *{old}*.")
+            await self.common.send_debug_async(entity, f"*{await self.friendly_name(entity)}* has left *{old}*.")
         else:
-            await self.common.send_state_async(entity, f"*{await self.friendly_name(entity)}* is at *{new}*.")
+            await self.common.send_debug_async(entity, f"*{await self.friendly_name(entity)}* is at *{new}*.")
 
     async def _input_sleep_callback_async(self, entity, attribute, old, new, kwargs):
         if old == new:
             return
         if new == "on":
-            await self.common.send_state_async(
+            await self.common.send_debug_async(
                 "person.mithras", f"Mithras is asleep.")
         else:
-            await self.common.send_state_async(
+            await self.common.send_debug_async(
                 "person.mithras", f"Mithras is awake.")

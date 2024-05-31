@@ -17,26 +17,10 @@ class Common(hass.Hass):
         config = self.args["config"]
         self.telegram_mithras = config["telegram_mithras"]
         self.telegram_debug_chat = config["telegram_debug_chat"]
-        self.telegram_state_chat_mithras = config["telegram_state_chat_mithras"]
-        self.telegram_state_chat_diana = config["telegram_state_chat_diana"]
         self.telegram_alarm_chat = config["telegram_alarm_chat"]
 
     async def is_sleep_async(self):
         return await self.get_state("input_boolean.sleep") == "on"
-
-    async def send_state_async(self, person: str, message: str, **kwargs):
-        # if person == "person.mithras":
-        #     target = self.telegram_state_chat_mithras
-        # elif person == "person.diana":
-        if person == "person.diana":
-            target = self.telegram_state_chat_diana
-        else:
-            return
-        await self.call_service("telegram_bot/send_message",
-                                target=[target],
-                                message=message,
-                                return_result=True,
-                                **kwargs)
 
     async def send_alarm_async(self, message: str, **kwargs):
         await self.call_service("telegram_bot/send_message",

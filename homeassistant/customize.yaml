@@ -1,9 +1,8 @@
 # Mithras
 person.mithras:
   entity_picture: /local/mithras.jfif
-# Diana
-person.diana:
-  entity_picture: /local/diana.jpg
+# Dina
+person.dina: {}
 
 # Living Room Camera
 camera.living_room_camera_high:
@@ -265,17 +264,21 @@ cover.z_wave_garage_door_controller:
 # switch.z_wave_garage_door_controller_signaling_state_audible
 # switch.z_wave_garage_door_controller_signaling_state_visual
 
-# Mithras' Pixel
+# Mithras' Phone
 device_tracker.pixel_7:
-  friendly_name: Mithras' Pixel
+  friendly_name: Mithras' Phone
+device_tracker.pixel_7_2:
+  friendly_name: Mithras' Hass
 device_tracker.google_maps_105774318449945023361:
   friendly_name: Mithras' Google Maps
 
-# Diana's Pixel
-device_tracker.diana_pixel:
-  friendly_name: Diana's Pixel
-device_tracker.google_maps_110641435314733431814:
-  friendly_name: Diana's Google Maps
+# Dina's Phone
+device_tracker.unifi_default_ca_a8_d2_36_54_7a:
+  friendly_name: Dina's Phone
+device_tracker.dina_goncharovas_iphone:
+  friendly_name: Dina's Hass
+device_tracker.google_maps_118090522190269394102:
+  friendly_name: Dina's Google Maps
 
 # Lights
 light.kitchen:

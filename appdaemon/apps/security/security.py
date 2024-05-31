@@ -9,6 +9,8 @@ DISARMED = "Disarmed"
 
 class Security(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+
         await self.listen_state(self._state_callback_async,
                                 entity_id="person")
         await self.listen_state(self._state_callback_async,

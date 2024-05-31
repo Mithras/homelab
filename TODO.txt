@@ -1,5 +1,17 @@
-- intall python and pip
-- rhaspby
+- appdaemon
+  - lambda support
+  - https://appdaemon.readthedocs.io/en/latest/APPGUIDE.html
+    kwargs -> cb_args
+  - https://appdaemon.readthedocs.io/en/latest/APPGUIDE.html#keeping-your-ide-happy
+- split person_state
+-
+  https://www.home-assistant.io/blog/2023/04/27/year-of-the-voice-chapter-2/
+  https://www.home-assistant.io/voice_control/worlds-most-private-voice-assistant/
+  https://www.home-assistant.io/voice_control/voice_remote_local_assistant/
+  https://www.home-assistant.io/voice_control/thirteen-usd-voice-remote/
+  https://www.home-assistant.io/voice_control/
+
+? rhaspby
   - https://next.home-assistant.io/docs/assist/custom_sentences
   - more alt sentences 
   - light switch not saying "light"
@@ -8,11 +20,3 @@
   - Time
     - set a timer
     - set an alarm (tts + light)
-- split person_state
-
-
-- chatgpt
-  https://chat.openai.com/chat
-  __Secure-next-auth.session-token
-  https://github.com/acheong08/ChatGPT/wiki/Setup
-  https://github.com/acheong08/ChatGPT/issues/399
