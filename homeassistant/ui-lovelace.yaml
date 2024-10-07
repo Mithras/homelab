@@ -41,7 +41,15 @@ views:
                 icon: mdi:amplifier
               - entity: switch.tradfri_control_outlet_01
                 icon: mdi:speaker-multiple
-              - vacuum.roborock_vacuum_s5
+              - vacuum.roborock_s8_pro_ultra
+              # - image.roborock_s8_pro_ultra_upstairs
+              # - image.roborock_s8_pro_ultra_downstairs
+              # - cover.fyrtur_01
+              # - cover.fyrtur_02
+              - cover.living_room_window_2
+              - cover.curtain_3_aa2c
+              - sensor.smart_plug_03_power
+              - input_boolean.ac_living_room
           - type: entities
             title: Upstairs
             show_header_toggle: false
@@ -51,9 +59,11 @@ views:
               - sensor.airthings_wave_178276_humidity
               - sensor.airthings_wave_178276_vocs
               - sensor.airthings_wave_178276_carbon_dioxide
-              - switch.smart_plug_03
-              - input_boolean.fan
-              - sensor.smart_plug_03_power
+              - light.office
+              - entity: switch.smart_light_switch_01
+                icon: mdi:lightbulb-on
+              - sensor.smart_plug_04_power
+              - input_boolean.ac_master_bedroom
 
       - type: vertical-stack
         cards:
@@ -66,8 +76,6 @@ views:
               - light.living_room_main
               - light.living_room_back
               - light.kitchen
-              - entity: switch.smart_light_switch_01
-                icon: mdi:lightbulb-on
               - light.toilet
               - light.hallway_downstairs
               - light.hallway_upstairs
@@ -103,6 +111,7 @@ views:
               - binary_sensor.motion_sensor_04_occupancy
               - binary_sensor.motion_sensor_05_occupancy
               - binary_sensor.motion_sensor_12_occupancy
+              - binary_sensor.motion_sensor_13_occupancy
               - binary_sensor.door_sensor_03_contact
               - binary_sensor.door_sensor_02_contact
               - binary_sensor.door_sensor_01_contact
@@ -124,10 +133,11 @@ views:
         title: Device
         show_header_toggle: false
         entities:
+          - device_tracker.f8_1a_2b_57_d5_61
           - device_tracker.pixel_7
           - device_tracker.pixel_7_2
           - device_tracker.google_maps_105774318449945023361
-          - device_tracker.unifi_default_ca_a8_d2_36_54_7a
+          - device_tracker.dinagonasiphone
           - device_tracker.dina_goncharovas_iphone
           - device_tracker.google_maps_118090522190269394102
       - type: entities
@@ -166,6 +176,7 @@ views:
           - sensor.motion_sensor_04_battery
           - sensor.motion_sensor_05_battery
           - sensor.motion_sensor_12_battery
+          - sensor.motion_sensor_13_battery
           - sensor.door_sensor_02_battery
           - sensor.door_sensor_03_battery
           - sensor.door_sensor_01_battery
@@ -190,6 +201,7 @@ views:
           - sensor.motion_sensor_04_illuminance_lux
           - sensor.motion_sensor_05_illuminance_lux
           - sensor.motion_sensor_12_illuminance_lux
+          - sensor.motion_sensor_13_illuminance_lux
 
   - title: Graphs
     path: graphs

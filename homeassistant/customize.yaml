@@ -1,6 +1,5 @@
 # Mithras
-person.mithras:
-  entity_picture: /local/mithras.jfif
+person.mithras: {}
 # Dina
 person.dina: {}
 
@@ -141,7 +140,16 @@ sensor.motion_sensor_12_illuminance_lux:
   friendly_name: Hallway Upstairs Motion Sensor Illuminance
 sensor.motion_sensor_12_temperature:
   friendly_name: Hallway Upstairs Motion Sensor Temperature
-# Motion Sensor 13 (hardware mod)
+# Motion Sensor 13
+binary_sensor.motion_sensor_13_occupancy:
+  friendly_name: Bathroom Upstairs Motion Sensor
+sensor.motion_sensor_13_battery:
+  friendly_name: Bathroom Upstairs Motion Sensor Battery
+sensor.motion_sensor_13_illuminance_lux:
+  friendly_name: Bathroom Upstairs Motion Sensor Illuminance
+sensor.motion_sensor_13_temperature:
+  friendly_name: Bathroom Upstairs Motion Sensor Temperature
+# Motion Sensor 14 (hardware mod)
 # ---
 # hue_sensor_01
 binary_sensor.hue_sensor_01_occupancy:
@@ -201,26 +209,27 @@ sensor.smart_plug_02_temperature:
   friendly_name: Mithras Desktop Temperature
 # Smart Plug 03
 switch.smart_plug_03:
-  friendly_name: Fan (upstairs)
+  friendly_name: AC Living Room
 sensor.smart_plug_03_energy:
-  friendly_name: Fan (upstairs) Energy
+  friendly_name: AC Living Room Energy
 sensor.smart_plug_03_power:
-  friendly_name: Fan (upstairs) Power
+  friendly_name: AC Living Room Power
 sensor.smart_plug_03_temperature:
-  friendly_name: Fan (upstairs) Power Temperature
+  friendly_name: AC Living Room Temperature
+# Smart Plug 03
 # Smart Plug 04
-# switch.smart_plug_04:
-#   friendly_name: Master Bedroom AC
-# sensor.smart_plug_04_energy:
-#   friendly_name: Master Bedroom AC Energy
-# sensor.smart_plug_04_power:
-#   friendly_name: Master Bedroom AC Power
-# sensor.smart_plug_04_temperature:
-#   friendly_name: Master Bedroom AC Temperature
+switch.smart_plug_04:
+  friendly_name: AC Master Bedroom
+sensor.smart_plug_04_energy:
+  friendly_name: AC Master Bedroom Energy
+sensor.smart_plug_04_power:
+  friendly_name: AC Master Bedroom Power
+sensor.smart_plug_04_temperature:
+  friendly_name: AC Master Bedroom Temperature
 
 # Smart Light Switch 01
 switch.smart_light_switch_01:
-  friendly_name: Kitchen Main
+  friendly_name: Bathroom Upstairs
 # Smart Light Switch 02
 switch.smart_light_switch_02:
   friendly_name: Master Bathroom Main
@@ -266,15 +275,19 @@ cover.z_wave_garage_door_controller:
 
 # Mithras' Phone
 device_tracker.pixel_7:
-  friendly_name: Mithras' Phone
+  friendly_name: Mithras' Phone (UniFi)
+device_tracker.f8_1a_2b_57_d5_61:
+  friendly_name: Mithras' Phone (AP)
 device_tracker.pixel_7_2:
   friendly_name: Mithras' Hass
 device_tracker.google_maps_105774318449945023361:
   friendly_name: Mithras' Google Maps
 
 # Dina's Phone
-device_tracker.unifi_default_ca_a8_d2_36_54_7a:
-  friendly_name: Dina's Phone
+# device_tracker.___:
+#   friendly_name: Dina's Phone (UniFi)
+device_tracker.dinagonasiphone:
+  friendly_name: Dina's Phone (AP)
 device_tracker.dina_goncharovas_iphone:
   friendly_name: Dina's Hass
 device_tracker.google_maps_118090522190269394102:
@@ -313,6 +326,8 @@ light.hue_white_ambiance_20:
   friendly_name: Master Toilet
 light.hue_white_ambiance_21:
   friendly_name: Master Bathroom
+light.office:
+  friendly_name: Office
 
 # appdaemon.dark
 appdaemon.dark:
@@ -364,3 +379,14 @@ sensor.airthings_wave_211131_temperature:
   friendly_name: Living Room Temperature
 sensor.airthings_wave_211131_battery:
   friendly_name: Living Room Airthings Battery
+
+cover.curtain_3_954e:
+  friendly_name: Backyard Door Right
+cover.curtain_3_aa2c:
+  friendly_name: Backyard Door
+cover.fyrtur_01:
+  friendly_name: Living Room Window Left
+cover.fyrtur_02:
+  friendly_name: Living Room Window Right
+cover.living_room_window_2:
+  friendly_name: Living Room Window

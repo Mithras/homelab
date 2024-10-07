@@ -241,3 +241,19 @@ LightMasterBathroomMain:
     sun_down_on_profile: "on"
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
+LightBathroomUpstairs:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_13_occupancy
+        additional_delay: 60
+    light_group: switch.smart_light_switch_01
+    sun_up_on_profile: "on"
+    sun_down_on_profile: "on"
+    sun_up_off_profile: "off"
+    sun_down_off_profile: "off"

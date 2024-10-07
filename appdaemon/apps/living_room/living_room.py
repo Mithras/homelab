@@ -10,6 +10,8 @@ class LivingRoom(globals.Hass):
         self._tv_input = config["tv_input"]
         self._living_room_main_light = config["living_room_main_light"]
         self._light_strip = config["light_strip"]
+        self._tv_delay = config["tv_delay"]
+        self._tv_timer = None
 
         await self.listen_state(self._mithras_desktop_callback_async,
                                 entity_id=self._mithras_desktop)
@@ -53,9 +55,14 @@ class LivingRoom(globals.Hass):
         await self.common.turn_on_async(self._speakers)
         await self.common.light_turn_bright_async(self._living_room_main_light)
         await self.common.turn_on_async(self._tv_input)
+        await self.cancel_timer(self._tv_timer)
 
     async def _deactivate_async(self):
         await self.common.turn_off_async(self._jotunheim)
         await self.common.turn_off_async(self._speakers)
         await self.common.turn_off_async(self._light_strip)
+        await self.cancel_timer(self._tv_timer)
+        self._tv_timer = await self.run_in(self._turn_off_tv_async, self._tv_delay)
+
+    async def _turn_off_tv_async(self, kwargs):
         await self.common.turn_off_async(self._tv_input)

@@ -35,26 +35,14 @@ device_tracker:
   - platform: google_maps
     username: !secret location_account
     scan_interval: 30
-
-sensor:
-  - platform: systemmonitor
-    resources:
-      - type: disk_use
-        arg: /
-      - type: disk_free
-        arg: /
-      - type: memory_use
-      - type: memory_free
-      - type: network_in
-        arg: eth0
-      - type: network_out
-        arg: eth0
-      - type: throughput_network_in
-        arg: eth0
-      - type: throughput_network_out
-        arg: eth0
-      - type: processor_use
-      - type: last_boot
+  - platform: unifi_direct
+    host: 192.168.0.227 # u6-enterprise-downstairs
+    username: !secret unifi_direct_username
+    password: !secret unifi_direct_password
+  - platform: unifi_direct
+    host: 192.168.0.158 # u6-lr-upstairs
+    username: !secret unifi_direct_username
+    password: !secret unifi_direct_password
 
 switch:
   - platform: wake_on_lan
@@ -89,12 +77,15 @@ input_boolean:
   sleep:
     name: Sleep
     icon: mdi:sleep
-  fan:
-    name: Fan
-    icon: mdi:fan
   tv:
     name: Samsung Smart TV
     icon: mdi:television
+  ac_living_room:
+    name: AC Living Room
+    icon: mdi:air-conditioner
+  ac_master_bedroom:
+    name: AC Master Bedroom
+    icon: mdi:air-conditioner
 
 lovelace:
   mode: yaml

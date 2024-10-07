@@ -76,7 +76,7 @@ class Climate(globals.Hass):
             return
 
         await self.call_service("telegram_bot/send_message",
-                                target=[self.common.telegram_debug_chat],
+                                entity_id=[self.common.telegram_debug_chat],
                                 message=f"You have left *{old}*. Do you want to pre-set climate to home?\n  - current Temperature: {temperature_float}°C",
                                 inline_keyboard=[[
                                     ["Yes", SET_HOME_CMD],

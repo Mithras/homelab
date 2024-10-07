@@ -28,3 +28,4 @@ GlobalLight:
       - switch.tradfri_control_outlet_01
       - media_player.samsung_9_series_65
       - light.light_strip
+      - light.office

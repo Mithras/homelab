@@ -19,8 +19,8 @@ SymfoniskLightLivingRoom:
     - Common
   config:
     topic: zigbee2mqtt/symfonisk_02/action
-    light: light.living_room_main
-    secondary: light.living_room_back
+    light: light.living_room_back
+    secondary: light.living_room_main
     secondary_indication: False
 SymfoniskLightKitchen:
   module: symfonisk_light

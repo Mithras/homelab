@@ -20,6 +20,7 @@ SensorAlarmArmedAway:
     - binary_sensor.motion_sensor_10_occupancy # Toilet Motion Sensor
     - binary_sensor.motion_sensor_11_occupancy # Laundry Room Motion Sensor
     - binary_sensor.motion_sensor_12_occupancy # Hallway Downstairs Upstairs Motion Sensor
+    - binary_sensor.motion_sensor_13_occupancy # Hallway Downstairs Upstairs Motion Sensor
     - binary_sensor.door_sensor_03_contact # Front Door Sensor
     - binary_sensor.door_sensor_01_contact # Garage Door Sensor
     - binary_sensor.door_sensor_02_contact # Backyard Door Sensor
@@ -76,6 +77,7 @@ SensorAlarmArmedSleep:
     - binary_sensor.motion_sensor_10_occupancy # Toilet Motion Sensor
     - binary_sensor.motion_sensor_11_occupancy # Laundry Room Motion Sensor
     - binary_sensor.motion_sensor_12_occupancy # Hallway Upstairs Motion Sensor
+    - binary_sensor.motion_sensor_13_occupancy # Hallway Upstairs Motion Sensor
     - binary_sensor.door_sensor_03_contact # Front Door Sensor
     - binary_sensor.door_sensor_01_contact # Garage Door Sensor
     - binary_sensor.door_sensor_02_contact # Backyard Door Sensor

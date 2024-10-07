@@ -1,6 +1,7 @@
 /.storage
 /backups
 __pycache__
+/image
 
 /.google_maps_location_sharing.*
 /home-assistant_v2.db*

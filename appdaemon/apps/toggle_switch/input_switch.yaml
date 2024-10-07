@@ -1,0 +1,62 @@
+TvInputSwitch:
+  module: input_switch
+  class: InputSwitch
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    input: input_boolean.tv
+    power: sensor.smart_plug_01_power
+    power_on_threshold: 30
+    power_off_threshold: 30
+    check_interval: 60
+    service: remote/send_command
+    toggle_payload:
+      entity_id: remote.rm3_mini_1
+      device: tv_living_room
+      command: power
+AcLivingRoomInputSwitch:
+  module: input_switch
+  class: InputSwitch
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    input: input_boolean.ac_living_room
+    power: sensor.smart_plug_03_power
+    power_on_threshold: 1
+    power_off_threshold: 1
+    check_interval: 60
+    service: remote/send_command
+    on_payload:
+      entity_id: remote.rm3_mini_1
+      device: ac_living_room
+      command: "on"
+    off_payload:
+      entity_id: remote.rm3_mini_1
+      device: ac_living_room
+      command: "off"
+AcMasterBedroomInputSwitch:
+  module: input_switch
+  class: InputSwitch
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    input: input_boolean.ac_master_bedroom
+    power: sensor.smart_plug_04_power
+    power_on_threshold: 1
+    power_off_threshold: 1
+    check_interval: 60
+    service: remote/send_command
+    on_payload:
+      entity_id: remote.rm3_mini_2_remote
+      device: ac_master_bedroom
+      command: "on"
+    off_payload:
+      entity_id: remote.rm3_mini_2_remote
+      device: ac_master_bedroom
+      command: "off"

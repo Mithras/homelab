@@ -24,14 +24,14 @@ class Common(hass.Hass):
 
     async def send_alarm_async(self, message: str, **kwargs):
         await self.call_service("telegram_bot/send_message",
-                                target=[self.telegram_alarm_chat],
+                                entity_id=[self.telegram_alarm_chat],
                                 message=message,
                                 return_result=True,
                                 **kwargs)
 
     async def send_debug_async(self, message: str, **kwargs):
         await self.call_service("telegram_bot/send_message",
-                                target=[self.telegram_debug_chat],
+                                entity_id=[self.telegram_debug_chat],
                                 message=message,
                                 return_result=True,
                                 **kwargs)

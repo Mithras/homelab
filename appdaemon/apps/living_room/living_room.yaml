@@ -12,5 +12,6 @@ LivingRoom:
     jotunheim: switch.tradfri_control_outlet_02
     speakers: switch.tradfri_control_outlet_01
     tv_input: input_boolean.tv
-    living_room_main_light: light.living_room_main
+    living_room_main_light: light.living_room_back
     light_strip: light.light_strip
+    tv_delay: 300 # 5m
