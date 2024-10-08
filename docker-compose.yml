@@ -1,27 +1,4 @@
 services:
-  # rhasspy:
-  #   image: rhasspy/rhasspy
-  #   container_name: rhasspy
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./rhasspy/profiles:/profiles
-  #     - /etc/localtime:/etc/localtime:ro
-  #   ports:
-  #     - 12101:12101
-  #   networks:
-  #     - homelab
-  #   command: --user-profiles /profiles --profile en
-  #   user: "${UID}:${GID}"
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    restart: unless-stopped
-    volumes:
-      - ./portainer:/data
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - 9443:9443
   mosquitto:
     image: eclipse-mosquitto
     container_name: mosquitto
@@ -161,6 +138,40 @@ services:
       - 22000:22000/tcp # TCP file transfers
       - 22000:22000/udp # QUIC file transfers
       # - 21027:21027/udp # Receive local discovery broadcasts
+  wyoming-piper:
+    image: rhasspy/wyoming-piper
+    command: --voice en_US-lessac-medium
+    container_name: wyoming-piper
+    restart: unless-stopped
+    hostname: wyoming-piper
+    volumes:
+      - ./wyoming-piper/data:/data
+    ports:
+      - 10200:10200
+    networks:
+      - homelab
+  wyoming-whisper:
+    # docker compose up -d wyoming-whisper
+    image: rhasspy/wyoming-whisper
+    command:
+      - --model
+      # - medium-int8 # 3-4s
+      # - distil-medium.en # 4-5s
+      # - medium.en # 5-6s
+      # - distil-large-v2 # 8-9s
+      - ellisd/faster-whisper-distil-medium-en-int8 # 3s
+      # - ellisd/faster-whisper-distil-large-v2-en-int8 # 5s
+      - --language
+      - en
+    container_name: wyoming-whisper
+    restart: unless-stopped
+    hostname: wyoming-whisper
+    volumes:
+      - ./wyoming-whisper/data:/data
+    ports:
+      - 10300:10300
+    networks:
+      - homelab
 networks:
   homelab:
     name: homelab

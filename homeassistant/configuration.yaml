@@ -14,6 +14,7 @@ sun:
 system_health:
 zone: !include zone.yaml
 bluetooth:
+media_source:
 
 homeassistant:
   external_url: !secret external_url
