@@ -1,0 +1,94 @@
+x-gpu: &gpu
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+services:
+  wyoming-whisper:
+    <<: [ *gpu ]
+    # image: rhasspy/wyoming-whisper
+    build:
+      args:
+        - BASE=nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
+        # https://github.com/rhasspy/wyoming-faster-whisper/releases
+        - WYOMING_WHISPER_VERSION=2.2.0
+      context: ./wyoming-whisper
+    command:
+      - --device
+      - cuda
+      - --model
+      # - large-v3 # gpu: 0.25s
+      - deepdml/faster-whisper-large-v3-turbo-ct2 # gpu: 0.2s
+      - --language
+      - en
+      - --debug
+    container_name: wyoming-whisper
+    restart: unless-stopped
+    hostname: wyoming-whisper
+    volumes:
+      - ./wyoming-whisper/data:/data
+    ports:
+      - 10300:10300
+    networks:
+      - homelab
+  ollama:
+    # https://ollama.com/library/mistral-nemo:12b - hardly works
+    # https://ollama.com/library/command-r:35b - doesn't work
+    # https://ollama.com/library/qwen2.5:14b - works
+    # https://ollama.com/library/qwen2.5:32b - works best
+    <<: [ *gpu ]
+    image: ollama/ollama
+    container_name: ollama
+    restart: unless-stopped
+    hostname: ollama
+    volumes:
+      - ./ollama/data:/root/.ollama
+    ports:
+      - 11434:11434
+    networks:
+      - homelab
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    # restart: unless-stopped
+    hostname: open-webui
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_AUTH=0
+      - WEBUI_SECRET_KEY=
+    volumes:
+      - ./open-webui/data:/app/backend/data
+    ports:
+      - 3000:8080
+    networks:
+      - homelab
+  local-ai:
+    # functionary-small-v3.2.Q8_0.gguf - text works, json doesn't work
+    <<: [ *gpu ]
+    image: localai/localai:latest-gpu-nvidia-cuda-12
+    command:
+      # text-, function~
+      - huggingface://bartowski/Mistral-7B-Instruct-v0.3-GGUF/Mistral-7B-Instruct-v0.3-Q8_0.gguf
+      # text+, function-
+      # - huggingface://bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/Meta-Llama-3.1-8B-Instruct-Q8_0.gguf
+      # text+, function-
+      # - huggingface://bartowski/Mistral-Nemo-Instruct-2407-GGUF/Mistral-Nemo-Instruct-2407-Q8_0.gguf
+      # fails
+      # - huggingface://TheBloke/dolphin-2.7-mixtral-8x7b-GGUF/dolphin-2.7-mixtral-8x7b.Q4_K_M.gguf
+      # text-, function~
+      # - huggingface://TheBloke/laser-dolphin-mixtral-2x7b-dpo-GGUF/laser-dolphin-mixtral-2x7b-dpo.Q5_K_M.gguf
+    container_name: local-ai
+    # restart: unless-stopped
+    hostname: local-ai
+    volumes:
+      - ./local-ai/data/models:/build/models
+    ports:
+      - 8080:8080
+    networks:
+      - homelab
+networks:
+  homelab:
+    name: homelab
