@@ -276,18 +276,14 @@ cover.z_wave_garage_door_controller:
 # Mithras' Phone
 device_tracker.pixel_7:
   friendly_name: Mithras' Phone (UniFi)
-device_tracker.f8_1a_2b_57_d5_61:
-  friendly_name: Mithras' Phone (AP)
 device_tracker.pixel_7_2:
   friendly_name: Mithras' Hass
 device_tracker.google_maps_105774318449945023361:
   friendly_name: Mithras' Google Maps
 
 # Dina's Phone
-# device_tracker.___:
-#   friendly_name: Dina's Phone (UniFi)
 device_tracker.dinagonasiphone:
-  friendly_name: Dina's Phone (AP)
+  friendly_name: Dina's Phone (UniFi)
 device_tracker.dina_goncharovas_iphone:
   friendly_name: Dina's Hass
 device_tracker.google_maps_118090522190269394102:

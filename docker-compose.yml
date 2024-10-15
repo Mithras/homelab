@@ -13,19 +13,6 @@ services:
     networks:
       - homelab
     user: "${UID}:${GID}"
-  adguardhome:
-    image: adguard/adguardhome
-    container_name: adguardhome
-    restart: unless-stopped
-    volumes:
-      - ./adguard/work:/opt/adguardhome/work
-      - ./adguard/conf:/opt/adguardhome/conf
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - 53:53/tcp
-      - 53:53/udp
-      - 3000:3000
-    user: "${UID}:${GID}"
   swag:
     image: lscr.io/linuxserver/swag
     container_name: swag
@@ -151,7 +138,6 @@ services:
     networks:
       - homelab
   wyoming-whisper:
-    # docker compose up -d wyoming-whisper
     image: rhasspy/wyoming-whisper
     command:
       - --model
@@ -172,6 +158,19 @@ services:
       - 10300:10300
     networks:
       - homelab
+  # adguardhome:
+  #   image: adguard/adguardhome
+  #   container_name: adguardhome
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./adguard/work:/opt/adguardhome/work
+  #     - ./adguard/conf:/opt/adguardhome/conf
+  #     - /etc/localtime:/etc/localtime:ro
+  #   ports:
+  #     - 53:53/tcp
+  #     - 53:53/udp
+  #     - 3000:3000
+  #   user: "${UID}:${GID}"
 networks:
   homelab:
     name: homelab

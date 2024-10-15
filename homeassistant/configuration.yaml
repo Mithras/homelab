@@ -15,6 +15,7 @@ system_health:
 zone: !include zone.yaml
 bluetooth:
 media_source:
+assist_pipeline:
 
 homeassistant:
   external_url: !secret external_url
@@ -23,7 +24,7 @@ homeassistant:
   longitude: !secret longitude
   country: US
   customize: !include customize.yaml
-  whitelist_external_dirs:
+  allowlist_external_dirs:
     - /config/tmp
 
 recorder: !include recorder.yaml
@@ -36,14 +37,6 @@ device_tracker:
   - platform: google_maps
     username: !secret location_account
     scan_interval: 30
-  - platform: unifi_direct
-    host: 192.168.0.227 # u6-enterprise-downstairs
-    username: !secret unifi_direct_username
-    password: !secret unifi_direct_password
-  - platform: unifi_direct
-    host: 192.168.0.158 # u6-lr-upstairs
-    username: !secret unifi_direct_username
-    password: !secret unifi_direct_password
 
 switch:
   - platform: wake_on_lan

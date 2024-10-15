@@ -1,8 +1,0 @@
-/profiles/en/kaldi
-/profiles/en/tts
-/profiles/en/supervisord.log
-/profiles/en/supervisord.pid
-/profiles/en/intent_graph.pickle.gz
-/profiles/en/docker-compose.yml
-/profiles/en/supervisord.conf
-/profiles/en/profile.json

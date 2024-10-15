@@ -1,0 +1,27 @@
+turn_on:
+  fields:
+    entity_id:
+      required: true
+      selector:
+        config_entry:
+          integration: appdaemon_app
+turn_off:
+  fields:
+    entity_id:
+      required: true
+      selector:
+        config_entry:
+          integration: appdaemon_app
+toggle:
+  fields:
+    entity_id:
+      required: true
+      selector:
+        config_entry:
+          integration: appdaemon_app
+fire_event:
+  fields:
+    event:
+      required: true
+      selector:
+        text:

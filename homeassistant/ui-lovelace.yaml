@@ -133,7 +133,6 @@ views:
         title: Device
         show_header_toggle: false
         entities:
-          - device_tracker.f8_1a_2b_57_d5_61
           - device_tracker.pixel_7
           - device_tracker.pixel_7_2
           - device_tracker.google_maps_105774318449945023361

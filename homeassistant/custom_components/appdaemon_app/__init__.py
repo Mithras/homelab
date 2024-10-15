@@ -1,11 +1,10 @@
-from homeassistant.const import (
-    STATE_ON, STATE_OFF, SERVICE_TURN_ON, SERVICE_TURN_OFF, SERVICE_TOGGLE, ATTR_ENTITY_ID)
+from homeassistant.const import STATE_ON, STATE_OFF, SERVICE_TURN_ON, SERVICE_TURN_OFF, SERVICE_TOGGLE, ATTR_ENTITY_ID
 
 
 DOMAIN = 'appdaemon_app'
 
 
-def setup(hass, config):
+def setup(hass, config) -> bool:
     def turn_on(call):
         entity_id = call.data[ATTR_ENTITY_ID]
         state_obj = hass.states.get(entity_id)
@@ -30,7 +29,6 @@ def setup(hass, config):
     hass.services.register(DOMAIN, SERVICE_TURN_ON, turn_on)
     hass.services.register(DOMAIN, SERVICE_TURN_OFF, turn_off)
     hass.services.register(DOMAIN, SERVICE_TOGGLE, toggle)
-    hass.services.register(
-        DOMAIN, "fire_event", fire_event)
+    hass.services.register(DOMAIN, "fire_event", fire_event)
 
     return True
