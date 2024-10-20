@@ -35,10 +35,16 @@ services:
     networks:
       - homelab
   ollama:
-    # https://ollama.com/library/mistral-nemo:12b - hardly works
-    # https://ollama.com/library/command-r:35b - doesn't work
-    # https://ollama.com/library/qwen2.5:14b - works
-    # https://ollama.com/library/qwen2.5:32b - works best
+    # Generation
+    # ~ https://ollama.com/library/mistral-nemo:12b
+    # - https://ollama.com/library/command-r:35b
+    # + https://ollama.com/library/qwen2.5:14b
+    # ++ https://ollama.com/library/qwen2.5:32b
+    # Embedding
+    # ++ https://ollama.com/library/mxbai-embed-large
+    # Reranking
+    # + ollama pull hf.co/gpustack/bge-reranker-v2-m3-GGUF:Q8_0
+    # ? mixedbread-ai/mxbai-rerank-large-v1
     <<: [ *gpu ]
     image: ollama/ollama
     container_name: ollama
@@ -50,30 +56,49 @@ services:
       - 11434:11434
     networks:
       - homelab
-  local-ai:
-    # functionary-small-v3.2.Q8_0.gguf - text works, json doesn't work
-    <<: [ *gpu ]
-    image: localai/localai:latest-gpu-nvidia-cuda-12
-    command:
-      # text-, function~
-      - huggingface://bartowski/Mistral-7B-Instruct-v0.3-GGUF/Mistral-7B-Instruct-v0.3-Q8_0.gguf
-      # text+, function-
-      # - huggingface://bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/Meta-Llama-3.1-8B-Instruct-Q8_0.gguf
-      # text+, function-
-      # - huggingface://bartowski/Mistral-Nemo-Instruct-2407-GGUF/Mistral-Nemo-Instruct-2407-Q8_0.gguf
-      # fails
-      # - huggingface://TheBloke/dolphin-2.7-mixtral-8x7b-GGUF/dolphin-2.7-mixtral-8x7b.Q4_K_M.gguf
-      # text-, function~
-      # - huggingface://TheBloke/laser-dolphin-mixtral-2x7b-dpo-GGUF/laser-dolphin-mixtral-2x7b-dpo.Q5_K_M.gguf
-    container_name: local-ai
-    # restart: unless-stopped
-    hostname: local-ai
+  sd-download:
+    build: https://github.com/AcdbdBarho/stable-diffusion-webui-docker.git#:services/download
+    container_name: sd-download
     volumes:
-      - ./local-ai/data/models:/build/models
+      - ./automatic/data:/data
+  automatic:
+    <<: [ *gpu ]
+    # build: https://github.com/AbdBarho/stable-diffusion-webui-docker.git#:services/AUTOMATIC1111
+    build: https://github.com/Mithras/stable-diffusion-webui-docker.git#:services/AUTOMATIC1111 # hotfix
+    container_name: automatic
+    # restart: unless-stopped
+    hostname: automatic
+    environment:
+      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api --gradio-auth Mithras:${AUTOMATIC_PWD}
     ports:
-      - 8080:8080
-    networks:
-      - homelab
+      - 7860:7860
+    volumes:
+      - ./automatic/data:/data
+      - ./automatic/output:/output
+  # local-ai:
+  #   # functionary-small-v3.2.Q8_0.gguf - text works, json doesn't work
+  #   <<: [ *gpu ]
+  #   image: localai/localai:latest-gpu-nvidia-cuda-12
+  #   command:
+  #     # text-, function~
+  #     - huggingface://bartowski/Mistral-7B-Instruct-v0.3-GGUF/Mistral-7B-Instruct-v0.3-Q8_0.gguf
+  #     # text+, function-
+  #     # - huggingface://bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/Meta-Llama-3.1-8B-Instruct-Q8_0.gguf
+  #     # text+, function-
+  #     # - huggingface://bartowski/Mistral-Nemo-Instruct-2407-GGUF/Mistral-Nemo-Instruct-2407-Q8_0.gguf
+  #     # fails
+  #     # - huggingface://TheBloke/dolphin-2.7-mixtral-8x7b-GGUF/dolphin-2.7-mixtral-8x7b.Q4_K_M.gguf
+  #     # text-, function~
+  #     # - huggingface://TheBloke/laser-dolphin-mixtral-2x7b-dpo-GGUF/laser-dolphin-mixtral-2x7b-dpo.Q5_K_M.gguf
+  #   container_name: local-ai
+  #   # restart: unless-stopped
+  #   hostname: local-ai
+  #   volumes:
+  #     - ./local-ai/data/models:/build/models
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - homelab
 networks:
   homelab:
     name: homelab
