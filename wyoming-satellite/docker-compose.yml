@@ -3,55 +3,46 @@ services:
     build: https://github.com/rhasspy/wyoming-mic-external.git
     restart: unless-stopped
     ports:
-      - "10600:10600"
+      - 10600:10600
     devices:
       - /dev/snd:/dev/snd
     group_add:
       - audio
     command:
       - --device
-      # - default:CARD=USB
-      - plughw:CARD=USB,DEV=0
+      - default:CARD=USB
+      # - plughw:CARD=USB,DEV=0
       - --debug
   playback:
     build: https://github.com/rhasspy/wyoming-snd-external.git
     restart: unless-stopped
     ports:
-      - "10601:10601"
+      - 10601:10601
     devices:
       - /dev/snd:/dev/snd
     group_add:
       - audio
     command:
-      - "--device"
+      - --device
       - default:CARD=USB
       # - plughw:CARD=USB,DEV=0
       - --debug
-  wakeword:
-    image: rhasspy/wyoming-openwakeword
-    restart: unless-stopped
-    ports:
-      - "10400:10400"
-    command:
-      - "--preload-model"
-      - ok_nabu # hey_jarvis
-      - --debug
-      # - --debug-probability
-      # - --threshold # default: 0.5 (0.0-1.0)
   satellite:
     build: https://github.com/rhasspy/wyoming-satellite.git
     restart: unless-stopped
     ports:
-      - "10700:10700"
+      - 10700:10700
     command:
-      - "--mic-uri"
-      - "tcp://microphone:10600"
-      - "--snd-uri"
-      - "tcp://playback:10601"
-      - "--wake-uri"
-      - "tcp://wakeword:10400"
+      - --mic-uri
+      - tcp://microphone:10600
+      - --snd-uri
+      - tcp://playback:10601
+      - --wake-uri
+      # - tcp://wakeword:10400
+      - tcp://host.docker.internal:10400
       - --wake-word-name
-      - ok_nabu # hey_jarvis
+      # - ok_nabu # hey_jarvis
+      - computer # jarvis
       - --awake-wav
       - /app/sounds/awake.wav
       - --done-wav
@@ -61,10 +52,23 @@ services:
       - --timer-finished-wav-repeat
       - "3"
       - "1"
-      - "--name"
-      - "Wyoming Satellite"
+      - --name
+      - Wyoming Satellite
       - --debug
       # - --debug-recording-dir
       # - /debug-recording-dir
     volumes:
-      - ./satellite/debug-recording-dir:/debug-recording-dir
+      - ./debug-recording-dir:/debug-recording-dir
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  # wakeword:
+  #   image: rhasspy/wyoming-openwakeword
+  #   restart: unless-stopped
+  #   ports:
+  #     - 10400:10400
+  #   command:
+  #     - --preload-model
+  #     - ok_nabu # hey_jarvis
+  #     - --debug
+  #     # - --debug-probability
+  #     # - --threshold # default: 0.5 (0.0-1.0)

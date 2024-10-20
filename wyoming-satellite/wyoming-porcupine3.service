@@ -1,0 +1,7 @@
+[Unit]
+Description=Wyoming Porcupine3
+[Service]
+WorkingDirectory=/home/pi/homelab/wyoming-satellite
+ExecStart=/home/pi/homelab/wyoming-satellite/run.sh
+[Install]
+WantedBy=multi-user.target
