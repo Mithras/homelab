@@ -19,7 +19,7 @@ assist_pipeline:
 
 homeassistant:
   external_url: !secret external_url
-  internal_url: https://ubuntu1:8123/
+  internal_url: https://ubuntu1:8443/
   latitude: !secret latitude
   longitude: !secret longitude
   country: US
@@ -30,8 +30,9 @@ homeassistant:
 recorder: !include recorder.yaml
 
 http:
-  ssl_certificate: !secret ssl_certificate
-  ssl_key: !secret ssl_key
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.18.0.0/24
 
 device_tracker:
   - platform: google_maps
