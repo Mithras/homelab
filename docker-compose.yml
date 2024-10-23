@@ -127,13 +127,12 @@ services:
       - PUID=${UID}
       - PGID=${GID}
     ports:
-      # - 80:80
-      # - 443:443
       - 81:81 # Admin
       - 3002:3002 # Open WebUI
       - 8443:8443 # Home Assistant
       - 8384:8384 # Syncthing
       - 7860:7860 # Automatic
+      - 11434:11434 # Ollama
     volumes:
       - ./nginx-proxy-manager/data:/data
       - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
