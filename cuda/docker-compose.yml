@@ -40,6 +40,7 @@ services:
     # - https://ollama.com/library/command-r:35b
     # + https://ollama.com/library/qwen2.5:14b
     # ++ https://ollama.com/library/qwen2.5:32b
+    # +++ ollama pull hf.co/bartowski/Replete-LLM-V2.5-Qwen-32b-GGUF:Q4_K_M
     # Embedding
     # ++ https://ollama.com/library/mxbai-embed-large
     # Reranking
@@ -50,6 +51,8 @@ services:
     container_name: ollama
     restart: unless-stopped
     hostname: ollama
+    environment:
+      - OLLAMA_ORIGINS=*
     volumes:
       - ./ollama/data:/root/.ollama
     ports:

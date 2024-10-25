@@ -1,0 +1,20 @@
+services:
+  dev:
+    build:
+      context: ${HOME_ASSISTANT_CORE}
+      dockerfile: Dockerfile.dev
+    stdin_open: true
+    tty: true
+    environment:
+      - PYTHONASYNCIODEBUG=1
+    volumes:
+      - ${HOME_ASSISTANT_CORE}:/workspace
+      - ./launch.json:/workspace/.vscode/launch.json
+      - ../homeassistant/custom_components:/workspace/config/custom_components
+    # ports:
+    #   - 8123:8123 # Web UI
+    networks:
+      - homelab
+networks:
+  homelab:
+    name: homelab

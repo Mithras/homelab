@@ -3,8 +3,6 @@
 __pycache__
 /image
 /tts
-/custom_components/extended_openai_conversation
-/custom_components/llama_conversation
 
 /.google_maps_location_sharing.*
 /home-assistant_v2.db*

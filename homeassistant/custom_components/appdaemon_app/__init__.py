@@ -1,7 +1,13 @@
-from homeassistant.const import STATE_ON, STATE_OFF, SERVICE_TURN_ON, SERVICE_TURN_OFF, SERVICE_TOGGLE, ATTR_ENTITY_ID
+from homeassistant.const import (
+    ATTR_ENTITY_ID,
+    SERVICE_TOGGLE,
+    SERVICE_TURN_OFF,
+    SERVICE_TURN_ON,
+    STATE_OFF,
+    STATE_ON,
+)
 
-
-DOMAIN = 'appdaemon_app'
+DOMAIN = "appdaemon_app"
 
 
 def setup(hass, config) -> bool:
@@ -18,9 +24,11 @@ def setup(hass, config) -> bool:
     def toggle(call):
         entity_id = call.data[ATTR_ENTITY_ID]
         state_obj = hass.states.get(entity_id)
-        hass.states.set(entity_id,
-                        STATE_ON if state_obj.state == STATE_OFF else STATE_OFF,
-                        state_obj.attributes)
+        hass.states.set(
+            entity_id,
+            STATE_ON if state_obj.state == STATE_OFF else STATE_OFF,
+            state_obj.attributes,
+        )
 
     def fire_event(call):
         event = call.data["event"]
