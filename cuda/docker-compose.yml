@@ -53,6 +53,7 @@ services:
     hostname: ollama
     environment:
       - OLLAMA_ORIGINS=*
+      - OLLAMA_KEEP_ALIVE=1800
     volumes:
       - ./ollama/data:/root/.ollama
     ports:
