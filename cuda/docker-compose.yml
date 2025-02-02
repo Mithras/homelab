@@ -7,45 +7,62 @@ x-gpu: &gpu
             count: all
             capabilities: [gpu]
 services:
-  wyoming-whisper:
+  # wyoming-whisper:
+  #   <<: [ *gpu ]
+  #   # image: rhasspy/wyoming-whisper
+  #   build:
+  #     args:
+  #       - BASE=nvidia/cuda:12.8.0-cudnn-runtime-ubuntu22.04
+  #       # https://github.com/rhasspy/wyoming-faster-whisper/releases
+  #       - WYOMING_WHISPER_VERSION=2.4.0
+  #     context: ./wyoming-whisper
+  #   command:
+  #     - --device
+  #     - cuda
+  #     - --model
+  #     # - large-v3 # gpu: 0.25s
+  #     - deepdml/faster-whisper-large-v3-turbo-ct2 # gpu: 0.2s
+  #     - --language
+  #     - en
+  #     - --debug
+  #   container_name: wyoming-whisper
+  #   restart: unless-stopped
+  #   hostname: wyoming-whisper
+  #   volumes:
+  #     - ./wyoming-whisper/data:/data
+  #   ports:
+  #     - 10300:10300
+  #   networks:
+  #     - homelab
+  wyoming-whisper-2:
     <<: [ *gpu ]
-    # image: rhasspy/wyoming-whisper
-    build:
-      args:
-        - BASE=nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
-        # https://github.com/rhasspy/wyoming-faster-whisper/releases
-        - WYOMING_WHISPER_VERSION=2.2.0
-      context: ./wyoming-whisper
-    command:
-      - --device
-      - cuda
-      - --model
-      # - large-v3 # gpu: 0.25s
-      - deepdml/faster-whisper-large-v3-turbo-ct2 # gpu: 0.2s
-      - --language
-      - en
-      - --debug
-    container_name: wyoming-whisper
+    # https://github.com/linuxserver/docker-faster-whisper
+    image: lscr.io/linuxserver/faster-whisper:gpu
+    container_name: wyoming-whisper-2
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      # - WHISPER_MODEL=distil-large-v3
+      - WHISPER_MODEL=large-v3-turbo
+      - WHISPER_BEAM=5
+      - WHISPER_LANG=en
     restart: unless-stopped
-    hostname: wyoming-whisper
+    hostname: wyoming-whisper-2
     volumes:
-      - ./wyoming-whisper/data:/data
+      - ./wyoming-whisper-2/data:/config
     ports:
-      - 10300:10300
+      - 10301:10300
     networks:
       - homelab
   ollama:
     # Generation
-    # ~ https://ollama.com/library/mistral-nemo:12b
-    # - https://ollama.com/library/command-r:35b
-    # + https://ollama.com/library/qwen2.5:14b
-    # ++ https://ollama.com/library/qwen2.5:32b
-    # +++ ollama pull hf.co/bartowski/Replete-LLM-V2.5-Qwen-32b-GGUF:Q4_K_M
+    # + ollama pull hf.co/bartowski/Replete-LLM-V2.5-Qwen-32b-GGUF:Q4_K_M
+    # ? ollama pull hf.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF:Q4_K_M
     # Embedding
-    # ++ https://ollama.com/library/mxbai-embed-large
+    # + ollama pull mxbai-embed-large
     # Reranking
     # + ollama pull hf.co/gpustack/bge-reranker-v2-m3-GGUF:Q8_0
-    # ? mixedbread-ai/mxbai-rerank-large-v1
     <<: [ *gpu ]
     image: ollama/ollama
     container_name: ollama
@@ -53,32 +70,32 @@ services:
     hostname: ollama
     environment:
       - OLLAMA_ORIGINS=*
-      - OLLAMA_KEEP_ALIVE=1800
+      - OLLAMA_KEEP_ALIVE=300
     volumes:
       - ./ollama/data:/root/.ollama
     ports:
       - 11434:11434
     networks:
       - homelab
-  sd-download:
-    build: https://github.com/AcdbdBarho/stable-diffusion-webui-docker.git#:services/download
-    container_name: sd-download
-    volumes:
-      - ./automatic/data:/data
-  automatic:
-    <<: [ *gpu ]
-    # build: https://github.com/AbdBarho/stable-diffusion-webui-docker.git#:services/AUTOMATIC1111
-    build: https://github.com/Mithras/stable-diffusion-webui-docker.git#:services/AUTOMATIC1111 # hotfix
-    container_name: automatic
-    # restart: unless-stopped
-    hostname: automatic
-    environment:
-      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api --gradio-auth Mithras:${AUTOMATIC_PWD}
-    ports:
-      - 7860:7860
-    volumes:
-      - ./automatic/data:/data
-      - ./automatic/output:/output
+  # sd-download:
+  #   build: https://github.com/AcdbdBarho/stable-diffusion-webui-docker.git#:services/download
+  #   container_name: sd-download
+  #   volumes:
+  #     - ./automatic/data:/data
+  # automatic:
+  #   <<: [ *gpu ]
+  #   # build: https://github.com/AbdBarho/stable-diffusion-webui-docker.git#:services/AUTOMATIC1111
+  #   build: https://github.com/Mithras/stable-diffusion-webui-docker.git#:services/AUTOMATIC1111 # hotfix
+  #   container_name: automatic
+  #   # restart: unless-stopped
+  #   hostname: automatic
+  #   environment:
+  #     - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api --gradio-auth Mithras:${AUTOMATIC_PWD}
+  #   ports:
+  #     - 7860:7860
+  #   volumes:
+  #     - ./automatic/data:/data
+  #     - ./automatic/output:/output
   # local-ai:
   #   # functionary-small-v3.2.Q8_0.gguf - text works, json doesn't work
   #   <<: [ *gpu ]
