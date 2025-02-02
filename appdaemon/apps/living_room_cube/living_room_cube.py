@@ -13,6 +13,7 @@ ROTATE_PROFILES = [
 
 class LivingRoomCube(globals.Hass):
     async def initialize(self):
+        return
         config = self.args["config"]
         self.topic = config["topic"]
         self._light_kitchen = config["light_kitchen"]
@@ -43,6 +44,7 @@ class LivingRoomCube(globals.Hass):
                                 topic=self.topic)
 
     async def terminate(self):
+        return
         await self.call_service("mqtt/unsubscribe",
                                 topic=self.topic,
                                 namespace="mqtt",

@@ -20,4 +20,4 @@ exclude:
     - camera.porch_camera_high
 include:
   entities:
-    - sensor.hue_sensor_01_illuminance_lux
+    - sensor.hue_sensor_01_illuminance

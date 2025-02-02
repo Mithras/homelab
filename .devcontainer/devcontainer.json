@@ -4,21 +4,21 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "dev",
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "script/setup",
+  "postCreateCommand": "git config --global --add safe.directory ${containerWorkspaceFolder} && script/setup",
   "postStartCommand": "script/bootstrap",
   "customizations": {
     "vscode": {
       "extensions": [
-        "mhutchie.git-graph",
-        "esbenp.prettier-vscode",
-        "streetsidesoftware.code-spell-checker",
-        "ms-python.vscode-pylance",
         "charliermarsh.ruff",
-        "redhat.vscode-yaml"
-        // "ms-python.pylint",
+        "ms-python.pylint",
+        "ms-python.vscode-pylance",
         // "visualstudioexptteam.vscodeintellicode",
+        "redhat.vscode-yaml",
+        "esbenp.prettier-vscode",
         // "GitHub.vscode-pull-request-github",
-        // "GitHub.copilot"
+        // "GitHub.copilot",
+        "mhutchie.git-graph",
+        "streetsidesoftware.code-spell-checker"
       ],
       "settings": {
         "python.experiments.optOutFrom": ["pythonTestAdapter"],
@@ -47,7 +47,13 @@
         ],
         "[python]": {
           "editor.defaultFormatter": "charliermarsh.ruff"
-        }
+        },
+        "json.schemas": [
+          {
+            "fileMatch": ["homeassistant/components/*/manifest.json"],
+            "url": "./script/json_schemas/manifest_schema.json"
+          }
+        ]
       }
     }
   }

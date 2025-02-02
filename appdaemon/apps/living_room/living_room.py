@@ -21,9 +21,8 @@ class LivingRoom(globals.Hass):
         await self.listen_state(self._person_not_home_callback_async,
                                 entity_id=config["person"],
                                 new="not_home")
-        await self.listen_state(self._awake_callback_async,
-                                entity_id=config["sleep_input"],
-                                new="off")
+        await self.listen_state(self._sleep_callback_async,
+                                entity_id=config["sleep_input"])
 
     async def _mithras_desktop_callback_async(self, entity, attribute, old, new, kwargs):
         if old == new:
@@ -40,15 +39,18 @@ class LivingRoom(globals.Hass):
         await self.common.turn_on_async(self._mithras_desktop)
 
     async def _person_not_home_callback_async(self, entity, attribute, old, new, kwargs):
-        if old == new or await self.anyone_home(person=True):
+        if old == new: # or await self.anyone_home(person=True):
             return
         await self._deactivate_async()
 
-    async def _awake_callback_async(self, entity, attribute, old, new, kwargs):
+    async def _sleep_callback_async(self, entity, attribute, old, new, kwargs):
         if old == new:
             return
-        await self._activate_async()
-        await self.common.turn_on_async(self._mithras_desktop)
+        if new == "on":
+            await self._deactivate_async()
+        else:
+            await self._activate_async()
+            await self.common.turn_on_async(self._mithras_desktop)
 
     async def _activate_async(self):
         await self.common.turn_on_async(self._jotunheim)

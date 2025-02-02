@@ -12,7 +12,7 @@ class Dark(globals.Hass):
         await self._set_dark_async(None)
         await self.listen_state(self._illuminance_callback_async,
                                 entity_id=self._illuminance)
-  
+
     async def _illuminance_callback_async(self, entity, attribute, old, new, kwargs):
         # self.log("_illuminance_callback_async")
         if old == "unknown" or old == "unavailable" or new == "unavailable":

@@ -1,11 +1,11 @@
-# MasterBedroomSwitch:
-#   module: master_bedroom_switch
-#   class: MasterBedroomSwitch
-#   global_dependencies:
-#     - globals
-#   dependencies:
-#     - Common
-#   config:
-#     topic: zigbee2mqtt/tradfri_on_off_switch_01/action
-#     master_bedroom_light: light.master_bedroom
-#     light_app_state: appdaemon_app.light_master_bedroom
+MasterBedroomSwitch:
+  module: master_bedroom_switch
+  class: MasterBedroomSwitch
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    topic: zigbee2mqtt/tradfri_on_off_switch_01/action
+    master_bedroom_light: light.master_bedroom
+    light_app_state: appdaemon_app.light_master_bedroom

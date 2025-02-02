@@ -10,6 +10,9 @@ mobile_app:
 my:
 person:
 stream:
+  ll_hls: true
+  part_duration: 0.5
+  segment_duration: 2
 sun:
 system_health:
 zone: !include zone.yaml
@@ -19,7 +22,8 @@ assist_pipeline:
 
 homeassistant:
   external_url: !secret external_url
-  internal_url: https://ubuntu1:8443/
+  # internal_url: https://ubuntu1:8443/
+  internal_url: http://ubuntu1:8123/
   latitude: !secret latitude
   longitude: !secret longitude
   country: US
@@ -27,8 +31,8 @@ homeassistant:
   allowlist_external_dirs:
     - /config/tmp
 
-# debugpy:
-#   start: false
+debugpy:
+  # start: false
 
 recorder: !include recorder.yaml
 
@@ -93,6 +97,8 @@ lovelace:
       type: module
 
 appdaemon_app:
+mithras_app:
+  test: qwerty
 
 conversation:
   # intents:

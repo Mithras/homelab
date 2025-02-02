@@ -1,0 +1,10 @@
+{
+  "domain": "mithras_app",
+  "name": "app",
+  "version": "1.0.0",
+  "codeowners": ["@Mithras"],
+  "integration_type": "helper",
+  "iot_class": "calculated",
+  "dependencies": [],
+  "requirements": []
+}

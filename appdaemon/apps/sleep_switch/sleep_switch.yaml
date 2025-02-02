@@ -8,3 +8,23 @@ SleepSwitch:
   config:
     topic: zigbee2mqtt/smart_switch_01/action
     input: input_boolean.sleep
+    turn_on:
+      - service: input_boolean/turn_on
+        data:
+          entity_id: input_boolean.sleep
+      - service: cover/close_cover
+        data:
+          entity_id: cover.fyrtur_02
+      - service: cover/close_cover
+        data:
+          entity_id: cover.curtain_3_aa2c
+    turn_off:
+      - service: input_boolean/turn_off
+        data:
+          entity_id: input_boolean.sleep
+      - service: cover/open_cover
+        data:
+          entity_id: cover.fyrtur_02
+      - service: cover/open_cover
+        data:
+          entity_id: cover.curtain_3_aa2c

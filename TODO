@@ -1,6 +1,0 @@
-- zigbee2mqtt/rodret_01/action
-    on, off, brightness_move_up, brightness_move_down, brightness_stop
-- https://docs.python.org/3/using/cmdline.html#envvar-PYTHON_FROZEN_MODULES
-    /etc/services.d/home-assistant/run
-    /usr/src/homeassistant/rootfs/etc/services.d/home-assistant/run
-        exec python3 -Xfrozen_modules=off -m debugpy --listen 0.0.0.0:5678 -m homeassistant --config /config

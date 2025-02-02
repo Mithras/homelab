@@ -149,14 +149,23 @@ sensor.motion_sensor_13_illuminance_lux:
   friendly_name: Bathroom Upstairs Motion Sensor Illuminance
 sensor.motion_sensor_13_temperature:
   friendly_name: Bathroom Upstairs Motion Sensor Temperature
-# Motion Sensor 14 (hardware mod)
+# Motion Sensor 14 (v2)
+binary_sensor.motion_sensor_v2_14_occupancy:
+  friendly_name: Office Motion Sensor
+sensor.motion_sensor_v2_14_battery:
+  friendly_name: Office Motion Sensor Battery
+sensor.motion_sensor_v2_14_illuminance:
+  friendly_name: Office Motion Sensor Illuminance
+sensor.motion_sensor_v2_14_device_temperature:
+  friendly_name: Office Motion Sensor Temperature
+# Motion Sensor XX (hardware mod)
 # ---
 # hue_sensor_01
 binary_sensor.hue_sensor_01_occupancy:
   friendly_name: Porch Motion Sensor
 sensor.hue_sensor_01_battery:
   friendly_name: Porch Motion Sensor Battery
-sensor.hue_sensor_01_illuminance_lux:
+sensor.hue_sensor_01_illuminance:
   friendly_name: Porch Motion Sensor Illuminance
 sensor.hue_sensor_01_temperature:
   friendly_name: Porch Motion Sensor Temperature
@@ -184,11 +193,14 @@ switch.tradfri_control_outlet_01:
   friendly_name: Speakers
 sensor.tradfri_control_outlet_01_power_on_behavior:
   friendly_name: Speakers Power On Behavior
-# TRÅDFRI control outlet 03
+# TRÅDFRI control outlet 02
 switch.tradfri_control_outlet_02:
   friendly_name: Jotunheim
 sensor.tradfri_control_outlet_02_power_on_behavior:
   friendly_name: Jotunheim Power On Behavior
+# TRÅDFRI control outlet 03
+switch.tradfri_control_outlet_03:
+  friendly_name: Grow light
 # Smart Plug 01
 switch.smart_plug_01:
   friendly_name: Samsung Smart TV
@@ -233,6 +245,9 @@ switch.smart_light_switch_01:
 # Smart Light Switch 02
 switch.smart_light_switch_02:
   friendly_name: Master Bathroom Main
+# Smart Light Switch 03
+switch.smart_light_switch_03:
+  friendly_name: Fireplace
 
 # Thermostat
 climate.z_wave_plus_thermostat:
@@ -381,8 +396,40 @@ cover.curtain_3_954e:
 cover.curtain_3_aa2c:
   friendly_name: Backyard Door
 cover.fyrtur_01:
-  friendly_name: Living Room Window Left
+  friendly_name: TODO
 cover.fyrtur_02:
-  friendly_name: Living Room Window Right
-cover.living_room_window_2:
   friendly_name: Living Room Window
+
+# Flower Care 5631
+sensor.plant_sensor_5631_battery:
+  friendly_name: Olive tree (left) battery
+sensor.plant_sensor_5631_conductivity:
+  friendly_name: Olive tree (left) conductivity
+sensor.plant_sensor_5631_illuminance:
+  friendly_name: Olive tree (left) illuminance
+sensor.plant_sensor_5631_moisture:
+  friendly_name: Olive tree (left) moisture
+sensor.plant_sensor_5631_temperature:
+  friendly_name: Olive tree (left) temperature
+# Flower Care 54dd
+sensor.plant_sensor_54dd_battery:
+  friendly_name: Olive tree (right) battery
+sensor.plant_sensor_54dd_conductivity:
+  friendly_name: Olive tree (right) conductivity
+sensor.plant_sensor_54dd_illuminance:
+  friendly_name: Olive tree (right) illuminance
+sensor.plant_sensor_54dd_moisture:
+  friendly_name: Olive tree (right) moisture
+sensor.plant_sensor_54dd_temperature:
+  friendly_name: Olive tree (right) temperature
+# Flower Care 5662
+sensor.plant_sensor_5662_battery:
+  friendly_name: Monstera battery
+sensor.plant_sensor_5662_conductivity:
+  friendly_name: Monstera conductivity
+sensor.plant_sensor_5662_illuminance:
+  friendly_name: Monstera illuminance
+sensor.plant_sensor_5662_moisture:
+  friendly_name: Monstera moisture
+sensor.plant_sensor_5662_temperature:
+  friendly_name: Monstera temperature

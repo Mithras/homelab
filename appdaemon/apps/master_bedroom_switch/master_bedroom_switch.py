@@ -3,6 +3,7 @@ import globals
 
 class MasterBedroomSwitch(globals.Hass):
     async def initialize(self):
+        return
         config = self.args["config"]
         self.topic = config["topic"]
         self._master_bedroom_light = config["master_bedroom_light"]
@@ -17,6 +18,7 @@ class MasterBedroomSwitch(globals.Hass):
                                 topic=self.topic)
 
     async def terminate(self):
+        return
         await self.call_service("mqtt/unsubscribe",
                                 topic=self.topic,
                                 namespace="mqtt",

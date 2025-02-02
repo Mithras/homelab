@@ -257,3 +257,21 @@ LightBathroomUpstairs:
     sun_down_on_profile: "on"
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
+LightOffice:
+  module: light
+  class: Light
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    sensors:
+      - entity: binary_sensor.motion_sensor_v2_14_occupancy
+        additional_delay: 270
+    light_group: light.office
+    sun_down_on_profile: bright
+    sun_down_off_profile: "off"
+    sun_up_on_profile: "off"
+    sun_up_off_profile: "off"
+    sleep_on_profile: nightlight
+    sleep_off_profile: "off"

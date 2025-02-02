@@ -3,6 +3,7 @@ import globals
 
 class Exhaust(globals.Hass):
     async def initialize(self):
+        return
         config = self.args["config"]
         self._input = config["input"]
         self._temperature = config["temperature"]
@@ -14,6 +15,7 @@ class Exhaust(globals.Hass):
         await self._ensure_state_async()
 
     async def _temperature_callback_async(self, entity, attribute, old, new, kwargs):
+        return
         if old == new:
             return
         # self.log(f"TemperatureChange: old = {old}, new = {new}")

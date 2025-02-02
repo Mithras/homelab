@@ -27,13 +27,14 @@ views:
             show_header_toggle: false
             state_color: true
             entities:
+              - media_player.music_player_daemon
               - sensor.airthings_wave_211131_temperature
               - sensor.airthings_wave_211131_humidity
               - sensor.airthings_wave_211131_vocs
               - sensor.airthings_wave_211131_carbon_dioxide
               - sensor.smart_plug_02_power
               - switch.smart_plug_02
-              - entity: switch.mithras_desktop
+              - entity: switch.mithras_desktop_2
                 icon: mdi:desktop-tower
               - input_boolean.tv
               - sensor.smart_plug_01_power
@@ -45,25 +46,12 @@ views:
               # - image.roborock_s8_pro_ultra_upstairs
               # - image.roborock_s8_pro_ultra_downstairs
               # - cover.fyrtur_01
-              # - cover.fyrtur_02
-              - cover.living_room_window_2
+              - cover.fyrtur_02
               - cover.curtain_3_aa2c
               - sensor.smart_plug_03_power
               - input_boolean.ac_living_room
-          - type: entities
-            title: Upstairs
-            show_header_toggle: false
-            state_color: true
-            entities:
-              - sensor.airthings_wave_178276_temperature
-              - sensor.airthings_wave_178276_humidity
-              - sensor.airthings_wave_178276_vocs
-              - sensor.airthings_wave_178276_carbon_dioxide
-              - light.office
-              - entity: switch.smart_light_switch_01
-                icon: mdi:lightbulb-on
-              - sensor.smart_plug_04_power
-              - input_boolean.ac_master_bedroom
+              - entity: switch.smart_light_switch_03
+                icon: mdi:fireplace
 
       - type: vertical-stack
         cards:
@@ -91,30 +79,42 @@ views:
               - light.garage
               - light.hue_white_ambiance_19
               - light.backyard
+              - entity: switch.smart_light_switch_01
+                icon: mdi:lightbulb-on
 
       - type: vertical-stack
         cards:
-          - type: glance
-            show_state: false
+          - type: entities
+            title: Master bedroom
+            show_header_toggle: false
+            state_color: true
             entities:
-              - binary_sensor.porch_camera_motion
-              - binary_sensor.living_room_camera_motion
-              - binary_sensor.hue_sensor_01_occupancy
-              - binary_sensor.motion_sensor_06_occupancy
-              - binary_sensor.motion_sensor_10_occupancy
-              - binary_sensor.motion_sensor_11_occupancy
-              - binary_sensor.motion_sensor_01_occupancy
-              - binary_sensor.motion_sensor_02_occupancy
-              - binary_sensor.motion_sensor_07_occupancy
-              - binary_sensor.motion_sensor_08_occupancy
-              - binary_sensor.motion_sensor_03_occupancy
-              - binary_sensor.motion_sensor_04_occupancy
-              - binary_sensor.motion_sensor_05_occupancy
-              - binary_sensor.motion_sensor_12_occupancy
-              - binary_sensor.motion_sensor_13_occupancy
-              - binary_sensor.door_sensor_03_contact
-              - binary_sensor.door_sensor_02_contact
-              - binary_sensor.door_sensor_01_contact
+              - sensor.airthings_wave_178276_temperature
+              - sensor.airthings_wave_178276_humidity
+              - sensor.airthings_wave_178276_vocs
+              - sensor.airthings_wave_178276_carbon_dioxide
+              - sensor.smart_plug_04_power
+              - input_boolean.ac_master_bedroom
+          - type: entities
+            title: Office
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - light.office
+              - entity: switch.tradfri_control_outlet_03
+                icon: mdi:lightbulb-on
+              - sensor.plant_sensor_5631_temperature
+              - sensor.plant_sensor_5631_moisture
+              - sensor.plant_sensor_5631_conductivity
+              - sensor.plant_sensor_5631_illuminance
+              - sensor.plant_sensor_54dd_temperature
+              - sensor.plant_sensor_54dd_moisture
+              - sensor.plant_sensor_54dd_conductivity
+              - sensor.plant_sensor_54dd_illuminance
+              - sensor.plant_sensor_5662_temperature
+              - sensor.plant_sensor_5662_moisture
+              - sensor.plant_sensor_5662_conductivity
+              - sensor.plant_sensor_5662_illuminance
           - type: picture-entity
             entity: camera.porch_camera_high
           - type: picture-entity
@@ -146,6 +146,28 @@ views:
         entities:
           - select.porch_camera_recording_mode
           - select.living_room_camera_recording_mode
+      - type: glance
+        show_state: false
+        entities:
+          - binary_sensor.porch_camera_motion
+          - binary_sensor.living_room_camera_motion
+          - binary_sensor.hue_sensor_01_occupancy
+          - binary_sensor.motion_sensor_06_occupancy
+          - binary_sensor.motion_sensor_10_occupancy
+          - binary_sensor.motion_sensor_11_occupancy
+          - binary_sensor.motion_sensor_01_occupancy
+          - binary_sensor.motion_sensor_02_occupancy
+          - binary_sensor.motion_sensor_07_occupancy
+          - binary_sensor.motion_sensor_08_occupancy
+          - binary_sensor.motion_sensor_03_occupancy
+          - binary_sensor.motion_sensor_04_occupancy
+          - binary_sensor.motion_sensor_05_occupancy
+          - binary_sensor.motion_sensor_12_occupancy
+          - binary_sensor.motion_sensor_13_occupancy
+          - binary_sensor.motion_sensor_v2_14_occupancy
+          - binary_sensor.door_sensor_03_contact
+          - binary_sensor.door_sensor_02_contact
+          - binary_sensor.door_sensor_01_contact
       - type: entities
         title: System Monitor
         show_header_toggle: false
@@ -176,6 +198,7 @@ views:
           - sensor.motion_sensor_05_battery
           - sensor.motion_sensor_12_battery
           - sensor.motion_sensor_13_battery
+          - sensor.motion_sensor_v2_14_battery
           - sensor.door_sensor_02_battery
           - sensor.door_sensor_03_battery
           - sensor.door_sensor_01_battery
@@ -184,23 +207,9 @@ views:
           - sensor.smart_switch_01_battery
           - sensor.touchscreen_deadbolt_z_wave_plus_battery_level
           - sensor.hue_sensor_01_battery
-      - type: entities
-        title: Illuminance
-        show_header_toggle: false
-        entities:
-          - sensor.hue_sensor_01_illuminance_lux
-          - sensor.motion_sensor_06_illuminance_lux
-          - sensor.motion_sensor_10_illuminance_lux
-          - sensor.motion_sensor_11_illuminance_lux
-          - sensor.motion_sensor_01_illuminance_lux
-          - sensor.motion_sensor_02_illuminance_lux
-          - sensor.motion_sensor_07_illuminance_lux
-          - sensor.motion_sensor_08_illuminance_lux
-          - sensor.motion_sensor_03_illuminance_lux
-          - sensor.motion_sensor_04_illuminance_lux
-          - sensor.motion_sensor_05_illuminance_lux
-          - sensor.motion_sensor_12_illuminance_lux
-          - sensor.motion_sensor_13_illuminance_lux
+          - sensor.plant_sensor_5631_battery
+          - sensor.plant_sensor_54dd_battery
+          - sensor.plant_sensor_5662_battery
 
   - title: Graphs
     path: graphs

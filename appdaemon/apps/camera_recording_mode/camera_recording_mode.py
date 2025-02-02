@@ -28,5 +28,6 @@ class CameraRecordingMode(globals.Hass):
             return
         recording_mode = self._security_recording_mode_map[security]
         # self.log(f"recording_mode = {recording_mode}")
-        await self.set_state(self._recording_mode,
-                             state=recording_mode)
+        await self.call_service("select/select_option",
+                                entity_id=self._recording_mode,
+                                option=recording_mode)

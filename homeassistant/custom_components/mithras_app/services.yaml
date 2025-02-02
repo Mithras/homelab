@@ -1,0 +1,6 @@
+fire_event:
+  fields:
+    event:
+      required: true
+      selector:
+        text:

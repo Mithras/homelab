@@ -16,6 +16,9 @@ class Hass(hass.Hass):
         self.app_config[self.name]["constrain_enabled"] = None
 
     async def initialize(self):
+        # self.log(f"1: {self._setup_task}") # <Task>
+        # self.log(f"2: {await self._setup_task}") # <Task>
+        # self.log(f"3: {await (await self._setup_task)}") # None
         await (await self._setup_task)
 
     async def bright(self):

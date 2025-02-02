@@ -37,7 +37,7 @@ class InputSwitch(globals.Hass):
         try:
             while True:
                 power_str = await self.get_state(self._power)
-                if power_str != "unknown":
+                if power_str != "unknown" and power_str != "unavailable":
                     power = float(power_str)
                     input = await self.get_state(self._input)
                     # self.log(

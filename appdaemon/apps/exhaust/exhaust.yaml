@@ -1,12 +1,12 @@
-# Exhaust:
-#   module: exhaust
-#   class: Exhaust
-#   global_dependencies:
-#     - globals
-#   dependencies:
-#     - Common
-#   config:
-#     input: input_boolean.fan
-#     temperature: sensor.air_quality_monitor_01_temperature
-#     min_temperature: 20.5
-#     max_temperature: 21.5
+Exhaust:
+  module: exhaust
+  class: Exhaust
+  global_dependencies:
+    - globals
+  dependencies:
+    - Common
+  config:
+    input: input_boolean.fan
+    temperature: sensor.air_quality_monitor_01_temperature
+    min_temperature: 20.5
+    max_temperature: 21.5

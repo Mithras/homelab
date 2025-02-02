@@ -1,1 +1,3 @@
-/data
+/data/*
+!/data/glados.onnx
+!data/glados.onnx.json

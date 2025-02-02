@@ -17,13 +17,15 @@ services:
     image: ghcr.io/home-assistant/home-assistant:stable
     container_name: homeassistant
     restart: unless-stopped
+    environment:
+      - PYTHON_FROZEN_MODULES=off # https://docs.python.org/3/using/cmdline.html#envvar-PYTHON_FROZEN_MODULES
     volumes:
       - ./homeassistant:/config
       - ./tmp:/config/tmp
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
-    # ports:
-    #   - 8123:8123 # Web UI
+    ports:
+      - 8123:8123 # Web UI
     #   - 5678:5678 # Debug
     privileged: true
     user: "${UID}:${GID}"
@@ -111,7 +113,7 @@ services:
       - homelab
   wyoming-piper:
     image: rhasspy/wyoming-piper
-    command: --voice en_US-lessac-medium
+    command: --voice en_US-libritts_r-medium
     container_name: wyoming-piper
     restart: unless-stopped
     hostname: wyoming-piper
@@ -134,6 +136,7 @@ services:
       - 8384:8384 # Syncthing
       - 7860:7860 # Automatic
       - 11434:11434 # Ollama
+      - 6680:6680 # mpd
     volumes:
       - ./nginx-proxy-manager/data:/data
       - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt

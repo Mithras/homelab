@@ -49,11 +49,11 @@ class Ventilation(globals.Hass):
         fan_mode = await self.get_state(self._climate, attribute="fan_mode")
         fan_running = fan_mode == FAN_LOW or hvac_action != HVAC_IDLE
 
-        # self.log(
-        #     f"_handle_climate_change_async: hvac_action = {hvac_action}, fan_mode = {fan_mode}, self._fan_running = {self._fan_running}, fan_running = {fan_running}")
         if self._fan_running == fan_running:
             return
 
+        self.log(
+            f"_handle_climate_change_async: hvac_action = {hvac_action}, fan_mode = {fan_mode}, self._fan_running = {self._fan_running}, fan_running = {fan_running}")
         self._fan_running = fan_running
         delay = self._on_low_interval if self._fan_running else self._on_auto_interval
         await self.cancel_timer(self._timer_handle)
@@ -61,11 +61,11 @@ class Ventilation(globals.Hass):
 
     async def _set_fan_mode(self, kwargs):
         fan_mode = FAN_AUTO if self._fan_running else FAN_LOW
-        # self.log(
-        #     f"_set_fan_mode: fan_mode = {fan_mode}")
         if fan_mode == FAN_LOW and await self.get_state(self._sleep_input) == "on":
             self._start_when_awake = True
             return
+        self.log(
+            f"_set_fan_mode: fan_mode = {fan_mode}")
         await self.call_service("climate/set_fan_mode",
                                 entity_id=self._climate,
                                 fan_mode=fan_mode,
