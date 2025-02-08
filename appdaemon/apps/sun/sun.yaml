@@ -1,4 +1,4 @@
-SunFront:
+Sun:
   module: sun
   class: Sun
   global_dependencies:
@@ -6,13 +6,25 @@ SunFront:
   dependencies:
     - Common
   config:
-    light: light.driveway
-SunBack:
-  module: sun
-  class: Sun
-  global_dependencies:
-    - globals
-  dependencies:
-    - Common
-  config:
-    light: light.hue_white_ambiance_19
+    sunset:
+      - service: light/turn_on
+        data:
+          entity_id: light.driveway
+          profile: nightlight
+      - service: light/turn_on
+        data:
+          entity_id: light.hue_white_ambiance_19
+          profile: nightlight
+      - service: switch/turn_off
+        data:
+          entity_id: switch.tradfri_control_outlet_03
+    sunrise:
+      - service: light/turn_off
+        data:
+          entity_id: light.driveway
+      - service: light/turn_off
+        data:
+          entity_id: light.hue_white_ambiance_19
+      - service: switch/turn_on
+        data:
+          entity_id: switch.tradfri_control_outlet_03
