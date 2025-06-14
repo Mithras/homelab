@@ -1,43 +1,46 @@
-x-gpu: &gpu
+x-gpu-all: &gpu-all
   deploy:
     resources:
       reservations:
         devices:
           - driver: nvidia
-            count: all
             capabilities: [gpu]
+x-gpu-5090: &gpu-5090
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            capabilities: [gpu]
+            device_ids:
+              - "0"
+x-gpu-3090: &gpu-3090
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            capabilities: [gpu]
+            device_ids:
+              - "1"
 services:
-  # wyoming-whisper:
-  #   <<: [ *gpu ]
-  #   # image: rhasspy/wyoming-whisper
-  #   build:
-  #     args:
-  #       - BASE=nvidia/cuda:12.8.0-cudnn-runtime-ubuntu22.04
-  #       # https://github.com/rhasspy/wyoming-faster-whisper/releases
-  #       - WYOMING_WHISPER_VERSION=2.4.0
-  #     context: ./wyoming-whisper
-  #   command:
-  #     - --device
-  #     - cuda
-  #     - --model
-  #     # - large-v3 # gpu: 0.25s
-  #     - deepdml/faster-whisper-large-v3-turbo-ct2 # gpu: 0.2s
-  #     - --language
-  #     - en
-  #     - --debug
-  #   container_name: wyoming-whisper
-  #   restart: unless-stopped
-  #   hostname: wyoming-whisper
-  #   volumes:
-  #     - ./wyoming-whisper/data:/data
-  #   ports:
-  #     - 10300:10300
-  #   networks:
-  #     - homelab
+  llama-swap:
+    <<: [ *gpu-5090 ]
+    image: ghcr.io/mostlygeek/llama-swap:cuda
+    container_name: llama-swap
+    restart: unless-stopped
+    hostname: llama-swap
+    volumes:
+      - ./llama-swap/config.yaml:/app/config.yaml
+      - ./llama-swap/cache:/root/.cache/llama.cpp
+    ports:
+      - 8080:8080
+    networks:
+      - homelab
   wyoming-whisper-2:
-    <<: [ *gpu ]
+    <<: [ *gpu-3090 ]
     # https://github.com/linuxserver/docker-faster-whisper
-    image: lscr.io/linuxserver/faster-whisper:gpu
+    image: lscr.io/linuxserver/faster-whisper:2.3.0-gpu
     container_name: wyoming-whisper-2
     environment:
       - PUID=1000
@@ -55,71 +58,149 @@ services:
       - 10301:10300
     networks:
       - homelab
-  ollama:
-    # Generation
-    # + ollama pull hf.co/bartowski/Replete-LLM-V2.5-Qwen-32b-GGUF:Q4_K_M
-    # ? ollama pull hf.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF:Q4_K_M
-    # Embedding
-    # + ollama pull mxbai-embed-large
-    # Reranking
-    # + ollama pull hf.co/gpustack/bge-reranker-v2-m3-GGUF:Q8_0
-    <<: [ *gpu ]
-    image: ollama/ollama
-    container_name: ollama
-    restart: unless-stopped
-    hostname: ollama
-    environment:
-      - OLLAMA_ORIGINS=*
-      - OLLAMA_KEEP_ALIVE=300
-    volumes:
-      - ./ollama/data:/root/.ollama
-    ports:
-      - 11434:11434
-    networks:
-      - homelab
-  # sd-download:
-  #   build: https://github.com/AcdbdBarho/stable-diffusion-webui-docker.git#:services/download
-  #   container_name: sd-download
-  #   volumes:
-  #     - ./automatic/data:/data
-  # automatic:
-  #   <<: [ *gpu ]
-  #   # build: https://github.com/AbdBarho/stable-diffusion-webui-docker.git#:services/AUTOMATIC1111
-  #   build: https://github.com/Mithras/stable-diffusion-webui-docker.git#:services/AUTOMATIC1111 # hotfix
-  #   container_name: automatic
-  #   # restart: unless-stopped
-  #   hostname: automatic
-  #   environment:
-  #     - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api --gradio-auth Mithras:${AUTOMATIC_PWD}
-  #   ports:
-  #     - 7860:7860
-  #   volumes:
-  #     - ./automatic/data:/data
-  #     - ./automatic/output:/output
-  # local-ai:
-  #   # functionary-small-v3.2.Q8_0.gguf - text works, json doesn't work
-  #   <<: [ *gpu ]
-  #   image: localai/localai:latest-gpu-nvidia-cuda-12
-  #   command:
-  #     # text-, function~
-  #     - huggingface://bartowski/Mistral-7B-Instruct-v0.3-GGUF/Mistral-7B-Instruct-v0.3-Q8_0.gguf
-  #     # text+, function-
-  #     # - huggingface://bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/Meta-Llama-3.1-8B-Instruct-Q8_0.gguf
-  #     # text+, function-
-  #     # - huggingface://bartowski/Mistral-Nemo-Instruct-2407-GGUF/Mistral-Nemo-Instruct-2407-Q8_0.gguf
-  #     # fails
-  #     # - huggingface://TheBloke/dolphin-2.7-mixtral-8x7b-GGUF/dolphin-2.7-mixtral-8x7b.Q4_K_M.gguf
-  #     # text-, function~
-  #     # - huggingface://TheBloke/laser-dolphin-mixtral-2x7b-dpo-GGUF/laser-dolphin-mixtral-2x7b-dpo.Q5_K_M.gguf
-  #   container_name: local-ai
-  #   # restart: unless-stopped
-  #   hostname: local-ai
-  #   volumes:
-  #     - ./local-ai/data/models:/build/models
-  #   ports:
-  #     - 8080:8080
-  #   networks:
-  #     - homelab
 networks:
   homelab:
     name: homelab
+
+# ---
+
+# llama-cpp:
+#   <<: [ *gpu-5090 ]
+#   # https://github.com/ggml-org/llama.cpp/blob/master/docs/docker.md
+#   image: ghcr.io/ggml-org/llama.cpp:server-cuda
+#   # -hf unsloth/Qwen3-30B-A3B-GGUF:Q4_K_XL
+#   command: >
+#     -hf unsloth/Qwen3-30B-A3B-GGUF:Q4_K_M
+#     --n-gpu-layers 99
+
+#     --flash-attn
+#     --threads 16
+#     --no-webui
+#     --split-mode none
+#     --main-gpu 0
+#     -c 16384
+#     --jinja
+#     --log-file /models/log
+#     --verbosity 1
+#     --log-prefix
+#     --log-timestamps
+#   # --verbose-prompt
+#   # -hf unsloth/Qwen3-32B-GGUF:Q4_K_XL
+#   # --jinja
+#   # -c 4096
+#   # -b 2048
+#   # --mlock
+#   # --no-mmap
+#   container_name: llama-cpp
+#   restart: unless-stopped
+#   hostname: llama-cpp
+#   volumes:
+#     - ./llama-cpp/models:/models
+#     - ./llama-cpp/cache:/root/.cache/llama.cpp
+#   ports:
+#     - 8080:8080
+#   networks:
+#     - homelab
+# ollama:
+#   # Embedding
+#   # + ollama pull mxbai-embed-large
+#   # Reranking
+#   # + ollama pull hf.co/gpustack/bge-reranker-v2-m3-GGUF:Q8_0
+#   # Generation
+#   # + ollama pull hf.co/bartowski/Replete-LLM-V2.5-Qwen-32b-GGUF:Q4_K_M
+#   # ? ollama pull hf.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF:Q4_K_M
+#   # ? ollama pull hf.co/bartowski/Qwen2.5-Coder-32B-Instruct-GGUF:Q4_K_M
+#   # ? ollama pull hf.co/bartowski/EVA-Qwen2.5-72B-v0.2-GGUF:Q4_K_M
+#   # - ollama pull hf.co/bartowski/meta-llama_Llama-4-Scout-17B-16E-Instruct-GGUF:Q4_K_M
+#   # ---
+#   # ? ollama pull hf.co/unsloth/Qwen3-32B-GGUF:Q4_K_XL
+#   # ? ollama pull hf.co/unsloth/Qwen3-30B-A3B-GGUF:Q4_K_XL
+#   <<: [ *gpu ]
+#   image: ollama/ollama
+#   container_name: ollama
+#   restart: unless-stopped
+#   hostname: ollama
+#   environment:
+#     - OLLAMA_ORIGINS=*
+#     - OLLAMA_KEEP_ALIVE=300
+#     # - OLLAMA_SCHED_SPREAD=1
+#   volumes:
+#     - ./ollama/data:/root/.ollama
+#   ports:
+#     - 11434:11434
+#   networks:
+#     - homelab
+    
+# sd-download:
+#   build: https://github.com/AcdbdBarho/stable-diffusion-webui-docker.git#:services/download
+#   container_name: sd-download
+#   volumes:
+#     - ./automatic/data:/data
+
+# automatic:
+#   <<: [ *gpu ]
+#   # build: https://github.com/AbdBarho/stable-diffusion-webui-docker.git#:services/AUTOMATIC1111
+#   build: https://github.com/Mithras/stable-diffusion-webui-docker.git#:services/AUTOMATIC1111 # hotfix
+#   container_name: automatic
+#   # restart: unless-stopped
+#   hostname: automatic
+#   environment:
+#     - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api --gradio-auth Mithras:${AUTOMATIC_PWD}
+#   ports:
+#     - 7860:7860
+#   volumes:
+#     - ./automatic/data:/data
+#     - ./automatic/output:/output
+
+# local-ai:
+#   # functionary-small-v3.2.Q8_0.gguf - text works, json doesn't work
+#   <<: [ *gpu ]
+#   image: localai/localai:latest-gpu-nvidia-cuda-12
+#   command:
+#     # text-, function~
+#     - huggingface://bartowski/Mistral-7B-Instruct-v0.3-GGUF/Mistral-7B-Instruct-v0.3-Q8_0.gguf
+#     # text+, function-
+#     # - huggingface://bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/Meta-Llama-3.1-8B-Instruct-Q8_0.gguf
+#     # text+, function-
+#     # - huggingface://bartowski/Mistral-Nemo-Instruct-2407-GGUF/Mistral-Nemo-Instruct-2407-Q8_0.gguf
+#     # fails
+#     # - huggingface://TheBloke/dolphin-2.7-mixtral-8x7b-GGUF/dolphin-2.7-mixtral-8x7b.Q4_K_M.gguf
+#     # text-, function~
+#     # - huggingface://TheBloke/laser-dolphin-mixtral-2x7b-dpo-GGUF/laser-dolphin-mixtral-2x7b-dpo.Q5_K_M.gguf
+#   container_name: local-ai
+#   # restart: unless-stopped
+#   hostname: local-ai
+#   volumes:
+#     - ./local-ai/data/models:/build/models
+#   ports:
+#     - 8080:8080
+#   networks:
+#     - homelab
+
+# wyoming-whisper:
+#   <<: [ *gpu ]
+#   # image: rhasspy/wyoming-whisper
+#   build:
+#     args:
+#       - BASE=nvidia/cuda:12.8.0-cudnn-runtime-ubuntu22.04
+#       # https://github.com/rhasspy/wyoming-faster-whisper/releases
+#       - WYOMING_WHISPER_VERSION=2.4.0
+#     context: ./wyoming-whisper
+#   command:
+#     - --device
+#     - cuda
+#     - --model
+#     # - large-v3 # gpu: 0.25s
+#     - deepdml/faster-whisper-large-v3-turbo-ct2 # gpu: 0.2s
+#     - --language
+#     - en
+#     - --debug
+#   container_name: wyoming-whisper
+#   restart: unless-stopped
+#   hostname: wyoming-whisper
+#   volumes:
+#     - ./wyoming-whisper/data:/data
+#   ports:
+#     - 10300:10300
+#   networks:
+#     - homelab

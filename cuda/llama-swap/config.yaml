@@ -1,0 +1,20 @@
+# https://github.com/mostlygeek/llama-swap
+
+healthCheckTimeout: 300
+logLevel: info
+models:
+  qwen3moe:
+    cmd: >
+      /app/llama-server
+      -hf unsloth/Qwen3-30B-A3B-GGUF:Q4_K_M
+      --n-gpu-layers 99
+      --port ${PORT}
+
+      --flash-attn
+      --threads 16
+      --no-webui
+      --split-mode none
+      -c 16384
+      --jinja
+    ttl: 300
+    # useModelName: /root/.cache/llama.cpp/unsloth_Qwen3-30B-A3B-GGUF_Qwen3-30B-A3B-Q4_K_M.gguf
