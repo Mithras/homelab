@@ -5,20 +5,16 @@ DARK_STATE = "appdaemon.dark"
 
 
 class Hass(hass.Hass):
-    def __init__(self, ad, name, logging, args, config, app_config, global_vars):
-        hass.Hass.__init__(self, ad, name, logging, args,
-                           config, app_config, global_vars)
-
+    def __init__(self, ad, name):
+        hass.Hass.__init__(self, ad, name)
+    
         self._setup_task = self.create_task(self._setup())
 
         self.register_constraint("constrain_arm")
         self.register_constraint("constrain_enabled")
-        self.app_config[self.name]["constrain_enabled"] = None
+        # self.app_config[self.name]["constrain_enabled"] = None # BUG? 
 
     async def initialize(self):
-        # self.log(f"1: {self._setup_task}") # <Task>
-        # self.log(f"2: {await self._setup_task}") # <Task>
-        # self.log(f"3: {await (await self._setup_task)}") # None
         await (await self._setup_task)
 
     async def bright(self):
@@ -30,12 +26,12 @@ class Hass(hass.Hass):
         return dark == "on"
 
     async def constrain_arm(self, value=None):
-        await self._setup_task
+        await (await self._setup_task)
         arm = await self.get_state("appdaemon.security")
         return arm != "Disarmed" if value is None else arm is not None and arm in value
 
     async def constrain_enabled(self, value):
-        await self._setup_task
+        await (await self._setup_task)
         state = await self.get_state(self._app_state_name)
         return state == "on"
 

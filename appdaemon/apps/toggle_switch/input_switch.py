@@ -55,20 +55,16 @@ class InputSwitch(globals.Hass):
     async def _on_async(self):
         if self._on_payload:
             await self.call_service(self._service,
-                                    return_result=True,
                                     **self._on_payload)
         else:
             await self.call_service(self._service,
-                                    return_result=True,
                                     **self._toggle_payload)
  
     async def _off_async(self):
         if self._off_payload:
             await self.call_service(self._service,
-                                    return_result=True,
                                     **self._off_payload)
         else:
             await self.call_service(self._service,
-                                    return_result=True,
                                     **self._toggle_payload)
  

@@ -13,6 +13,8 @@ ROTATE_PROFILES = [
 
 class LivingRoomCube(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         return
         config = self.args["config"]
         self.topic = config["topic"]
@@ -37,8 +39,7 @@ class LivingRoomCube(globals.Hass):
 
         await self.call_service("mqtt/subscribe",
                                 topic=self.topic,
-                                namespace="mqtt",
-                                return_result=True)
+                                namespace="mqtt")
         await self.listen_event(self._action_callback_async, "MQTT_MESSAGE",
                                 namespace="mqtt",
                                 topic=self.topic)
@@ -47,8 +48,7 @@ class LivingRoomCube(globals.Hass):
         return
         await self.call_service("mqtt/unsubscribe",
                                 topic=self.topic,
-                                namespace="mqtt",
-                                return_result=True)
+                                namespace="mqtt")
 
     async def _action_callback_async(self, event_name, data, kwargs):
         payload = data["payload"]

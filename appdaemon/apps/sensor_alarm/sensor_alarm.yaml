@@ -2,8 +2,6 @@ SensorAlarmArmedAway:
   module: sensor_alarm
   class: SensorAlarm
   constrain_arm: Armed Away
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -37,12 +35,11 @@ SensorAlarmArmedAway:
     - binary_sensor.z_wave_garage_door_controller_access_control_barrier_unattended_operation_has_been_disabled_per_ul_requirements
     - binary_sensor.z_wave_garage_door_controller_home_security_tampering_product_cover_removed
     - binary_sensor.hue_sensor_01_occupancy
+  constrain_enabled:
 SensorAlarmArmedHome:
   module: sensor_alarm
   class: SensorAlarm
   constrain_arm: Armed Home
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -59,12 +56,11 @@ SensorAlarmArmedHome:
     - binary_sensor.z_wave_garage_door_controller_access_control_barrier_unattended_operation_has_been_disabled_per_ul_requirements
     - binary_sensor.z_wave_garage_door_controller_home_security_tampering_product_cover_removed
     - binary_sensor.hue_sensor_01_occupancy
+  constrain_enabled:
 SensorAlarmArmedSleep:
   module: sensor_alarm
   class: SensorAlarm
   constrain_arm: Armed Sleep
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -94,3 +90,4 @@ SensorAlarmArmedSleep:
     - binary_sensor.z_wave_garage_door_controller_access_control_barrier_unattended_operation_has_been_disabled_per_ul_requirements
     - binary_sensor.z_wave_garage_door_controller_home_security_tampering_product_cover_removed
     - binary_sensor.hue_sensor_01_occupancy
+  constrain_enabled:

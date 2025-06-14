@@ -9,6 +9,8 @@ STEP_DELAY = 0.5
 
 class SymfoniskLight(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         config = self.args["config"]
         self._topic = config["topic"]
         self._light = config["light"]
@@ -21,8 +23,7 @@ class SymfoniskLight(globals.Hass):
 
         await self.call_service("mqtt/subscribe",
                                 topic=self._topic,
-                                namespace="mqtt",
-                                return_result=True)
+                                namespace="mqtt")
         await self.listen_event(self._action_callback_async, "MQTT_MESSAGE",
                                 namespace="mqtt",
                                 topic=self._topic)
@@ -30,8 +31,7 @@ class SymfoniskLight(globals.Hass):
     async def terminate(self):
         await self.call_service("mqtt/unsubscribe",
                                 topic=self._topic,
-                                namespace="mqtt",
-                                return_result=True)
+                                namespace="mqtt")
         if self._update_task:
             self._update_task.cancel()
 

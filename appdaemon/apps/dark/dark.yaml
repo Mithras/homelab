@@ -1,11 +1,10 @@
 Dark:
   module: dark
   class: Dark
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
     illuminance: sensor.hue_sensor_01_illuminance
     illuminance_threshold: 200
     illuminance_delay: 301
+  constrain_enabled:

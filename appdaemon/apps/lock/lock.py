@@ -8,6 +8,8 @@ EVENT = f"{DOMAIN}_lock_rotate"
 
 class Lock(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         config = self.args["config"]
         state = config["state"]
         lock_device_id = config["lock_device_id"]
@@ -33,8 +35,7 @@ class Lock(globals.Hass):
             if userId == self._code_slot:
                 await self.call_service("zwave_js/clear_lock_usercode",
                                         entity_id=self._lock,
-                                        code_slot=self._code_slot,
-                                        return_result=True)
+                                        code_slot=self._code_slot)
                 await self.set_state(self._state,
                                      state="")
                 await self.common.send_debug_async(f"*User Code #{self._code_slot}* has been cleared.")
@@ -44,8 +45,7 @@ class Lock(globals.Hass):
         await self.call_service("zwave_js/set_lock_usercode",
                                 entity_id=self._lock,
                                 code_slot=self._code_slot,
-                                usercode=usercode,
-                                return_result=True)
+                                usercode=usercode)
         await self.set_state(self._state,
                              state=usercode)
         await self.common.send_debug_async(f"*User Code #{self._code_slot}* has been changed.")

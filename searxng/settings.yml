@@ -2,14 +2,7 @@
 use_default_settings: true
 server:
   bind_address: 0.0.0.0
-  # base_url: http://searxng/
-  secret_key: TODO
-  image_proxy: true
-ui:
-  static_use_hash: true
 search:
   formats:
     - html
     - json
-# redis:
-#   url: redis://redis:6379/0

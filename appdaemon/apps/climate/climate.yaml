@@ -1,8 +1,6 @@
 Climate:
   module: climate
   class: Climate
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -19,3 +17,4 @@ Climate:
     sleep_params:
       hvac_mode: heat
       temperature: 19
+  constrain_enabled:

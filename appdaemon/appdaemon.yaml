@@ -14,8 +14,8 @@ appdaemon:
   elevation: !secret elevation
   time_zone: America/Los_Angeles
   # production_mode: true
-  total_threads: 5
-  pin_apps: false
+  # total_threads: 5 # BUG?
+  # pin_apps: false # BUG?
   qsize_warning_threshold: 10
   plugins:
     HASS:

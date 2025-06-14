@@ -1,8 +1,6 @@
 LivingRoomCameraMotionRecording:
   module: camera_recording_mode
   class: CameraRecordingMode
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -11,11 +9,10 @@ LivingRoomCameraMotionRecording:
     armed_home: Never
     armed_sleep: Detections
     disarmed: Never
+  constrain_enabled:
 PorchCameraMotionRecording:
   module: camera_recording_mode
   class: CameraRecordingMode
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -24,3 +21,4 @@ PorchCameraMotionRecording:
     armed_home: Detections
     armed_sleep: Detections
     disarmed: Never
+  constrain_enabled:

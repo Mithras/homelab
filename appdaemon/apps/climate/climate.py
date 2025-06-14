@@ -7,6 +7,8 @@ DO_NOTHING_CMD = "/climate-do-nothing"
 
 class Climate(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         config = self.args["config"]
         self._climate = config["climate"]
         self._temperature = config["temperature"]
@@ -81,8 +83,7 @@ class Climate(globals.Hass):
                                 inline_keyboard=[[
                                     ["Yes", SET_HOME_CMD],
                                     ["No", DO_NOTHING_CMD]
-                                ]],
-                                return_result=True)
+                                ]])
 
     async def _telegram_callback_async(self, event_name, data, kwargs):
         self.log(f"_telegram_callback_async: {data}")
@@ -104,8 +105,7 @@ class Climate(globals.Hass):
             await self._update_climate_async()
             await self.call_service("telegram_bot/answer_callback_query",
                                     message=f"Climate has been pre-set to home.",
-                                    callback_query_id=telegram_id,
-                                    return_result=True)
+                                    callback_query_id=telegram_id)
 
     async def _telegram_edit_message_async(self, telegram_chat_id, telegram_message_id, telegram_message):
         self.log(f"_telegram_edit_message_async: {telegram_message}")
@@ -113,8 +113,7 @@ class Climate(globals.Hass):
                                 chat_id=telegram_chat_id,
                                 message_id=telegram_message_id,
                                 message=telegram_message,
-                                inline_keyboard=[],
-                                return_result=True)
+                                inline_keyboard=[])
 
     async def _update_climate_async(self):
         params = await self._getParams_async()
@@ -124,13 +123,11 @@ class Climate(globals.Hass):
 
         await self.call_service("climate/set_hvac_mode",
                                 entity_id=self._climate,
-                                hvac_mode=hvac_mode,
-                                return_result=True)
+                                hvac_mode=hvac_mode)
         if temperature is not None:
             await self.call_service("climate/set_temperature",
                                     entity_id=self._climate,
-                                    temperature=temperature,
-                                    return_result=True)
+                                    temperature=temperature)
 
     async def _getParams_async(self):
         if self._override is not None:

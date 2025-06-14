@@ -1,8 +1,6 @@
 SymfoniskLightMasterBedroom:
   module: symfonisk_light
   class: SymfoniskLight
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -10,11 +8,10 @@ SymfoniskLightMasterBedroom:
     light: light.master_bedroom
     secondary: appdaemon_app.light_master_bedroom
     secondary_indication: True
+  constrain_enabled:
 SymfoniskLightLivingRoom:
   module: symfonisk_light
   class: SymfoniskLight
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -22,11 +19,10 @@ SymfoniskLightLivingRoom:
     light: light.living_room_back
     secondary: light.living_room_main
     secondary_indication: False
+  constrain_enabled:
 SymfoniskLightKitchen:
   module: symfonisk_light
   class: SymfoniskLight
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -34,3 +30,4 @@ SymfoniskLightKitchen:
     light: light.kitchen
     secondary: appdaemon_app.light_kitchen
     secondary_indication: True
+  constrain_enabled:

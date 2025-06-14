@@ -3,6 +3,8 @@ import globals
   
 class Light(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         config = self.args["config"]
         self._light_group = config["light_group"]
         self._sun_up_on_profile = config.get("sun_up_on_profile", None)
@@ -32,13 +34,13 @@ class Light(globals.Hass):
             return
 
         sensor = self._sensorMap[entity]
-        on_state = kwargs["on_state"]
+        on_state = kwargs.get("on_state", "on")
 
         if new == on_state:
             # self.log(f"callback.handle_on: sensor={sensor}")
             await self._handle_on_async(sensor)
         else:
-            additional_delay = kwargs["additional_delay"]
+            additional_delay = kwargs.get("additional_delay", None)
             if additional_delay:
                 # self.log(
                 #     f"callback.sleep: sensor={sensor}, additional_delay={additional_delay}")

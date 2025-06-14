@@ -3,6 +3,8 @@ import globals
 
 class Exhaust(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         return
         config = self.args["config"]
         self._input = config["input"]

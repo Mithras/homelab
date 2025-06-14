@@ -238,6 +238,15 @@ sensor.smart_plug_04_power:
   friendly_name: AC Master Bedroom Power
 sensor.smart_plug_04_temperature:
   friendly_name: AC Master Bedroom Temperature
+# Smart Plug 05
+switch.smart_plug_05:
+  friendly_name: Pyramid
+sensor.smart_plug_05_energy:
+  friendly_name: Pyramid Energy
+sensor.smart_plug_05_power:
+  friendly_name: Pyramid Power
+sensor.smart_plug_05_temperature:
+  friendly_name: Pyramid Temperature
 
 # Smart Light Switch 01
 switch.smart_light_switch_01:

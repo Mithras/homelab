@@ -1,7 +1,6 @@
 Security:
   module: security
   class: Security
-  global_dependencies:
-    - globals
   dependencies:
     - Common
+  constrain_enabled:

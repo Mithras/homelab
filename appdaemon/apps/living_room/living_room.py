@@ -3,6 +3,8 @@ import globals
 
 class LivingRoom(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         config = self.args["config"]
         self._mithras_desktop = config["mithras_desktop"]
         self._jotunheim = config["jotunheim"]

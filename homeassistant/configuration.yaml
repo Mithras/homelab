@@ -31,8 +31,8 @@ homeassistant:
   allowlist_external_dirs:
     - /config/tmp
 
-debugpy:
-  # start: false
+# debugpy:
+#   start: false
 
 recorder: !include recorder.yaml
 

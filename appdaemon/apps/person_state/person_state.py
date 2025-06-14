@@ -3,6 +3,8 @@ import globals
 
 class PersonState(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         config = self.args["config"]
         self._input_sleep = config["input_sleep"]
 

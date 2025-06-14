@@ -1,8 +1,6 @@
 CameraAlarmLivingRoom:
   module: camera_alarm
   class: CameraAlarm
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   constrain_arm: Armed Away, Armed Sleep
@@ -10,11 +8,10 @@ CameraAlarmLivingRoom:
     camera: camera.living_room_camera_high
     sensors:
       - binary_sensor.living_room_camera_motion
+  constrain_enabled:
 CameraAlarmPorch:
   module: camera_alarm
   class: CameraAlarm
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   constrain_arm:
@@ -22,3 +19,4 @@ CameraAlarmPorch:
     camera: camera.porch_camera_high
     sensors:
       - binary_sensor.porch_camera_motion
+  constrain_enabled:

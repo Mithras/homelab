@@ -1,8 +1,6 @@
 Ventilation:
   module: ventilation
   class: Ventilation
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -10,3 +8,4 @@ Ventilation:
     on_low_interval: 900 # 15m
     on_auto_interval: 9900 # 2h 45m
     sleep_input: input_boolean.sleep
+  constrain_enabled:

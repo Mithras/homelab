@@ -1,8 +1,6 @@
 SleepSwitch:
   module: sleep_switch
   class: SleepSwitch
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -28,3 +26,4 @@ SleepSwitch:
       - service: cover/open_cover
         data:
           entity_id: cover.curtain_3_aa2c
+  constrain_enabled:

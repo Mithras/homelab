@@ -52,6 +52,8 @@ views:
               - input_boolean.ac_living_room
               - entity: switch.smart_light_switch_03
                 icon: mdi:fireplace
+              - entity: switch.smart_plug_05
+                icon: mdi:pyramid
 
       - type: vertical-stack
         cards:

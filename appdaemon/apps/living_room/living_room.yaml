@@ -1,8 +1,6 @@
 LivingRoom:
   module: living_room
   class: LivingRoom
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -15,3 +13,4 @@ LivingRoom:
     living_room_main_light: light.living_room_back
     light_strip: light.light_strip
     tv_delay: 300 # 5m
+  constrain_enabled:

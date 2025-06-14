@@ -1,8 +1,6 @@
 GlobalLight:
   module: global_light
   class: GlobalLight
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -29,3 +27,4 @@ GlobalLight:
       - media_player.samsung_9_series_65
       - light.light_strip
       - light.office
+  constrain_enabled:

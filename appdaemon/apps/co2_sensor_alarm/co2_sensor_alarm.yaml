@@ -2,20 +2,18 @@ LivingRoomCo2SensorAlarm:
   module: co2_sensor_alarm
   class: Co2SensorAlarm
   constrain_arm: Armed Home
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config: 
     sensor: sensor.airthings_wave_211131_carbon_dioxide
+  constrain_enabled:
 MasterBedroomCo2SensorAlarm:
   module: co2_sensor_alarm
   class: Co2SensorAlarm
   constrain_arm: Armed Home
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config: 
     sensor: sensor.airthings_wave_178276_carbon_dioxide
+  constrain_enabled:
  

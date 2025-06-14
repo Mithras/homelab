@@ -18,7 +18,8 @@ services:
     container_name: homeassistant
     restart: unless-stopped
     environment:
-      - PYTHON_FROZEN_MODULES=off # https://docs.python.org/3/using/cmdline.html#envvar-PYTHON_FROZEN_MODULES
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL}
+      # - PYTHON_FROZEN_MODULES=off # https://docs.python.org/3/using/cmdline.html#envvar-PYTHON_FROZEN_MODULES
     volumes:
       - ./homeassistant:/config
       - ./tmp:/config/tmp
@@ -32,7 +33,7 @@ services:
     networks:
       - homelab
   appdaemon:
-    image: acockburn/appdaemon:dev
+    image: acockburn/appdaemon:latest
     container_name: appdaemon
     restart: unless-stopped
     volumes:
@@ -137,6 +138,7 @@ services:
       - 7860:7860 # Automatic
       - 11434:11434 # Ollama
       - 6680:6680 # mpd
+      - 8888:8888 # searxng
     volumes:
       - ./nginx-proxy-manager/data:/data
       - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
@@ -182,44 +184,50 @@ services:
     image: docker.io/searxng/searxng
     container_name: searxng
     restart: unless-stopped
+    environment:
+      SEARXNG_BASE_URL: ${SEARXNG_BASE_URL}
+      SEARXNG_SECRET: ${SEARXNG_SECRET}
     volumes:
       - ./searxng:/etc/searxng
     networks:
       - homelab
-  # wyoming-whisper:
-  #   image: rhasspy/wyoming-whisper
-  #   command:
-  #     - --model
-  #     # - medium-int8 # 3-4s
-  #     # - distil-medium.en # 4-5s
-  #     # - medium.en # 5-6s
-  #     # - distil-large-v2 # 8-9s
-  #     - ellisd/faster-whisper-distil-medium-en-int8 # 3s
-  #     # - ellisd/faster-whisper-distil-large-v2-en-int8 # 5s
-  #     - --language
-  #     - en
-  #   container_name: wyoming-whisper
-  #   restart: unless-stopped
-  #   hostname: wyoming-whisper
-  #   volumes:
-  #     - ./wyoming-whisper/data:/data
-  #   ports:
-  #     - 10300:10300
-  #   networks:
-  #     - homelab
-  # adguardhome:
-  #   image: adguard/adguardhome
-  #   container_name: adguardhome
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./adguard/work:/opt/adguardhome/work
-  #     - ./adguard/conf:/opt/adguardhome/conf
-  #     - /etc/localtime:/etc/localtime:ro
-  #   ports:
-  #     - 53:53/tcp
-  #     - 53:53/udp
-  #     - 3000:3000
-  #   user: "${UID}:${GID}"
 networks:
   homelab:
     name: homelab
+
+# ---
+
+# wyoming-whisper:
+#   image: rhasspy/wyoming-whisper
+#   command:
+#     - --model
+#     # - medium-int8 # 3-4s
+#     # - distil-medium.en # 4-5s
+#     # - medium.en # 5-6s
+#     # - distil-large-v2 # 8-9s
+#     - ellisd/faster-whisper-distil-medium-en-int8 # 3s
+#     # - ellisd/faster-whisper-distil-large-v2-en-int8 # 5s
+#     - --language
+#     - en
+#   container_name: wyoming-whisper
+#   restart: unless-stopped
+#   hostname: wyoming-whisper
+#   volumes:
+#     - ./wyoming-whisper/data:/data
+#   ports:
+#     - 10300:10300
+#   networks:
+#     - homelab
+# adguardhome:
+#   image: adguard/adguardhome
+#   container_name: adguardhome
+#   restart: unless-stopped
+#   volumes:
+#     - ./adguard/work:/opt/adguardhome/work
+#     - ./adguard/conf:/opt/adguardhome/conf
+#     - /etc/localtime:/etc/localtime:ro
+#   ports:
+#     - 53:53/tcp
+#     - 53:53/udp
+#     - 3000:3000
+#   user: "${UID}:${GID}"

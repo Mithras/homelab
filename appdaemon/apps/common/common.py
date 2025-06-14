@@ -26,35 +26,30 @@ class Common(hass.Hass):
         await self.call_service("telegram_bot/send_message",
                                 # target=[self.telegram_alarm_chat],
                                 message=message,
-                                return_result=True,
                                 **kwargs)
 
     async def send_debug_async(self, message: str, **kwargs):
         await self.call_service("telegram_bot/send_message",
                                 # target=[self.telegram_debug_chat],
                                 message=message,
-                                return_result=True,
                                 **kwargs)
 
     async def turn_on_async(self, entity: str, **kwargs):
         [domain, _] = entity.split(".")
         await self.call_service(f"{domain}/turn_on",
                                 entity_id=entity,
-                                return_result=True,
                                 **kwargs)
 
     async def turn_off_async(self, entity: str, **kwargs):
         [domain, _] = entity.split(".")
         await self.call_service(f"{domain}/turn_off",
                                 entity_id=entity,
-                                return_result=True,
                                 **kwargs)
 
     async def toggle_async(self, entity: str, **kwargs):
         [domain, _] = entity.split(".")
         await self.call_service(f"{domain}/toggle",
                                 entity_id=entity,
-                                return_result=True,
                                 **kwargs)
 
     async def light_turn_bright_async(self, light_group: str, **kwargs):
@@ -73,7 +68,6 @@ class Common(hass.Hass):
             await self.call_service("light/turn_on",
                                     entity_id=light_group,
                                     profile=profile,
-                                    return_result=True,
                                     **kwargs)
 
     async def light_flash_async(self, light: str, **kwargs):
@@ -81,5 +75,4 @@ class Common(hass.Hass):
                                 entity_id=light,
                                 brightness=255,
                                 flash="short",
-                                return_result=True,
                                 **kwargs)

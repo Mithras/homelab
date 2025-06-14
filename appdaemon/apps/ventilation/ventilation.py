@@ -41,8 +41,7 @@ class Ventilation(globals.Hass):
             self._start_when_awake = False
             await self.call_service("climate/set_fan_mode",
                                     entity_id=self._climate,
-                                    fan_mode=FAN_LOW,
-                                    return_result=True)
+                                    fan_mode=FAN_LOW)
 
     async def _handle_climate_change_async(self):
         hvac_action = await self.get_state(self._climate, attribute="hvac_action")
@@ -68,5 +67,4 @@ class Ventilation(globals.Hass):
             f"_set_fan_mode: fan_mode = {fan_mode}")
         await self.call_service("climate/set_fan_mode",
                                 entity_id=self._climate,
-                                fan_mode=fan_mode,
-                                return_result=True)
+                                fan_mode=fan_mode)

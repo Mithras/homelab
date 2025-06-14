@@ -3,6 +3,8 @@ import globals
 
 class GlobalLight(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         config = self.args["config"]
         input_sleep = config["input_sleep"]
         self.entities = config["entities"]

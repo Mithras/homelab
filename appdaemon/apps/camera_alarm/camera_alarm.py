@@ -12,6 +12,8 @@ LOCAL_TMP_PATH = "/conf/tmp"
 
 class CameraAlarm(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         config = self.args["config"]
         self._camera = config["camera"]
         for entity in config["sensors"]:
@@ -30,12 +32,10 @@ class CameraAlarm(globals.Hass):
         local_filename = f"{LOCAL_TMP_PATH}/{name}.jpg"
         await self.call_service("camera/snapshot",
                                 entity_id=self._camera,
-                                filename=remote_filename,
-                                return_result=True)
+                                filename=remote_filename)
         await self.call_service("telegram_bot/send_photo",
                                 # target=[self.common.telegram_alarm_chat],
-                                file=remote_filename,
-                                return_result=True)
+                                file=remote_filename)
         os.remove(local_filename)
 
     def _get_name(self):

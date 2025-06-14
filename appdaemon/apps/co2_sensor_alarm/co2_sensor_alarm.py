@@ -10,6 +10,8 @@ class Co2SensorAlarm(globals.Hass):
     _step: int
 
     async def initialize(self):
+        await super().initialize()
+        
         config = self.args["config"]
         sensor = config["sensor"]
 

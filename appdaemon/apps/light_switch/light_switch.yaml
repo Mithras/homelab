@@ -1,10 +1,9 @@
 LightSwitch:
   module: light_switch
   class: LightSwitch
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
     topic: zigbee2mqtt/tradfri_01/action
     light: light.office
+  constrain_enabled:

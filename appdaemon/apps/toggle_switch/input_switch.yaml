@@ -1,8 +1,6 @@
 TvInputSwitch:
   module: input_switch
   class: InputSwitch
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -16,11 +14,10 @@ TvInputSwitch:
       entity_id: remote.rm3_mini_1
       device: tv_living_room
       command: power
+  constrain_enabled:
 AcLivingRoomInputSwitch:
   module: input_switch
   class: InputSwitch
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -38,11 +35,10 @@ AcLivingRoomInputSwitch:
       entity_id: remote.rm3_mini_1
       device: ac_living_room
       command: "off"
+  constrain_enabled:
 AcMasterBedroomInputSwitch:
   module: input_switch
   class: InputSwitch
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -60,3 +56,4 @@ AcMasterBedroomInputSwitch:
       entity_id: remote.rm3_mini_2_remote
       device: ac_master_bedroom
       command: "off"
+  constrain_enabled:

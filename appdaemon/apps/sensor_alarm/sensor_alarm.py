@@ -11,6 +11,8 @@ GARAGE_STATE_MESSAGE_MAP = {
 
 class SensorAlarm(globals.Hass):
     async def initialize(self):
+        await super().initialize()
+        
         for entity in self.args["config"]:
             await self.listen_state(self._state_callback_async,
                                     entity_id=entity)

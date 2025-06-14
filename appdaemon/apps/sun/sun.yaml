@@ -1,8 +1,6 @@
 Sun:
   module: sun
   class: Sun
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -28,3 +26,4 @@ Sun:
       - service: switch/turn_on
         data:
           entity_id: switch.tradfri_control_outlet_03
+  constrain_enabled:

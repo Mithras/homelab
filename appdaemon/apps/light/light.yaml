@@ -1,8 +1,6 @@
 LightMasterBedroom:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -13,11 +11,10 @@ LightMasterBedroom:
     sun_down_on_profile: bright
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
+  constrain_enabled:
 LightKitchen:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -31,11 +28,10 @@ LightKitchen:
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
     sleep_off_profile: "off"
+  constrain_enabled:
 LightGarage:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -52,11 +48,10 @@ LightGarage:
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
     ignore_sleep: True
+  constrain_enabled:
 LightMasterBathroom:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -69,11 +64,10 @@ LightMasterBathroom:
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
     sleep_off_profile: "off"
+  constrain_enabled:
 LightMasterToilet:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -87,11 +81,10 @@ LightMasterToilet:
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
     sleep_off_profile: "off"
+  constrain_enabled:
 LightPorch:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -105,11 +98,10 @@ LightPorch:
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
     ignore_sleep: True
+  constrain_enabled:
 LightDriveway:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -126,11 +118,10 @@ LightDriveway:
     sun_up_off_profile: "off"
     sun_down_off_profile: nightlight
     ignore_sleep: True
+  constrain_enabled:
 LightStaircase:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -143,11 +134,10 @@ LightStaircase:
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
     sleep_off_profile: "off"
+  constrain_enabled:
 LightHallwayDownstairs:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -159,11 +149,10 @@ LightHallwayDownstairs:
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
     sleep_off_profile: "off"
+  constrain_enabled:
 LightHallwayUpstairs:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -175,11 +164,10 @@ LightHallwayUpstairs:
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
     sleep_off_profile: "off"
+  constrain_enabled:
 LightToilet:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -193,11 +181,10 @@ LightToilet:
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
     sleep_off_profile: "off"
+  constrain_enabled:
 LightLandryRoom:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -209,11 +196,10 @@ LightLandryRoom:
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
     sleep_off_profile: "off"
+  constrain_enabled:
 LightBackyardDoor:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -225,11 +211,10 @@ LightBackyardDoor:
     sun_up_off_profile: "off"
     sun_down_off_profile: nightlight
     ignore_sleep: True
+  constrain_enabled:
 LightMasterBathroomMain:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -241,11 +226,10 @@ LightMasterBathroomMain:
     sun_down_on_profile: "on"
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
+  constrain_enabled:
 LightBathroomUpstairs:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -257,11 +241,10 @@ LightBathroomUpstairs:
     sun_down_on_profile: "on"
     sun_up_off_profile: "off"
     sun_down_off_profile: "off"
+  constrain_enabled:
 LightOffice:
   module: light
   class: Light
-  global_dependencies:
-    - globals
   dependencies:
     - Common
   config:
@@ -275,3 +258,4 @@ LightOffice:
     sun_up_off_profile: "off"
     sleep_on_profile: nightlight
     sleep_off_profile: "off"
+  constrain_enabled:
