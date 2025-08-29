@@ -1,6 +1,7 @@
 /ollama/data
 /ollama/.data-backup_asd*
 /wyoming-whisper/data
-/wyoming-whisper-2/data
-/wyoming-whisper-2/.data-backup_asd*
-/automatic
+/wyoming-whisper/.data-backup_asd*
+/open-responses-server/test.db
+/open-responses-server/test copy.db
+/mcpo/config.json

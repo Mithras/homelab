@@ -3,18 +3,50 @@
 healthCheckTimeout: 300
 logLevel: info
 models:
-  qwen3moe:
+  # https://huggingface.co/unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
+  qwen3moe_instruct:
     cmd: >
       /app/llama-server
-      -hf unsloth/Qwen3-30B-A3B-GGUF:Q4_K_M
+      -hf unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF:Q6_K_XL
       --n-gpu-layers 99
       --port ${PORT}
 
       --flash-attn
-      --threads 16
       --no-webui
       --split-mode none
       -c 16384
       --jinja
-    ttl: 300
-    # useModelName: /root/.cache/llama.cpp/unsloth_Qwen3-30B-A3B-GGUF_Qwen3-30B-A3B-Q4_K_M.gguf
+      --reasoning-format deepseek
+      --reasoning-budget 0
+      --alias qwen3moe_instruct
+
+      --temp 0.7
+      --top-p 0.8
+      --top-k 20
+      --min-p 0
+    ttl: 600
+  # https://huggingface.co/unsloth/Qwen3-30B-A3B-Thinking-2507-GGUF
+  qwen3moe_thinking:
+    cmd: >
+      /app/llama-server
+      -hf unsloth/Qwen3-30B-A3B-Thinking-2507-GGUF:Q6_K_XL
+      --n-gpu-layers 99
+      --port ${PORT}
+
+      --flash-attn
+      --no-webui
+      --split-mode none
+      -c 16384
+      --jinja
+      --reasoning-format deepseek
+      --alias qwen3moe_thinking
+
+      --temp 0.6
+      --top-p 0.95
+      --top-k 20
+      --min-p 0
+    ttl: 600
+# hooks:
+#   on_startup:
+#     preload:
+#       - qwen3moe_instruct
