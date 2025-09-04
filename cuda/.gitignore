@@ -4,4 +4,6 @@
 /wyoming-whisper/.data-backup_asd*
 /open-responses-server/test.db
 /open-responses-server/test copy.db
-/mcpo/config.json
+/mcp-proxy/memory
+/mcp-proxy/basic-memory
+/speaches/cache

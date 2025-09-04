@@ -38,8 +38,7 @@ services:
     restart: unless-stopped
     hostname: open-responses-server
     environment:
-      # OPENAI_BASE_URL_INTERNAL: http://llama-swap:8080/upstream/qwen3moe
-      OPENAI_BASE_URL_INTERNAL: http://llama-swap:8080/upstream/qwen3moe_no_think
+      OPENAI_BASE_URL_INTERNAL: http://llama-swap:8080/upstream/qwen3moe_coder
       OPENAI_BASE_URL: http://0.0.0.0:8081
       OPENAI_API_KEY: na
       API_ADAPTER_PORT: 8081
@@ -84,12 +83,17 @@ services:
       --port 8096
       --host 0.0.0.0
       --named-server-config /app/config.json
-    # --pass-environment
+      --pass-environment
     # --debug
+    environment:
+      MEMORY_FILE_PATH: /app/memory/memory.json
+      BASIC_MEMORY_HOME: /app/basic-memory
     volumes:
       - ./mcp-proxy/config.json:/app/config.json
       - ./mcp-proxy/filesystem:/app/filesystem
+      - ./mcp-proxy/memory:/app/memory
       - /home/mithras/Obsidian/Main:/app/obsidian:ro
+      - ./mcp-proxy/basic-memory:/app/basic-memory
     ports:
       - 8096:8096
     networks:
@@ -113,33 +117,60 @@ services:
     networks:
       - homelab
 
-  wyoming-whisper:
+  # https://github.com/speaches-ai/speaches/
+  # http://localhost:8001/v1/registry?task=text-to-speech
+  # http://localhost:8001/v1/registry?task=automatic-speech-recognition
+  # curl http://localhost:8001/v1/models/speaches-ai/Kokoro-82M-v1.0-ONNX -X POST
+  speaches:
     <<: [ *gpu-3090 ]
-    # https://github.com/linuxserver/docker-faster-whisper
-    image: lscr.io/linuxserver/faster-whisper:2.3.0-gpu
-    container_name: wyoming-whisper
+    image: ghcr.io/speaches-ai/speaches:latest-cuda
+    container_name: speaches
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles
-      # - WHISPER_MODEL=distil-large-v3
-      - WHISPER_MODEL=large-v3-turbo
-      - WHISPER_BEAM=5
-      - WHISPER_LANG=en
+      UVICORN_PORT: "8001"
+      # ENABLE_UI: "False"
+      # CHAT_COMPLETION_BASE_URL: TODO
+      TTL: "-1"
+      USE_BATCHED_MODE: "True"
     restart: unless-stopped
-    hostname: wyoming-whisper
+    hostname: speaches
     volumes:
-      - ./wyoming-whisper/data:/config
+      - ./speaches/cache:/home/ubuntu/.cache/huggingface/hub
     ports:
-      - 10301:10300
+      - 8001:8001
     networks:
       - homelab
+
 networks:
   homelab:
     name: homelab
 
 # ---
 
+# wyoming-whisper:
+#   <<: [ *gpu-3090 ]
+#   # https://github.com/linuxserver/docker-faster-whisper
+#   image: lscr.io/linuxserver/faster-whisper:2.3.0-gpu
+#   container_name: wyoming-whisper
+#   environment:
+#     - PUID=1000
+#     - PGID=1000
+#     - TZ=America/Los_Angeles
+#     # - WHISPER_MODEL=distil-large-v3
+#     - WHISPER_MODEL=large-v3-turbo
+#     - WHISPER_BEAM=5
+#     - WHISPER_LANG=en
+#   restart: unless-stopped
+#   hostname: wyoming-whisper
+#   volumes:
+#     - ./wyoming-whisper/data:/config
+#   ports:
+#     - 10301:10300
+#   networks:
+#     - homelab
+# networks:
+# homelab:
+#   name: homelab
+  
 # ollama:
 #   # ? ollama pull hf.co/unsloth/Qwen3-32B-GGUF:Q4_K_M
 #   # ? ollama pull hf.co/unsloth/Qwen3-30B-A3B-GGUF:Q4_K_M
