@@ -119,8 +119,10 @@ services:
 
   # https://github.com/speaches-ai/speaches/
   # http://localhost:8001/v1/registry?task=text-to-speech
+  # + curl http://localhost:8001/v1/models/speaches-ai/Kokoro-82M-v1.0-ONNX -X POST
   # http://localhost:8001/v1/registry?task=automatic-speech-recognition
-  # curl http://localhost:8001/v1/models/speaches-ai/Kokoro-82M-v1.0-ONNX -X POST
+  # + curl http://localhost:8001/v1/models/Systran/faster-whisper-large-v3 -X POST
+  # + curl http://localhost:8001/v1/models/distil-whisper/distil-large-v3.5-ct2 -X POST
   speaches:
     <<: [ *gpu-3090 ]
     image: ghcr.io/speaches-ai/speaches:latest-cuda
@@ -137,6 +139,26 @@ services:
       - ./speaches/cache:/home/ubuntu/.cache/huggingface/hub
     ports:
       - 8001:8001
+    networks:
+      - homelab
+
+  # https://github.com/roryeckel/wyoming_openai/
+  wyoming-openai:
+    image: ghcr.io/roryeckel/wyoming_openai:latest
+    container_name: wyoming-openai
+    environment:
+      STT_OPENAI_URL: http://speaches:8001/v1
+      STT_MODELS: Systran/faster-whisper-large-v3
+      # STT_STREAMING_MODELS: Systran/faster-whisper-large-v3
+      STT_BACKEND: SPEACHES
+      TTS_OPENAI_URL: http://speaches:8001/v1
+      TTS_MODELS: speaches-ai/Kokoro-82M-v1.0-ONNX
+      TTS_BACKEND: SPEACHES
+      # TTS_SPEED: "0.5"
+    restart: unless-stopped
+    hostname: wyoming-openai
+    ports:
+      - 10300:10300
     networks:
       - homelab
 
