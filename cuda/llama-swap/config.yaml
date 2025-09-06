@@ -15,6 +15,7 @@ models:
       --flash-attn on
       --no-webui
       --split-mode none
+      --main-gpu 0
       --ctx-size 32684
       --jinja
       --reasoning-format deepseek
@@ -39,6 +40,7 @@ models:
       --flash-attn on
       --no-webui
       --split-mode none
+      --main-gpu 0
       --ctx-size 32684
       --jinja
       --reasoning-format deepseek
@@ -50,7 +52,6 @@ models:
       --min-p 0
       --presence-penalty 1.0
     ttl: 600
-# ---
   # https://huggingface.co/unsloth/Qwen3-30B-A3B-Thinking-2507-GGUF
   qwen3moe_coder:
     cmd: >
@@ -63,6 +64,7 @@ models:
       --flash-attn on
       --no-webui
       --split-mode none
+      --main-gpu 0
       --ctx-size 32684
       --jinja
       --reasoning-format deepseek
@@ -74,7 +76,85 @@ models:
       --min-p 0
       --repeat-penalty 1.05
     ttl: 600
-# hooks:
-#   on_startup:
-#     preload:
-#       - qwen3moe_instruct
+  # https://huggingface.co/unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
+  # https://github.com/ggml-org/llama.cpp/pull/14029
+  qwen3_embedding:
+    cmd: >
+      /app/llama-server
+      -hf Qwen/Qwen3-Embedding-4B-GGUF:Q4_K_M
+      -ngl 99
+      --threads -1
+      --port ${PORT}
+
+      --no-webui
+      --split-mode none
+      --main-gpu 1
+      --alias qwen3_embedding
+    ttl: 600
+  # https://huggingface.co/Mungert/Qwen3-Reranker-4B-GGUF
+  qwen3_reranker:
+    cmd: >
+      /app/llama-server
+      -hf Mungert/Qwen3-Reranker-4B-GGUF:Q4_K_M
+      -ngl 99
+      --threads -1
+      --port ${PORT}
+
+      --no-webui
+      --split-mode none
+      --main-gpu 1
+      --alias qwen3_reranker
+    ttl: 600
+  # https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF
+  qwen3_task:
+    cmd: >
+      /app/llama-server
+      -hf unsloth/Qwen3-4B-Instruct-2507-GGUF:Q5_K_XL
+      -ngl 99
+      --threads -1
+      --port ${PORT}
+
+      --flash-attn on
+      --no-webui
+      --split-mode none
+      --main-gpu 1
+      --ctx-size 32684
+      --jinja
+      --reasoning-format deepseek
+      --reasoning-budget 0
+      --alias qwen3_task
+
+      --temp 0.7
+      --top-p 0.8
+      --top-k 20
+      --min-p 0
+      --presence-penalty 1.0
+    ttl: 600
+
+groups:
+  chat:
+    persistent: false
+    swap: true
+    exclusive: false
+    members:
+      - qwen3moe_instruct
+      - qwen3moe_thinking
+      - qwen3moe_coder
+  rag:
+    persistent: false
+    swap: false
+    exclusive: false
+    members:
+      - qwen3_embedding
+      - qwen3_reranker
+  task:
+    persistent: false
+    swap: true
+    exclusive: false
+    members:
+      - qwen3_task
+
+hooks:
+  on_startup:
+    preload:
+      - qwen3_task

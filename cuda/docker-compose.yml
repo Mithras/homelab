@@ -18,7 +18,7 @@ x-gpu-3090: &gpu-3090
 services:
 
   llama-swap:
-    <<: [ *gpu-5090 ]
+    <<: [ *gpu-all ]
     image: ghcr.io/mostlygeek/llama-swap:cuda
     container_name: llama-swap
     restart: unless-stopped
@@ -38,7 +38,7 @@ services:
     restart: unless-stopped
     hostname: open-responses-server
     environment:
-      OPENAI_BASE_URL_INTERNAL: http://llama-swap:8080/upstream/qwen3moe_coder
+      OPENAI_BASE_URL_INTERNAL: http://llama-swap:8080/upstream/qwen3moe_instruct
       OPENAI_BASE_URL: http://0.0.0.0:8081
       OPENAI_API_KEY: na
       API_ADAPTER_PORT: 8081
@@ -107,15 +107,16 @@ services:
     container_name: mcpo
     restart: unless-stopped
     hostname: mcpo
-    command: >
-      --config /app/config.json
-    # --header '{"Authorization": "Bearer ${HA_TOKEN}"}'
+    entrypoint: sh -c 'sleep 30 && mcpo --config /app/config.json'
     volumes:
       - ./mcpo/config.json:/app/config.json
     ports:
       - 8000:8000
     networks:
       - homelab
+    depends_on:
+      mcp-proxy:
+        condition: service_started
 
   # https://github.com/speaches-ai/speaches/
   # http://localhost:8001/v1/registry?task=text-to-speech
@@ -130,7 +131,7 @@ services:
     environment:
       UVICORN_PORT: "8001"
       # ENABLE_UI: "False"
-      # CHAT_COMPLETION_BASE_URL: TODO
+      CHAT_COMPLETION_BASE_URL: http://llama-swap:8080/upstream/qwen3moe_instruct/v1
       TTL: "-1"
       USE_BATCHED_MODE: "True"
     restart: unless-stopped
@@ -148,8 +149,8 @@ services:
     container_name: wyoming-openai
     environment:
       STT_OPENAI_URL: http://speaches:8001/v1
-      STT_MODELS: Systran/faster-whisper-large-v3
-      # STT_STREAMING_MODELS: Systran/faster-whisper-large-v3
+      STT_MODELS: distil-whisper/distil-large-v3.5-ct2
+      # STT_STREAMING_MODELS: distil-whisper/distil-large-v3.5-ct2
       STT_BACKEND: SPEACHES
       TTS_OPENAI_URL: http://speaches:8001/v1
       TTS_MODELS: speaches-ai/Kokoro-82M-v1.0-ONNX
