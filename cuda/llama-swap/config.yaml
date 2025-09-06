@@ -129,7 +129,6 @@ models:
       --top-k 20
       --min-p 0
       --presence-penalty 1.0
-    ttl: 600
 
 groups:
   chat:

@@ -1,9 +1,0 @@
-/ollama/data
-/ollama/.data-backup_asd*
-/wyoming-whisper/data
-/wyoming-whisper/.data-backup_asd*
-/open-responses-server/test.db
-/open-responses-server/test copy.db
-/mcp-proxy/memory
-/mcp-proxy/basic-memory
-/speaches/cache
