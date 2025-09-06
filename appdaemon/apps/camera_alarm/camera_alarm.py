@@ -34,7 +34,6 @@ class CameraAlarm(globals.Hass):
                                 entity_id=self._camera,
                                 filename=remote_filename)
         await self.call_service("telegram_bot/send_photo",
-                                # target=[self.common.telegram_alarm_chat],
                                 file=remote_filename)
         os.remove(local_filename)
 

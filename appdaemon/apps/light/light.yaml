@@ -256,6 +256,5 @@ LightOffice:
     sun_down_off_profile: "off"
     sun_up_on_profile: "off"
     sun_up_off_profile: "off"
-    sleep_on_profile: nightlight
-    sleep_off_profile: "off"
+    ignore_sleep: True
   constrain_enabled:

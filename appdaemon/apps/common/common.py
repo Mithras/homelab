@@ -2,7 +2,6 @@ import hassapi as hass
 import csv
 from collections import namedtuple
 
-
 Profile = namedtuple(
     "Profile", ["profile", "x_color", "y_color", "brightness"])
 with open("/conf/light_profiles.csv") as profiles_file:
@@ -11,7 +10,12 @@ with open("/conf/light_profiles.csv") as profiles_file:
     LIGHT_PROFILES = [Profile(row[0], float(row[1]), float(
         row[2]), int(row[3])) for row in profiles_reader]
 
-
+# TODO: merge into globals
+# TODO: total_threads: 0
+# TODO: kwargs -> **kwargs
+# TODO: /home/mithras/homelab/homeassistant/custom_components/appdaemon_app/__init__.py
+#   self.register_service("appdaemon_app2/turn_on / turn_off / toggle", self.xxx_callback)
+#   def xxx_callback(self, namespace: str, domain: str, service: str, **kwargs: Any) -> None:
 class Common(hass.Hass):
     async def initialize(self):
         config = self.args["config"]
@@ -24,13 +28,11 @@ class Common(hass.Hass):
 
     async def send_alarm_async(self, message: str, **kwargs):
         await self.call_service("telegram_bot/send_message",
-                                # target=[self.telegram_alarm_chat],
                                 message=message,
                                 **kwargs)
 
     async def send_debug_async(self, message: str, **kwargs):
         await self.call_service("telegram_bot/send_message",
-                                # target=[self.telegram_debug_chat],
                                 message=message,
                                 **kwargs)
 

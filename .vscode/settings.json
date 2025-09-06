@@ -2,5 +2,6 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8"
     },
-    "git.allowForcePush": true
+    "git.allowForcePush": true,
+    "python.pythonPath": "~/homelab/.venv/bin/python"
 }
