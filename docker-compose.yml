@@ -32,6 +32,9 @@ services:
     # user: "${UID}:${GID}"
     networks:
       - homelab
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
   appdaemon:
     image: acockburn/appdaemon:latest
     container_name: appdaemon
@@ -46,7 +49,7 @@ services:
     networks:
       - homelab
   zwavejs:
-    image: zwavejs/zwave-js-ui
+    image: zwavejs/zwave-js-ui:11.3 # 11.4 is busted
     container_name: zwavejs
     restart: unless-stopped
     environment:
@@ -182,7 +185,7 @@ services:
     ports:
       - 8889:8080
   # https://github.com/modelcontextprotocol/inspector
-  # http://ubuntu1:6274/?transport=sse&serverUrl=https://mithras.duckdns.org:8443/mcp_server/sse
+  # http://ubuntu1:6274/?transport=sse&serverUrl=http://mcp-proxy:8096/servers/home-assistant/sse
   # http://ubuntu1:6274/?transport=sse&serverUrl=http://mcp-proxy:8096/servers/time/sse
   mcp-inspector:
     image: ghcr.io/modelcontextprotocol/inspector
@@ -210,8 +213,7 @@ services:
       --pass-environment
     # --debug
     environment:
-      MEMORY_FILE_PATH: /app/memory/memory.json
-      BASIC_MEMORY_HOME: /app/basic-memory
+      API_ACCESS_TOKEN: ${HA_API_ACCESS_TOKEN}
       SEARXNG_URL: http://searxng:8080/
     volumes:
       - ./mcp-proxy/config.json:/app/config.json
@@ -219,18 +221,6 @@ services:
       - ./mcp-proxy/basic-memory:/app/basic-memory
     networks:
       - homelab
-  # https://github.com/open-webui/mcpo
-  mcpo:
-    image: ghcr.io/open-webui/mcpo:dev
-    restart: unless-stopped
-    entrypoint: sh -c 'sleep 30 && mcpo --config /app/config.json'
-    volumes:
-      - ./mcpo/config.json:/app/config.json
-    networks:
-      - homelab
-    depends_on:
-      mcp-proxy:
-        condition: service_started
   # https://github.com/roryeckel/wyoming_openai/
   wyoming-openai:
     image: ghcr.io/roryeckel/wyoming_openai:latest

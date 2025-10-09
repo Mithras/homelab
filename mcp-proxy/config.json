@@ -1,20 +1,18 @@
 {
   "mcpServers": {
+    "home-assistant": {
+      "command": "mcp-proxy",
+      "args": [
+        "https://mithras.duckdns.org:8443/mcp_server/sse"
+      ]
+    },
     "sequential-thinking": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
     },
-    "memory": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"]
-    },
     "time": {
       "command": "uvx",
       "args": ["mcp-server-time", "--local-timezone", "America/Los_Angeles"]
-    },
-    "basic-memory": {
-      "command": "uvx",
-      "args": ["basic-memory", "mcp"]
     },
     "searxng": {
       "command": "npx",
