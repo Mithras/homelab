@@ -11,12 +11,14 @@ models:
       -ngl 99
       --threads -1
       --port ${PORT}
+      -ctk q8_0
+      -ctv q8_0
+      -sm layer
+      -ts 2,1
 
       --flash-attn on
       --no-webui
-      --split-mode none
-      --main-gpu 0
-      --ctx-size 32684
+      --ctx-size 262144
       --jinja
       --reasoning-format deepseek
       --reasoning-budget 0
@@ -27,6 +29,7 @@ models:
       --top-k 20
       --min-p 0
       --presence-penalty 1.0
+    # --kv-unified
     ttl: 600
   # https://huggingface.co/unsloth/Qwen3-30B-A3B-Thinking-2507-GGUF
   qwen3moe_thinking:
@@ -36,12 +39,14 @@ models:
       -ngl 99
       --threads -1
       --port ${PORT}
+      -ctk q8_0
+      -ctv q8_0
+      -sm layer
+      -ts 2,1
 
       --flash-attn on
       --no-webui
-      --split-mode none
-      --main-gpu 0
-      --ctx-size 32684
+      --ctx-size 262144
       --jinja
       --reasoning-format deepseek
       --alias qwen3moe_thinking
@@ -60,12 +65,14 @@ models:
       -ngl 99
       --threads -1
       --port ${PORT}
+      -ctk q8_0
+      -ctv q8_0
+      -sm layer
+      -ts 2,1
 
       --flash-attn on
       --no-webui
-      --split-mode none
-      --main-gpu 0
-      --ctx-size 32684
+      --ctx-size 262144
       --jinja
       --reasoning-format deepseek
       --alias qwen3moe_coder
@@ -76,35 +83,65 @@ models:
       --min-p 0
       --repeat-penalty 1.05
     ttl: 600
-  # https://huggingface.co/unsloth/Qwen3-30B-A3B-Instruct-2507-GGUF
-  # https://github.com/ggml-org/llama.cpp/pull/14029
+  # https://huggingface.co/unsloth/Seed-OSS-36B-Instruct-GGUF
+  seed_oss:
+    cmd: >
+      /app/llama-server
+      -hf unsloth/Seed-OSS-36B-Instruct-GGUF:Q4_K_XL
+      -ngl 99
+      --threads -1
+      --port ${PORT}
+      -ctk q8_0
+      -ctv q8_0
+      -sm layer
+      -ts 2,1
+
+      --flash-attn on
+      --no-webui
+      --ctx-size 16342
+      --jinja
+      --reasoning-format deepseek
+      --alias seed_oss
+    ttl: 600
+  # https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF
   qwen3_embedding:
     cmd: >
       /app/llama-server
-      -hf Qwen/Qwen3-Embedding-4B-GGUF:Q4_K_M
+      -hf Qwen/Qwen3-Embedding-0.6B-GGUF:Q8_0
       -ngl 99
       --threads -1
       --port ${PORT}
+      -ctk q8_0
+      -ctv q8_0
+      -sm none
 
       --no-webui
-      --split-mode none
-      --main-gpu 1
       --alias qwen3_embedding
-    ttl: 600
-  # https://huggingface.co/Mungert/Qwen3-Reranker-4B-GGUF
+
+      --embedding
+      --pooling last
+      -ub 8192
+    env:
+      - CUDA_VISIBLE_DEVICES=1
+  # https://huggingface.co/Mungert/Qwen3-Reranker-0.6B-GGUF
+  # https://github.com/ggml-org/llama.cpp/pull/14029
   qwen3_reranker:
     cmd: >
       /app/llama-server
-      -hf Mungert/Qwen3-Reranker-4B-GGUF:Q4_K_M
+      -hf Mungert/Qwen3-Reranker-0.6B-GGUF:Q8_0
       -ngl 99
       --threads -1
       --port ${PORT}
+      -ctk q8_0
+      -ctv q8_0
+      -sm none
 
       --no-webui
-      --split-mode none
-      --main-gpu 1
       --alias qwen3_reranker
-    ttl: 600
+
+      --reranking
+    env:
+      - CUDA_VISIBLE_DEVICES=1
   # https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF
   qwen3_task:
     cmd: >
@@ -113,11 +150,12 @@ models:
       -ngl 99
       --threads -1
       --port ${PORT}
+      -ctk q8_0
+      -ctv q8_0
+      -sm none
 
       --flash-attn on
       --no-webui
-      --split-mode none
-      --main-gpu 1
       --ctx-size 32684
       --jinja
       --reasoning-format deepseek
@@ -129,6 +167,8 @@ models:
       --top-k 20
       --min-p 0
       --presence-penalty 1.0
+    env:
+      - CUDA_VISIBLE_DEVICES=1
 
 groups:
   chat:
@@ -139,6 +179,7 @@ groups:
       - qwen3moe_instruct
       - qwen3moe_thinking
       - qwen3moe_coder
+      - seed_oss
   rag:
     persistent: false
     swap: false
@@ -157,3 +198,5 @@ hooks:
   on_startup:
     preload:
       - qwen3_task
+      - qwen3_embedding
+      # - qwen3_reranker

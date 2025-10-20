@@ -58,6 +58,18 @@ services:
     networks:
       - homelab
 
+  # https://github.com/musistudio/claude-code-router
+  # http://localhost:3456/ui/
+  claude-code-router:
+    build: https://github.com/musistudio/claude-code-router.git
+    ports:
+      - "3456:3456"
+    volumes:
+      - ./claude-code-router:/root/.claude-code-router
+    restart: unless-stopped
+    networks:
+      - homelab
+    
 networks:
   homelab:
     name: homelab

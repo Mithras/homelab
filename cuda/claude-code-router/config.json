@@ -1,0 +1,57 @@
+{
+  "LOG": false,
+  "LOG_LEVEL": "debug",
+  "CLAUDE_PATH": "",
+  "HOST": "0.0.0.0",
+  "PORT": 3456,
+  "APIKEY": "claude-code-router",
+  "API_TIMEOUT_MS": "600000",
+  "PROXY_URL": "",
+  "transformers": [],
+  "Providers": [
+    {
+      "name": "qwen3moe_coder",
+      "api_base_url": "http://llama-swap:8080/upstream/qwen3moe_coder/v1/chat/completions",
+      "api_key": "NA",
+      "models": [
+        "qwen3moe_coder"
+      ]
+    },
+    {
+      "name": "qwen3moe_thinking",
+      "api_base_url": "http://llama-swap:8080/upstream/qwen3moe_thinking/v1/chat/completions",
+      "api_key": "NA",
+      "models": [
+        "qwen3moe_thinking"
+      ]
+    },
+    {
+      "name": "qwen3_task",
+      "api_base_url": "http://llama-swap:8080/upstream/qwen3_task/v1/chat/completions",
+      "api_key": "NA",
+      "models": [
+        "qwen3_task"
+      ]
+    }
+  ],
+  "StatusLine": {
+    "enabled": false,
+    "currentStyle": "default",
+    "default": {
+      "modules": []
+    },
+    "powerline": {
+      "modules": []
+    }
+  },
+  "Router": {
+    "default": "qwen3moe_coder,qwen3moe_coder",
+    "background": "qwen3_task,qwen3_task",
+    "think": "qwen3moe_thinking,qwen3moe_thinking",
+    "longContext": "qwen3moe_coder,qwen3moe_coder",
+    "longContextThreshold": 262144,
+    "webSearch": "",
+    "image": ""
+  },
+  "CUSTOM_ROUTER_PATH": ""
+}
