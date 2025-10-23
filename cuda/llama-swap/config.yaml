@@ -98,13 +98,73 @@ models:
 
       --flash-attn on
       --no-webui
-      --ctx-size 16342
+      --ctx-size 131072
       --jinja
-      --reasoning-format deepseek
+      --reasoning-format auto
       --alias seed_oss
+      --chat-template-kwargs '{"thinking_budget": 512}'
     ttl: 600
+
+  # https://huggingface.co/unsloth/GLM-4.5-Air-GGUF
+  glm_air:
+    cmd: >
+      /app/llama-server
+      -m /download/GLM-4.5-Air-IQ4_XS/GLM-4.5-Air-IQ4_XS.gguf
+      -ngl 99
+      --threads -1
+      --port ${PORT}
+      -ctk q8_0
+      -ctv q8_0
+
+      --flash-attn on
+      --no-webui
+      --ctx-size 131072
+      --jinja
+      --reasoning-format auto
+      --alias glm_air
+
+      -sm layer
+      -ts 31,17
+      --n-cpu-moe 15
+    # IQ4_XS:
+    #   -ts 31,17
+    #   --n-cpu-moe 15
+    #   TPS: 63.19 / 33.45
+    # Q4_K_M:
+    #   -ts 34,14
+    #   --n-cpu-moe 21
+    #   TPS: 64.32 / 20.62
+    ttl: 600
+
+  # https://huggingface.co/unsloth/gpt-oss-120b-GGUF
+  gpt_oss:
+    cmd: >
+      /app/llama-server
+      -m /download/gpt-oss-120b/Q4_K_M/gpt-oss-120b-Q4_K_M.gguf
+      -ngl 99
+      --threads -1
+      --port ${PORT}
+      -ctk q8_0
+      -ctv q8_0
+
+      --flash-attn on
+      --no-webui
+      --ctx-size 131072
+      --jinja
+      --reasoning-format auto
+      --alias gpt_oss
+
+      -sm layer
+      -ts 100,65
+      --n-cpu-moe 6
+    # Q4_K_M
+    #   -ts 100,65
+    #   --n-cpu-moe 6
+    #   TPS: 138.43 / 74.09
+    ttl: 600
+
   # https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF
-  qwen3_embedding:
+  _qwen3_embedding:
     cmd: >
       /app/llama-server
       -hf Qwen/Qwen3-Embedding-0.6B-GGUF:Q8_0
@@ -125,7 +185,7 @@ models:
       - CUDA_VISIBLE_DEVICES=1
   # https://huggingface.co/Mungert/Qwen3-Reranker-0.6B-GGUF
   # https://github.com/ggml-org/llama.cpp/pull/14029
-  qwen3_reranker:
+  _qwen3_reranker:
     cmd: >
       /app/llama-server
       -hf Mungert/Qwen3-Reranker-0.6B-GGUF:Q8_0
@@ -143,7 +203,7 @@ models:
     env:
       - CUDA_VISIBLE_DEVICES=1
   # https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF
-  qwen3_task:
+  _qwen3_task:
     cmd: >
       /app/llama-server
       -hf unsloth/Qwen3-4B-Instruct-2507-GGUF:Q5_K_XL
@@ -180,6 +240,8 @@ groups:
       - qwen3moe_thinking
       - qwen3moe_coder
       - seed_oss
+      - glm_air
+      - gpt_oss
   rag:
     persistent: false
     swap: false
@@ -197,6 +259,4 @@ groups:
 hooks:
   on_startup:
     preload:
-      - qwen3_task
-      - qwen3_embedding
-      # - qwen3_reranker
+      - gpt_oss

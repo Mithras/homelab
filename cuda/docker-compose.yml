@@ -27,6 +27,7 @@ services:
     volumes:
       - ./llama-swap/config.yaml:/app/config.yaml
       - ./llama-swap/cache:/root/.cache/llama.cpp
+      - ./download:/download
     ports:
       - 8080:8080
     networks:
@@ -62,6 +63,8 @@ services:
   # http://localhost:3456/ui/
   claude-code-router:
     build: https://github.com/musistudio/claude-code-router.git
+    environment:
+      CLAUDE_CODE_ROUTER_APIKEY: ${CLAUDE_CODE_ROUTER_APIKEY}
     ports:
       - "3456:3456"
     volumes:

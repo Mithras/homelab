@@ -4,7 +4,7 @@
   "CLAUDE_PATH": "",
   "HOST": "0.0.0.0",
   "PORT": 3456,
-  "APIKEY": "claude-code-router",
+  "APIKEY": "${CLAUDE_CODE_ROUTER_APIKEY}",
   "API_TIMEOUT_MS": "600000",
   "PROXY_URL": "",
   "transformers": [],
