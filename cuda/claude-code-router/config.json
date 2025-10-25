@@ -26,11 +26,27 @@
       ]
     },
     {
-      "name": "qwen3_task",
-      "api_base_url": "http://llama-swap:8080/upstream/qwen3_task/v1/chat/completions",
+      "name": "gpt_oss",
+      "api_base_url": "http://llama-swap:8080/upstream/gpt_oss/v1/chat/completions",
       "api_key": "NA",
       "models": [
-        "qwen3_task"
+        "gpt_oss"
+      ]
+    },
+    {
+      "name": "glm_air",
+      "api_base_url": "http://llama-swap:8080/upstream/glm_air/v1/chat/completions",
+      "api_key": "NA",
+      "models": [
+        "glm_air"
+      ]
+    },
+    {
+      "name": "seed_oss",
+      "api_base_url": "http://llama-swap:8080/upstream/seed_oss/v1/chat/completions",
+      "api_key": "NA",
+      "models": [
+        "seed_oss"
       ]
     }
   ],
@@ -46,9 +62,9 @@
   },
   "Router": {
     "default": "qwen3moe_coder,qwen3moe_coder",
-    "background": "qwen3_task,qwen3_task",
-    "think": "qwen3moe_thinking,qwen3moe_thinking",
-    "longContext": "qwen3moe_coder,qwen3moe_coder",
+    "background": "",
+    "think": "",
+    "longContext": "",
     "longContextThreshold": 262144,
     "webSearch": "",
     "image": ""

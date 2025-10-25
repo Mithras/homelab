@@ -258,5 +258,4 @@ groups:
 
 hooks:
   on_startup:
-    preload:
-      - gpt_oss
+    preload: []
