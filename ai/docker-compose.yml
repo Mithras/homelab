@@ -1,0 +1,180 @@
+services:
+  llama:
+    restart: unless-stopped
+    # image: llama:hip
+    # image: llama:vulkan
+    entrypoint: ./llama-server
+    # --rpc 192.168.100.2:50052,192.168.200.2:50052
+    command: >
+      --host 0.0.0.0
+      --port 8080
+      --offline
+      --models-max 1
+      --models-preset /app/config.ini
+
+      --threads 16
+      -ngl -1
+      --no-mmap
+      --prio 2
+      --prio-batch 2
+
+      --flash-attn on
+      --jinja
+      --cache-ram 16384
+    # --parallel 2
+    # --kv-unified
+    # Doesn't work with Vulcan/RDP
+    # --cache-type-k bf16
+    # --cache-type-v bf16
+    environment:
+      ROCBLAS_USE_HIPBLASLT: "1"
+      # ibv_devinfo -v
+      GGML_RDMA_DEV: rocep101s0f1
+      GGML_RDMA_GID: "5"
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/kfd:/dev/kfd
+      - /dev/infiniband:/dev/infiniband
+      # - /dev/shm:/dev/shm
+    volumes:
+      - ./llama/cache:/root/.cache/llama.cpp/rpc
+    ports:
+      - 50052:50052
+      - ./llama/config.ini:/app/config.ini
+      - ./download/download:/download
+    ports:
+      - 8080:8080
+    network_mode: host
+    # ipc: host
+    # privileged: true
+    # shm_size: 2gb
+    # cap_add:
+    #   - IPC_LOCK
+
+  llama-rpc:
+    restart: unless-stopped
+    image: llama:server-vulkan
+    # image: llama:server-rocm
+    # image: llama:server-cuda
+    entrypoint: ./rpc-server
+    command: >
+      --host 0.0.0.0
+      --port 50052
+      --cache
+      --threads 16
+    environment:
+      ROCBLAS_USE_HIPBLASLT: "1"
+      # ibv_devinfo -v
+      GGML_RDMA_DEV: rocep101s0
+
+# vllm:
+#   privileged: true
+#   ipc: host
+#   shm_size: 2gb
+#   cap_add:
+#     - IPC_LOCK
+#   # restart: unless-stopped
+#   # image: docker.io/kyuz0/vllm-therock-gfx1151
+#   image: rocm/vllm-dev:nightly
+#   # image: vllm/vllm-openai-rocm:latest
+#   # entrypoint: /bin/bash
+#   # -c 'ray start --block --head --node-ip-address=192.168.100.1 --disable-usage-stats --num-cpus 16 --num-gpus 1'
+#   command: >
+#     vllm serve unsloth/gpt-oss-120b
+#   environment:
+#     VLLM_HOST_IP: 192.168.100.1
+#     UCX_NET_DEVICES: ibp101s0
+#     NCCL_SOCKET_IFNAME: ibp101s0
+#     OMPI_MCA_btl_tcp_if_include: ibp101s0
+#     GLOO_SOCKET_IFNAME: ibp101s0
+#     TP_SOCKET_IFNAME: ibp101s0
+#     RAY_memory_monitor_refresh_ms: 0
+#     MASTER_ADDR: 192.168.100.1
+
+#     RAY_DISABLE_METRICS: "1"
+#     NCCL_DEBUG: INFO
+
+#     # NCCL_IB_DISABLE: "0"
+#     # NCCL_IB_GID_INDEX: "0" # 1 - ip6, 3 - ip4
+#     # NCCL_IB_HCA: ibp101s0
+
+#     RCCL_SOCKET_IFNAME: ibp101s0
+#     RCCL_P2P_DISABLE: "0"
+#     RCCL_IB_DISABLE: "0"
+#     RCCL_IB_GID_INDEX: "0" # 1 - ip6, 3 - ip4
+#     RCCL_IB_HCA: ibp101s0
+#     RDMA_IFACE: ibp101s0
+
+#     # RAY_EXPERIMENTAL_NOSET_ROCR_VISIBLE_DEVICES: "1" # https://github.com/vllm-project/vllm/issues/12572
+#     # VLLM_ROCM_USE_AITER: "0"
+#     # NCCL_NET_GDR_LEVEL: "0"
+
+#     # NCCL_P2P_DISABLE: "1"
+#     # VLLM_CUSTOM_OPS: all
+#     # SAFETENSORS_FAST_GPU: "1"
+#     # PYTORCH_TUNABLEOP_ENABLED: "1"
+#   devices:
+#     - /dev/dri:/dev/dri
+#     - /dev/kfd:/dev/kfd
+#     - /dev/infiniband:/dev/infiniband
+#     - /dev/shm:/dev/shm
+#   # --group-add video
+#   # --group-add render
+#   # --group-add rdma
+#   # --security-opt seccomp=unconfined
+#   # --ulimit memlock=-1
+#   volumes:
+#     - ./vllm/cache:/root/.cache/huggingface
+#     - ./download/download:/download
+#   # ports:
+#   #   - 63799:63799 # Ray
+#   network_mode: host
+
+# vllm-rpc:
+#   privileged: true
+#   ipc: host
+#   shm_size: 2gb
+#   cap_add:
+#     - IPC_LOCK
+#   # restart: unless-stopped
+#   image: docker.io/kyuz0/vllm-therock-gfx1151
+#   # image: rocm/vllm-dev:nightly
+#   # image: vllm/vllm-openai-rocm:latest
+#   entrypoint: /bin/bash
+#   command: >
+#     -c 'ray start --block --address=192.168.100.1:6379 --disable-usage-stats  --num-cpus 16 --num-gpus 1 # --node-ip-address=192.168.100.2'
+#   environment:
+#     VLLM_HOST_IP: 192.168.100.2
+#     UCX_NET_DEVICES: ibp101s0
+#     NCCL_SOCKET_IFNAME: ibp101s0
+#     OMPI_MCA_btl_tcp_if_include: ibp101s0
+#     GLOO_SOCKET_IFNAME: ibp101s0
+#     TP_SOCKET_IFNAME: ibp101s0
+#     RAY_memory_monitor_refresh_ms: 0
+#     MASTER_ADDR: 192.168.100.1
+
+#     RAY_DISABLE_METRICS: "1"
+#     NCCL_DEBUG: INFO
+
+#     RCCL_SOCKET_IFNAME: ibp101s0
+#     RCCL_P2P_DISABLE: "0"
+#     RCCL_IB_DISABLE: "0"
+#     RCCL_IB_GID_INDEX: "0" # 1 - ip6, 3 - ip4
+#     RCCL_IB_HCA: ibp101s0
+#     RDMA_IFACE: ibp101s0
+#   devices:
+#     - /dev/dri:/dev/dri
+#     - /dev/kfd:/dev/kfd
+#     - /dev/infiniband:/dev/infiniband
+#     - /dev/shm:/dev/shm
+#   # --group-add video
+#   # --group-add render
+#   # --group-add rdma
+#   # --security-opt seccomp=unconfined
+#   # --ulimit memlock=-1
+#   volumes:
+#     - ./vllm/cache:/root/.cache/huggingface
+#     - ./download/download:/download
+#   # ports:
+#   #   - 63799:63799 # Ray
+#   network_mode: host
