@@ -1,10 +1,58 @@
+x-gpu-all: &gpu-all
+  runtime: nvidia
+  devices:
+    - nvidia.com/gpu=all
+x-gpu-5090: &gpu-5090
+  runtime: nvidia
+  devices:
+    - nvidia.com/gpu=0
+x-gpu-3090: &gpu-3090
+  runtime: nvidia
+  devices:
+    - nvidia.com/gpu=1
+
 services:
   llama:
     restart: unless-stopped
-    # image: llama:hip
-    # image: llama:vulkan
-    entrypoint: ./llama-server
+    # image: llama:server-rocm
+    image: llama:server-vulkan
+    command: >
+      --host 0.0.0.0
+      --port 8080
+      --rpc 192.168.100.2:50052
+      --offline
+      --models-max 1
+      --models-preset /app/config.ini
+
+      --threads 16
+      -ngl all
+      --no-mmap
+      --prio 2
+      --prio-batch 2
+
+      --flash-attn on
+      --jinja
+      --cache-ram 16384
     # --rpc 192.168.100.2:50052,192.168.200.2:50052
+    environment:
+      ROCBLAS_USE_HIPBLASLT: "1"
+      # ibv_devinfo -v
+      # GGML_RDMA_DEV: rocep101s0f1
+      # GGML_RDMA_GID: "5"
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/kfd:/dev/kfd
+      - /dev/infiniband:/dev/infiniband
+    volumes:
+      - ./llama/cache:/root/.cache/llama.cpp/rpc
+      - ./llama/config.ini:/app/config.ini
+      - ./download/download:/download
+    network_mode: host
+
+  llama-pc:
+    <<: [*gpu-all]
+    restart: unless-stopped
+    image: llama:server-cuda
     command: >
       --host 0.0.0.0
       --port 8080
@@ -13,7 +61,7 @@ services:
       --models-preset /app/config.ini
 
       --threads 16
-      -ngl -1
+      -ngl all
       --no-mmap
       --prio 2
       --prio-batch 2
@@ -21,41 +69,17 @@ services:
       --flash-attn on
       --jinja
       --cache-ram 16384
-    # --parallel 2
-    # --kv-unified
-    # Doesn't work with Vulcan/RDP
-    # --cache-type-k bf16
-    # --cache-type-v bf16
-    environment:
-      ROCBLAS_USE_HIPBLASLT: "1"
-      # ibv_devinfo -v
-      GGML_RDMA_DEV: rocep101s0f1
-      GGML_RDMA_GID: "5"
-    devices:
-      - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
-      - /dev/infiniband:/dev/infiniband
-      # - /dev/shm:/dev/shm
+      --cache-type-k bf16
+      --cache-type-v bf16
     volumes:
-      - ./llama/cache:/root/.cache/llama.cpp/rpc
-    ports:
-      - 50052:50052
-      - ./llama/config.ini:/app/config.ini
+      - ./llama/config-pc.ini:/app/config.ini
       - ./download/download:/download
-    ports:
-      - 8080:8080
     network_mode: host
-    # ipc: host
-    # privileged: true
-    # shm_size: 2gb
-    # cap_add:
-    #   - IPC_LOCK
 
   llama-rpc:
     restart: unless-stopped
-    image: llama:server-vulkan
     # image: llama:server-rocm
-    # image: llama:server-cuda
+    image: llama:server-vulkan
     entrypoint: ./rpc-server
     command: >
       --host 0.0.0.0
@@ -65,7 +89,72 @@ services:
     environment:
       ROCBLAS_USE_HIPBLASLT: "1"
       # ibv_devinfo -v
-      GGML_RDMA_DEV: rocep101s0
+      # GGML_RDMA_DEV: rocep101s0
+    volumes:
+      - ./llama/cache:/root/.cache/llama.cpp
+
+  llama-rpc-pc:
+    <<: [*gpu-all]
+    restart: unless-stopped
+    image: llama:server-cuda
+    entrypoint: ./rpc-server
+    command: >
+      --host 0.0.0.0
+      --port 50052
+      --cache
+      --threads 16
+    devices:
+      - /dev/infiniband:/dev/infiniband
+    environment: {}
+      # ibv_devinfo -v
+      # GGML_RDMA_DEV: rocep6s0
+      # GGML_RDMA_GID: "5"
+    volumes:
+      - ./llama/cache:/root/.cache/llama.cpp
+    network_mode: host
+
+  # https://github.com/speaches-ai/speaches/
+  # http://localhost:8001/
+  # http://localhost:8001/v1/registry?task=text-to-speech
+  # + curl http://localhost:8001/v1/models/speaches-ai/Kokoro-82M-v1.0-ONNX -X POST
+  # http://localhost:8001/v1/registry?task=automatic-speech-recognition
+  # + curl http://localhost:8001/v1/models/Systran/faster-whisper-large-v3 -X POST
+  # + curl http://localhost:8001/v1/models/distil-whisper/distil-large-v3.5-ct2 -X POST
+  speaches:
+    <<: [*gpu-3090]
+    restart: unless-stopped
+    image: ghcr.io/speaches-ai/speaches:latest-cuda
+    environment:
+      UVICORN_PORT: "8001"
+      # ENABLE_UI: "False"
+      CHAT_COMPLETION_BASE_URL: http://llama-swap:8080/upstream/qwen3moe_instruct/v1
+      TTL: "-1"
+      USE_BATCHED_MODE: "True"
+    volumes:
+      - ./speaches/cache:/home/ubuntu/.cache/huggingface/hub
+    ports:
+      - 8001:8001
+
+  opencode:
+    <<: [*gpu-all]
+    restart: unless-stopped
+    image: opencode
+    command: >
+      web
+      --hostname
+      0.0.0.0
+    volumes:
+      - "$HOME/.config/opencode:/home/opencode/.config/opencode"
+      - "$HOME/.local/share/opencode:/home/opencode/.local/share/opencode"
+      - "$HOME/.local/state/opencode:/home/opencode/.local/state/opencode"
+      - opencode-cache:/home/opencode/.cache
+      - ./opencode/workspace:/workspace
+    ports:
+      - 4096:4096
+
+volumes:
+  opencode-cache:
+
 
 # vllm:
 #   privileged: true

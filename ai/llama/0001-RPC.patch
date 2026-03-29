@@ -1,20 +1,30 @@
-From 8548a4efac80c8b7adb906cda8b70d5f288a1a3f Mon Sep 17 00:00:00 2001
+From bfd2c09a1a727adb0ffac813f18835b1b5941715 Mon Sep 17 00:00:00 2001
 From: Sergei Kizilov <sergeikizilov@meta.com>
 Date: Sat, 28 Mar 2026 08:59:48 -0700
 Subject: [PATCH] RPC
 
 ---
- .devops/cuda-new.Dockerfile | 5 +++--
- .devops/cuda.Dockerfile     | 5 +++--
- .devops/rocm.Dockerfile     | 4 +++-
- .devops/vulkan.Dockerfile   | 5 +++--
- 4 files changed, 12 insertions(+), 7 deletions(-)
+ .devops/cuda-new.Dockerfile | 9 ++++++---
+ .devops/cuda.Dockerfile     | 9 ++++++---
+ .devops/rocm.Dockerfile     | 8 ++++++--
+ .devops/vulkan.Dockerfile   | 9 ++++++---
+ 4 files changed, 24 insertions(+), 11 deletions(-)
 
 diff --git a/.devops/cuda-new.Dockerfile b/.devops/cuda-new.Dockerfile
-index 98dc147d7..731f58298 100644
+index 98dc147d7..fb34b9af7 100644
 --- a/.devops/cuda-new.Dockerfile
 +++ b/.devops/cuda-new.Dockerfile
-@@ -21,7 +21,7 @@ COPY . .
+@@ -12,7 +12,8 @@ FROM ${BASE_CUDA_DEV_CONTAINER} AS build
+ ARG CUDA_DOCKER_ARCH=default
+ 
+ RUN apt-get update && \
+-    apt-get install -y build-essential cmake python3 python3-pip git libssl-dev libgomp1
++    apt-get install -y build-essential cmake python3 python3-pip git libssl-dev libgomp1 \
++    libibverbs-dev rdma-core
+ 
+ WORKDIR /app
+ 
+@@ -21,7 +22,7 @@ COPY . .
  RUN if [ "${CUDA_DOCKER_ARCH}" != "default" ]; then \
      export CMAKE_ARGS="-DCMAKE_CUDA_ARCHITECTURES=${CUDA_DOCKER_ARCH}"; \
      fi && \
@@ -23,7 +33,15 @@ index 98dc147d7..731f58298 100644
      cmake --build build --config Release -j$(nproc)
  
  RUN mkdir -p /app/lib && \
-@@ -75,7 +75,7 @@ ENTRYPOINT ["/app/tools.sh"]
+@@ -40,6 +41,7 @@ FROM ${BASE_CUDA_RUN_CONTAINER} AS base
+ 
+ RUN apt-get update \
+     && apt-get install -y libgomp1 curl\
++    libibverbs-dev ibverbs-utils rdma-core \
+     && apt autoremove -y \
+     && apt clean -y \
+     && rm -rf /tmp/* /var/tmp/* \
+@@ -75,7 +77,7 @@ ENTRYPOINT ["/app/tools.sh"]
  ### Light, CLI only
  FROM base AS light
  
@@ -32,7 +50,7 @@ index 98dc147d7..731f58298 100644
  
  WORKDIR /app
  
-@@ -87,6 +87,7 @@ FROM base AS server
+@@ -87,6 +89,7 @@ FROM base AS server
  ENV LLAMA_ARG_HOST=0.0.0.0
  
  COPY --from=build /app/full/llama-server /app
@@ -41,10 +59,20 @@ index 98dc147d7..731f58298 100644
  WORKDIR /app
  
 diff --git a/.devops/cuda.Dockerfile b/.devops/cuda.Dockerfile
-index 52f103bc3..f1ee78e7e 100644
+index 52f103bc3..485d48998 100644
 --- a/.devops/cuda.Dockerfile
 +++ b/.devops/cuda.Dockerfile
-@@ -21,7 +21,7 @@ COPY . .
+@@ -12,7 +12,8 @@ FROM ${BASE_CUDA_DEV_CONTAINER} AS build
+ ARG CUDA_DOCKER_ARCH=default
+ 
+ RUN apt-get update && \
+-    apt-get install -y build-essential cmake python3 python3-pip git libssl-dev libgomp1
++    apt-get install -y build-essential cmake python3 python3-pip git libssl-dev libgomp1 \
++    libibverbs-dev ibverbs-utils rdma-core
+ 
+ WORKDIR /app
+ 
+@@ -21,7 +22,7 @@ COPY . .
  RUN if [ "${CUDA_DOCKER_ARCH}" != "default" ]; then \
      export CMAKE_ARGS="-DCMAKE_CUDA_ARCHITECTURES=${CUDA_DOCKER_ARCH}"; \
      fi && \
@@ -53,7 +81,15 @@ index 52f103bc3..f1ee78e7e 100644
      cmake --build build --config Release -j$(nproc)
  
  RUN mkdir -p /app/lib && \
-@@ -74,7 +74,7 @@ ENTRYPOINT ["/app/tools.sh"]
+@@ -40,6 +41,7 @@ FROM ${BASE_CUDA_RUN_CONTAINER} AS base
+ 
+ RUN apt-get update \
+     && apt-get install -y libgomp1 curl\
++    libibverbs-dev rdma-core \
+     && apt autoremove -y \
+     && apt clean -y \
+     && rm -rf /tmp/* /var/tmp/* \
+@@ -74,7 +76,7 @@ ENTRYPOINT ["/app/tools.sh"]
  ### Light, CLI only
  FROM base AS light
  
@@ -62,7 +98,7 @@ index 52f103bc3..f1ee78e7e 100644
  
  WORKDIR /app
  
-@@ -86,6 +86,7 @@ FROM base AS server
+@@ -86,6 +88,7 @@ FROM base AS server
  ENV LLAMA_ARG_HOST=0.0.0.0
  
  COPY --from=build /app/full/llama-server /app
@@ -71,10 +107,20 @@ index 52f103bc3..f1ee78e7e 100644
  WORKDIR /app
  
 diff --git a/.devops/rocm.Dockerfile b/.devops/rocm.Dockerfile
-index 830fe19e3..0f5ff2884 100644
+index 830fe19e3..0e67d5acc 100644
 --- a/.devops/rocm.Dockerfile
 +++ b/.devops/rocm.Dockerfile
-@@ -36,6 +36,7 @@ COPY . .
+@@ -28,7 +28,8 @@ RUN apt-get update \
+     git \
+     libssl-dev \
+     curl \
+-    libgomp1
++    libgomp1 \
++    libibverbs-dev ibverbs-utils rdma-core
+ 
+ WORKDIR /app
+ 
+@@ -36,6 +37,7 @@ COPY . .
  
  RUN HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
      cmake -S . -B build \
@@ -82,7 +128,15 @@ index 830fe19e3..0f5ff2884 100644
          -DGGML_HIP=ON \
          -DGGML_HIP_ROCWMMA_FATTN=ON \
          -DAMDGPU_TARGETS="$ROCM_DOCKER_ARCH" \
-@@ -93,7 +94,7 @@ ENTRYPOINT ["/app/tools.sh"]
+@@ -59,6 +61,7 @@ FROM ${BASE_ROCM_DEV_CONTAINER} AS base
+ 
+ RUN apt-get update \
+     && apt-get install -y libgomp1 curl\
++    libibverbs-dev rdma-core \
+     && apt autoremove -y \
+     && apt clean -y \
+     && rm -rf /tmp/* /var/tmp/* \
+@@ -93,7 +96,7 @@ ENTRYPOINT ["/app/tools.sh"]
  ### Light, CLI only
  FROM base AS light
  
@@ -91,7 +145,7 @@ index 830fe19e3..0f5ff2884 100644
  
  WORKDIR /app
  
-@@ -105,6 +106,7 @@ FROM base AS server
+@@ -105,6 +108,7 @@ FROM base AS server
  ENV LLAMA_ARG_HOST=0.0.0.0
  
  COPY --from=build /app/full/llama-server /app
@@ -100,10 +154,20 @@ index 830fe19e3..0f5ff2884 100644
  WORKDIR /app
  
 diff --git a/.devops/vulkan.Dockerfile b/.devops/vulkan.Dockerfile
-index 3112ec85e..a671617d6 100644
+index 3112ec85e..a7af420bf 100644
 --- a/.devops/vulkan.Dockerfile
 +++ b/.devops/vulkan.Dockerfile
-@@ -14,7 +14,7 @@ WORKDIR /app
+@@ -3,7 +3,8 @@ ARG UBUNTU_VERSION=26.04
+ FROM ubuntu:$UBUNTU_VERSION AS build
+ 
+ # Install build tools
+-RUN apt update && apt install -y git build-essential cmake wget xz-utils
++RUN apt update && apt install -y git build-essential cmake wget xz-utils \
++    libibverbs-dev ibverbs-utils rdma-core
+ 
+ # Install SSL and Vulkan SDK dependencies
+ RUN apt install -y libssl-dev curl \
+@@ -14,7 +15,7 @@ WORKDIR /app
  
  COPY . .
  
@@ -112,7 +176,15 @@ index 3112ec85e..a671617d6 100644
      cmake --build build --config Release -j$(nproc)
  
  RUN mkdir -p /app/lib && \
-@@ -71,7 +71,7 @@ ENTRYPOINT ["/app/tools.sh"]
+@@ -34,6 +35,7 @@ FROM ubuntu:$UBUNTU_VERSION AS base
+ RUN apt-get update \
+     && apt-get install -y libgomp1 curl libvulkan1 mesa-vulkan-drivers \
+     libglvnd0 libgl1 libglx0 libegl1 libgles2 \
++    libibverbs-dev rdma-core \
+     && apt autoremove -y \
+     && apt clean -y \
+     && rm -rf /tmp/* /var/tmp/* \
+@@ -71,7 +73,7 @@ ENTRYPOINT ["/app/tools.sh"]
  ### Light, CLI only
  FROM base AS light
  
@@ -121,7 +193,7 @@ index 3112ec85e..a671617d6 100644
  
  WORKDIR /app
  
-@@ -83,6 +83,7 @@ FROM base AS server
+@@ -83,6 +85,7 @@ FROM base AS server
  ENV LLAMA_ARG_HOST=0.0.0.0
  
  COPY --from=build /app/full/llama-server /app

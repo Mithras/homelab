@@ -12,6 +12,9 @@ docker run -it --rm -v ./download:/download hf-cli /bin/bash
 # hf download 'unsloth/Qwen3.5-122B-A10B-GGUF' --local-dir /download/qwen3.5-122 --include 'mmproj-BF16.gguf'
 
 # hf download 'unsloth/Qwen3.5-27B-GGUF' --local-dir /download/qwen3.5-27 --include 'Qwen3.5-27B-UD-Q4_K_XL.gguf'
+# hf download 'unsloth/Qwen3.5-27B-GGUF' --local-dir /download/qwen3.5-27 --include 'Qwen3.5-27B-Q5_K_M.gguf'
+# hf download 'unsloth/Qwen3.5-27B-GGUF' --local-dir /download/qwen3.5-27 --include 'Qwen3.5-27B-UD-Q5_K_XL.gguf'
+# hf download 'unsloth/Qwen3.5-27B-GGUF' --local-dir /download/qwen3.5-27 --include 'Qwen3.5-27B-UD-Q6_K_XL.gguf'
 # hf download 'unsloth/Qwen3.5-27B-GGUF' --local-dir /download/qwen3.5-27 --include 'mmproj-BF16.gguf'
 
 # hf download 'unsloth/Qwen3.5-35B-A3B-GGUF' --local-dir /download/qwen3.5-35 --include 'Qwen3.5-35B-A3B-UD-Q4_K_XL.gguf'
