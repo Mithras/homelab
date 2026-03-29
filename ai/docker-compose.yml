@@ -90,8 +90,14 @@ services:
       ROCBLAS_USE_HIPBLASLT: "1"
       # ibv_devinfo -v
       # GGML_RDMA_DEV: rocep101s0
+      # GGML_RDMA_GID: "5"
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/kfd:/dev/kfd
+      - /dev/infiniband:/dev/infiniband
     volumes:
       - ./llama/cache:/root/.cache/llama.cpp
+    network_mode: host
 
   llama-rpc-pc:
     <<: [*gpu-all]
