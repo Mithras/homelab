@@ -1,0 +1,130 @@
+From 94328442d1c6575abf83248ca2be8ef006ffb050 Mon Sep 17 00:00:00 2001
+From: Sergei Kizilov <sergeikizilov@meta.com>
+Date: Sat, 4 Apr 2026 06:09:18 -0700
+Subject: [PATCH] RPC + RDMA
+
+---
+ .devops/cuda.Dockerfile   | 7 +++++--
+ .devops/rocm.Dockerfile   | 6 +++++-
+ .devops/vulkan.Dockerfile | 7 +++++--
+ 3 files changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/.devops/cuda.Dockerfile b/.devops/cuda.Dockerfile
+index b3f6ccfc9..527108d3a 100644
+--- a/.devops/cuda.Dockerfile
++++ b/.devops/cuda.Dockerfile
+@@ -12,7 +12,8 @@ FROM ${BASE_CUDA_DEV_CONTAINER} AS build
+ ARG CUDA_DOCKER_ARCH=default
+ 
+ RUN apt-get update && \
+-    apt-get install -y gcc-14 g++-14 build-essential cmake python3 python3-pip git libssl-dev libgomp1
++    apt-get install -y gcc-14 g++-14 build-essential cmake python3 python3-pip git libssl-dev libgomp1 \
++    libibverbs-dev rdma-core
+ 
+ ENV CC=gcc-14 CXX=g++-14 CUDAHOSTCXX=g++-14
+ 
+@@ -23,7 +24,7 @@ COPY . .
+ RUN if [ "${CUDA_DOCKER_ARCH}" != "default" ]; then \
+     export CMAKE_ARGS="-DCMAKE_CUDA_ARCHITECTURES=${CUDA_DOCKER_ARCH}"; \
+     fi && \
+-    cmake -B build -DGGML_NATIVE=OFF -DGGML_CUDA=ON -DGGML_BACKEND_DL=ON -DGGML_CPU_ALL_VARIANTS=ON -DLLAMA_BUILD_TESTS=OFF ${CMAKE_ARGS} -DCMAKE_EXE_LINKER_FLAGS=-Wl,--allow-shlib-undefined . && \
++    cmake -B build -DGGML_RPC=ON -DGGML_RPC_RDMA=ON -DGGML_NATIVE=OFF -DGGML_CUDA=ON -DGGML_BACKEND_DL=ON -DGGML_CPU_ALL_VARIANTS=ON -DLLAMA_BUILD_TESTS=OFF ${CMAKE_ARGS} -DCMAKE_EXE_LINKER_FLAGS=-Wl,--allow-shlib-undefined . && \
+     cmake --build build --config Release -j$(nproc)
+ 
+ RUN mkdir -p /app/lib && \
+@@ -42,6 +43,7 @@ FROM ${BASE_CUDA_RUN_CONTAINER} AS base
+ 
+ RUN apt-get update \
+     && apt-get install -y libgomp1 curl \
++    libibverbs-dev rdma-core ibverbs-utils \
+     && apt autoremove -y \
+     && apt clean -y \
+     && rm -rf /tmp/* /var/tmp/* \
+@@ -89,6 +91,7 @@ FROM base AS server
+ ENV LLAMA_ARG_HOST=0.0.0.0
+ 
+ COPY --from=build /app/full/llama-server /app
++COPY --from=build /app/full/rpc-server /app
+ 
+ WORKDIR /app
+ 
+diff --git a/.devops/rocm.Dockerfile b/.devops/rocm.Dockerfile
+index 525ddc790..224894b40 100644
+--- a/.devops/rocm.Dockerfile
++++ b/.devops/rocm.Dockerfile
+@@ -28,7 +28,8 @@ RUN apt-get update \
+     git \
+     libssl-dev \
+     curl \
+-    libgomp1
++    libgomp1 \
++    libibverbs-dev rdma-core
+ 
+ WORKDIR /app
+ 
+@@ -36,6 +37,7 @@ COPY . .
+ 
+ RUN HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
+     cmake -S . -B build \
++        -DGGML_RPC=ON -DGGML_RPC_RDMA=ON \
+         -DGGML_HIP=ON \
+         -DGGML_HIP_ROCWMMA_FATTN=ON \
+         -DAMDGPU_TARGETS="$ROCM_DOCKER_ARCH" \
+@@ -59,6 +61,7 @@ FROM ${BASE_ROCM_DEV_CONTAINER} AS base
+ 
+ RUN apt-get update \
+     && apt-get install -y libgomp1 curl \
++    libibverbs-dev rdma-core ibverbs-utils \
+     && apt autoremove -y \
+     && apt clean -y \
+     && rm -rf /tmp/* /var/tmp/* \
+@@ -105,6 +108,7 @@ FROM base AS server
+ ENV LLAMA_ARG_HOST=0.0.0.0
+ 
+ COPY --from=build /app/full/llama-server /app
++COPY --from=build /app/full/rpc-server /app
+ 
+ WORKDIR /app
+ 
+diff --git a/.devops/vulkan.Dockerfile b/.devops/vulkan.Dockerfile
+index 98036c5fd..e55b79137 100644
+--- a/.devops/vulkan.Dockerfile
++++ b/.devops/vulkan.Dockerfile
+@@ -3,7 +3,8 @@ ARG UBUNTU_VERSION=26.04
+ FROM ubuntu:$UBUNTU_VERSION AS build
+ 
+ # Install build tools
+-RUN apt update && apt install -y git build-essential cmake wget xz-utils
++RUN apt update && apt install -y git build-essential cmake wget xz-utils \
++    libibverbs-dev rdma-core
+ 
+ # Install SSL and Vulkan SDK dependencies
+ RUN apt install -y libssl-dev curl \
+@@ -14,7 +15,7 @@ WORKDIR /app
+ 
+ COPY . .
+ 
+-RUN cmake -B build -DGGML_NATIVE=OFF -DGGML_VULKAN=ON -DLLAMA_BUILD_TESTS=OFF -DGGML_BACKEND_DL=ON -DGGML_CPU_ALL_VARIANTS=ON && \
++RUN cmake -B build -DGGML_RPC=ON -DGGML_RPC_RDMA=ON -DGGML_NATIVE=OFF -DGGML_VULKAN=ON -DLLAMA_BUILD_TESTS=OFF -DGGML_BACKEND_DL=ON -DGGML_CPU_ALL_VARIANTS=ON && \
+     cmake --build build --config Release -j$(nproc)
+ 
+ RUN mkdir -p /app/lib && \
+@@ -34,6 +35,7 @@ FROM ubuntu:$UBUNTU_VERSION AS base
+ RUN apt-get update \
+     && apt-get install -y libgomp1 curl libvulkan1 mesa-vulkan-drivers \
+     libglvnd0 libgl1 libglx0 libegl1 libgles2 \
++    libibverbs-dev rdma-core ibverbs-utils \
+     && apt autoremove -y \
+     && apt clean -y \
+     && rm -rf /tmp/* /var/tmp/* \
+@@ -86,6 +88,7 @@ FROM base AS server
+ ENV LLAMA_ARG_HOST=0.0.0.0
+ 
+ COPY --from=build /app/full/llama-server /app
++COPY --from=build /app/full/rpc-server /app
+ 
+ WORKDIR /app
+ 
+-- 
+2.53.0
+

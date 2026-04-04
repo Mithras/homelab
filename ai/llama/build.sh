@@ -12,22 +12,26 @@ git clean -fdx
 git pull
 
 # RPC: git format-patch -1 HEAD
-git apply ../0001-RPC.patch
+git apply ../0001-RPC-RDMA.patch
 
 # RDMA: https://github.com/ggml-org/llama.cpp/pull/20590
 curl -sL https://github.com/ggerganov/llama.cpp/pull/20590.patch | git apply
 
 if [[ "$(uname -n)" == "ms-s1-max-0" || "$(uname -n)" == "ms-s1-max-1" ]]; then
-    docker build . \
+    DOCKER_BUILDKIT=1 docker build . \
         -f .devops/vulkan.Dockerfile \
         --target server \
         --tag llama:server-vulkan
-    docker build . \
+    DOCKER_BUILDKIT=1 docker build . \
         -f .devops/rocm.Dockerfile \
         --target server \
         --tag llama:server-rocm
 elif [[ "$(uname -n)" == "mithras-pc" ]]; then
-    docker build . \
+    DOCKER_BUILDKIT=1 docker build . \
+        -f .devops/vulkan.Dockerfile \
+        --target server \
+        --tag llama:server-vulkan
+    DOCKER_BUILDKIT=1 docker build . \
         -f .devops/cuda-new.Dockerfile \
         --target server \
         --tag llama:server-cuda

@@ -68,9 +68,11 @@ services:
 
       --flash-attn on
       --jinja
-      --cache-ram 16384
+      --cache-ram 32768
       --cache-type-k bf16
       --cache-type-v bf16
+    # --kv-unified
+    environment: {}
     volumes:
       - ./llama/config-pc.ini:/app/config.ini
       - ./download/download:/download

@@ -1,0 +1,116 @@
+[53351] srv  update_slots: all slots are idle
+srv  proxy_reques: proxying request to model qwen35-27 on port 53351
+[53351] srv  params_from_: Chat format: peg-native
+[53351] slot get_availabl: id  1 | task -1 | selected slot by LCP similarity, sim_best = 1.000 (> 0.100 thold), f_keep = 1.000
+[53351] slot launch_slot_: id  1 | task -1 | sampler chain: logits -> ?penalties -> ?dry -> ?top-n-sigma -> top-k -> ?typical -> ?top-p -> min-p -> ?xtc -> temp-ext -> dist 
+[53351] slot launch_slot_: id  1 | task 31232 | processing task, is_child = 0
+[53351] slot update_slots: id  1 | task 31232 | new prompt, n_ctx_slot = 175104, n_keep = 0, task.n_tokens = 43964
+[53351] slot update_slots: id  1 | task 31232 | n_tokens = 43943, memory_seq_rm [43943, end)
+[53351] slot update_slots: id  1 | task 31232 | prompt processing progress, n_tokens = 43960, batch.n_tokens = 17, progress = 0.999909
+[53351] slot update_slots: id  1 | task 31232 | created context checkpoint 13 of 32 (pos_min = 43942, pos_max = 43942, n_tokens = 43943, size = 149.626 MiB)
+[53351] slot update_slots: id  1 | task 31232 | n_tokens = 43960, memory_seq_rm [43960, end)
+[53351] reasoning-budget: activated, budget=2147483647 tokens
+[53351] reasoning-budget: deactivated (natural end)
+[53351] slot init_sampler: id  1 | task 31232 | init sampler, took 3.53 ms, tokens: text = 43964, total = 43964
+[53351] slot update_slots: id  1 | task 31232 | prompt processing done, n_tokens = 43964, batch.n_tokens = 4
+[53351] srv  log_server_r: done request: POST /v1/chat/completions 127.0.0.1 200
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 200
+[53351] /app/ggml/src/ggml-cuda/ggml-cuda.cu:98: CUDA error
+[53351] CUDA error: the launch timed out and was terminated
+[53351]   current device: 1, in function ggml_backend_cuda_synchronize at /app/ggml/src/ggml-cuda/ggml-cuda.cu:2923
+[53351]   cudaStreamSynchronize(cuda_ctx->stream())
+[53351] libggml-base.so.0(+0x1831b)[0x7f93cb5de31b]
+[53351] libggml-base.so.0(ggml_print_backtrace+0x21c)[0x7f93cb5de77c]
+[53351] libggml-base.so.0(ggml_abort+0x15b)[0x7f93cb5de95b]
+[53351] /app/libggml-cuda.so(_Z15ggml_cuda_errorPKcS0_S0_iS0_+0xb7)[0x7f93c313d0f7]
+[53351] /app/libggml-cuda.so(+0x1d05a8)[0x7f93c313e5a8]
+[53351] libggml-base.so.0(ggml_backend_sched_synchronize+0x2e)[0x7f93cb5f720e]
+[53351] libllama.so.0(_ZN13llama_context11synchronizeEv+0x19)[0x7f93cb7441a9]
+[53351] libllama.so.0(llama_get_sampled_token_ith+0x14)[0x7f93cb747464]
+[53351] /app/llama-server(+0x2f5fad)[0x56383c035fad]
+[53351] /app/llama-server(+0x167926)[0x56383bea7926]
+[53351] /app/llama-server(+0x1f1bce)[0x56383bf31bce]
+[53351] /app/llama-server(+0xbc32a)[0x56383bdfc32a]
+[53351] /lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca)[0x7f93cb0491ca]
+[53351] /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b)[0x7f93cb04928b]
+[53351] /app/llama-server(+0xc3b95)[0x56383be03b95]
+srv    operator(): http client error: Failed to read connection
+srv  proxy_reques: proxying request to model qwen35-27 on port 53351
+srv    operator(): http client error: Could not establish connection
+srv  proxy_reques: proxying request to model qwen35-27 on port 53351
+
+---
+
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+[57669] srv  params_from_: Chat format: peg-native
+[57669] slot get_availabl: id  1 | task -1 | selected slot by LCP similarity, sim_best = 1.000 (> 0.100 thold), f_keep = 1.000
+[57669] slot launch_slot_: id  1 | task -1 | sampler chain: logits -> ?penalties -> ?dry -> ?top-n-sigma -> top-k -> ?typical -> ?top-p -> min-p -> ?xtc -> temp-ext -> dist 
+[57669] slot launch_slot_: id  1 | task 16638 | processing task, is_child = 0
+[57669] slot update_slots: id  1 | task 16638 | new prompt, n_ctx_slot = 262144, n_keep = 0, task.n_tokens = 62685
+[57669] slot update_slots: id  1 | task 16638 | n_tokens = 62665, memory_seq_rm [62665, end)
+[57669] slot update_slots: id  1 | task 16638 | prompt processing progress, n_tokens = 62681, batch.n_tokens = 16, progress = 0.999936
+[57669] slot update_slots: id  1 | task 16638 | created context checkpoint 11 of 32 (pos_min = 62664, pos_max = 62664, n_tokens = 62665, size = 149.626 MiB)
+[57669] slot update_slots: id  1 | task 16638 | n_tokens = 62681, memory_seq_rm [62681, end)
+[57669] reasoning-budget: activated, budget=2147483647 tokens
+[57669] reasoning-budget: deactivated (natural end)
+[57669] slot init_sampler: id  1 | task 16638 | init sampler, took 5.04 ms, tokens: text = 62685, total = 62685
+[57669] slot update_slots: id  1 | task 16638 | prompt processing done, n_tokens = 62685, batch.n_tokens = 4
+[57669] srv  log_server_r: done request: POST /v1/chat/completions 127.0.0.1 200
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 200
+[57669] /app/ggml/src/ggml-cuda/ggml-cuda.cu:98: CUDA error
+[57669] CUDA error: the launch timed out and was terminated
+[57669]   current device: 1, in function ggml_backend_cuda_synchronize at /app/ggml/src/ggml-cuda/ggml-cuda.cu:2923
+[57669]   cudaStreamSynchronize(cuda_ctx->stream())
+[57669] libggml-base.so.0(+0x1831b)[0x7fb1a403d31b]
+[57669] libggml-base.so.0(ggml_print_backtrace+0x21c)[0x7fb1a403d77c]
+[57669] libggml-base.so.0(ggml_abort+0x15b)[0x7fb1a403d95b]
+[57669] /app/libggml-cuda.so(_Z15ggml_cuda_errorPKcS0_S0_iS0_+0xb7)[0x7fb19bb9c0f7]
+[57669] /app/libggml-cuda.so(+0x1d05a8)[0x7fb19bb9d5a8]
+[57669] libggml-base.so.0(ggml_backend_sched_synchronize+0x2e)[0x7fb1a405620e]
+[57669] libllama.so.0(_ZN13llama_context11synchronizeEv+0x19)[0x7fb1a41a31a9]
+[57669] libllama.so.0(llama_get_sampled_token_ith+0x14)[0x7fb1a41a6464]
+[57669] /app/llama-server(+0x2f5fad)[0x5579a1094fad]
+[57669] /app/llama-server(+0x167926)[0x5579a0f06926]
+[57669] /app/llama-server(+0x1f1bce)[0x5579a0f90bce]
+[57669] /app/llama-server(+0xbc32a)[0x5579a0e5b32a]
+[57669] /lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca)[0x7fb1a3aa81ca]
+[57669] /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b)[0x7fb1a3aa828b]
+[57669] /app/llama-server(+0xc3b95)[0x5579a0e62b95]
+srv    operator(): http client error: Failed to read connection
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  log_server_r: done request: POST /v1/chat/completions 192.168.0.6 500
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
+srv  proxy_reques: proxying request to model qwen35-27 on port 57669
+srv    operator(): http client error: Could not establish connection
