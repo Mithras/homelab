@@ -27,12 +27,12 @@ if [[ "$(uname -n)" == "ms-s1-max-0" || "$(uname -n)" == "ms-s1-max-1" ]]; then
         --target server \
         --tag llama:server-rocm
 elif [[ "$(uname -n)" == "mithras-pc" ]]; then
+    # DOCKER_BUILDKIT=1 docker build . \
+    #     -f .devops/vulkan.Dockerfile \
+    #     --target server \
+    #     --tag llama:server-vulkan
     DOCKER_BUILDKIT=1 docker build . \
-        -f .devops/vulkan.Dockerfile \
-        --target server \
-        --tag llama:server-vulkan
-    DOCKER_BUILDKIT=1 docker build . \
-        -f .devops/cuda-new.Dockerfile \
+        -f .devops/cuda.Dockerfile \
         --target server \
         --tag llama:server-cuda
 else

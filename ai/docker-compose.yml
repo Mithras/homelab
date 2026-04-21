@@ -57,8 +57,6 @@ services:
       --host 0.0.0.0
       --port 8080
       --offline
-      --models-max 1
-      --models-preset /app/config.ini
 
       --threads 16
       -ngl all
@@ -69,10 +67,28 @@ services:
       --flash-attn on
       --jinja
       --cache-ram 32768
-      --cache-type-k bf16
-      --cache-type-v bf16
-    # --kv-unified
-    environment: {}
+      --cache-reuse 256
+      --no-kv-unified
+
+      --model /download/qwen3.5-27/Qwen3.5-27B-UD-Q5_K_XL.gguf
+      --mmproj /download/qwen3.5-27/mmproj-BF16.gguf
+      -dev CUDA0,CUDA1
+      --ctx-size 700000
+      --fit-target 4096,1024
+      --cache-type-k q8_0
+      --cache-type-v q8_0
+      --parallel 3
+
+      --temp 1.0
+      --top-p 0.95
+      --top-k 20
+      --min-p 0.0
+      --presence-penalty 1.5
+      --repeat-penalty 1.0
+      --reasoning-budget 4096
+      --reasoning-budget-message ". Okay enough thinking. Let's just jump to it."
+    devices:
+      - /dev/infiniband:/dev/infiniband
     volumes:
       - ./llama/config-pc.ini:/app/config.ini
       - ./download/download:/download
@@ -135,9 +151,7 @@ services:
     environment:
       UVICORN_PORT: "8001"
       # ENABLE_UI: "False"
-      CHAT_COMPLETION_BASE_URL: http://llama-swap:8080/upstream/qwen3moe_instruct/v1
       TTL: "-1"
-      USE_BATCHED_MODE: "True"
     volumes:
       - ./speaches/cache:/home/ubuntu/.cache/huggingface/hub
     ports:
@@ -151,17 +165,20 @@ services:
       web
       --hostname
       0.0.0.0
+    working_dir: /home/opencode/workdir
+    environment:
+      LITELLM_API_KEY: ${LITELLM_API_KEY}
     volumes:
+      - opencode:/home/opencode
       - "$HOME/.config/opencode:/home/opencode/.config/opencode"
       - "$HOME/.local/share/opencode:/home/opencode/.local/share/opencode"
       - "$HOME/.local/state/opencode:/home/opencode/.local/state/opencode"
-      - opencode-cache:/home/opencode/.cache
-      - ./opencode/workspace:/workspace
+      - ./opencode/workdir:/home/opencode/workdir
     ports:
       - 4096:4096
 
 volumes:
-  opencode-cache:
+  opencode:
 
 
 # vllm:
