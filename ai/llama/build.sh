@@ -14,8 +14,11 @@ git pull
 # RPC: git format-patch -1 HEAD
 git apply ../0001-RPC-RDMA.patch
 
-# RDMA: https://github.com/ggml-org/llama.cpp/pull/20590
-curl -sL https://github.com/ggerganov/llama.cpp/pull/20590.patch | git apply
+# gfx1151: git format-patch -1 HEAD
+git apply ../0001-gfx1151.patch
+
+# XXX: https://github.com/ggml-org/llama.cpp/pull/XXX
+# curl -sL https://github.com/ggerganov/llama.cpp/pull/XXX.patch | git apply
 
 if [[ "$(uname -n)" == "ms-s1-max-0" || "$(uname -n)" == "ms-s1-max-1" ]]; then
     DOCKER_BUILDKIT=1 docker build . \

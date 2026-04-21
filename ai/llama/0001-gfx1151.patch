@@ -1,0 +1,33 @@
+From 17b88eddad817d5637ed9e170b2c9efc7a738720 Mon Sep 17 00:00:00 2001
+From: Sergei Kizilov <sergeikizilov@meta.com>
+Date: Mon, 6 Apr 2026 22:11:05 -0700
+Subject: [PATCH] gfx1151
+
+---
+ .devops/rocm.Dockerfile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/.devops/rocm.Dockerfile b/.devops/rocm.Dockerfile
+index 224894b40..5c67701ce 100644
+--- a/.devops/rocm.Dockerfile
++++ b/.devops/rocm.Dockerfile
+@@ -16,7 +16,7 @@ FROM ${BASE_ROCM_DEV_CONTAINER} AS build
+ # check https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/compatibility/compatibilityrad/native_linux/native_linux_compatibility.html
+ # check https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/compatibility/compatibilityryz/native_linux/native_linux_compatibility.html
+ 
+-ARG ROCM_DOCKER_ARCH='gfx908;gfx90a;gfx942;gfx1030;gfx1100;gfx1101;gfx1102;gfx1151;gfx1150;gfx1200;gfx1201'
++ARG ROCM_DOCKER_ARCH='gfx1151'
+ 
+ # Set ROCm architectures
+ ENV AMDGPU_TARGETS=${ROCM_DOCKER_ARCH}
+@@ -43,6 +43,7 @@ RUN HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
+         -DAMDGPU_TARGETS="$ROCM_DOCKER_ARCH" \
+         -DGGML_BACKEND_DL=ON -DGGML_CPU_ALL_VARIANTS=ON \
+         -DCMAKE_BUILD_TYPE=Release -DLLAMA_BUILD_TESTS=OFF \
++        -DCMAKE_HIP_FLAGS="-mllvm --amdgpu-unroll-threshold-local=600" \
+     && cmake --build build --config Release -j$(nproc)
+ 
+ RUN mkdir -p /app/lib \
+-- 
+2.53.0
+
