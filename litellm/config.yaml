@@ -1,0 +1,62 @@
+model_list:
+  - model_name: Qwen3.5-27B
+    litellm_params:
+      litellm_credential_name: pc
+      custom_llm_provider: custom_openai
+      model: Qwen3.5-27B-UD-Q5_K_XL.gguf
+      max_parallel_requests: 3
+      tags: ["pc"]
+    model_info:
+      mode: chat
+  - model_name: qwen36-35
+    litellm_params:
+      litellm_credential_name: ms-s1-max-0
+      custom_llm_provider: custom_openai
+      model: qwen36-35
+      max_parallel_requests: 4
+      tags: ["ms-s1-max-0"]
+    model_info:
+      mode: chat
+  - model_name: qwen36-35
+    litellm_params:
+      litellm_credential_name: ms-s1-max-1
+      custom_llm_provider: custom_openai
+      model: qwen36-35
+      max_parallel_requests: 4
+      tags: ["ms-s1-max-1"]
+    model_info:
+      mode: chat
+
+credential_list:
+  - credential_name: pc
+    credential_values:
+      api_base: http://192.168.0.2:8080/v1
+      api_key: na
+    credential_info: {}
+  - credential_name: ms-s1-max-0
+    credential_values:
+      api_base: http://192.168.0.3:8080/v1
+      api_key: na
+    credential_info: {}
+  - credential_name: ms-s1-max-1
+    credential_values:
+      api_base: http://192.168.0.234:8080/v1
+      api_key: na
+    credential_info: {}
+
+# litellm_settings:
+#   callbacks:
+#     - websearch_interception
+#   websearch_interception_params:
+#     enabled_providers:
+#       - openai
+#     search_tool_name: searxng-search
+
+# search_tools:
+#   - search_tool_name: searxng-search
+#     litellm_params:
+#       search_provider: searxng
+#       api_base: http://192.168.0.6:8889/
+
+router_settings:
+  routing_strategy: simple-shuffle  # `least-busy` doesn't work

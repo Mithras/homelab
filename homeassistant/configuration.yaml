@@ -82,7 +82,14 @@ input_boolean:
     icon: mdi:air-conditioner
 
 lovelace:
-  mode: yaml
+  resource_mode: yaml
+  dashboards:
+    lovelace:
+      mode: yaml
+      filename: ui-lovelace.yaml
+      title: Overview
+      icon: mdi:view-dashboard
+      show_in_sidebar: true
   resources:
     # https://github.com/thomasloven/lovelace-auto-entities
     - url: /local/ui-lovelace/auto-entities/auto-entities.js

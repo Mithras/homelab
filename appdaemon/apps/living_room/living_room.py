@@ -43,6 +43,10 @@ class LivingRoom(globals.Hass):
     async def _person_not_home_callback_async(self, entity, attribute, old, new, kwargs):
         if old == new: # or await self.anyone_home(person=True):
             return
+
+        if await self.anyone_home(person=True):
+            return
+        
         await self._deactivate_async()
 
     async def _sleep_callback_async(self, entity, attribute, old, new, kwargs):
