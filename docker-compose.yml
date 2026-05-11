@@ -241,6 +241,41 @@ services:
       - homelab
       - litellm
 
+  openclaw:
+    # image: ghcr.io/openclaw/openclaw
+    build: ./openclaw
+    restart: unless-stopped
+    cap_drop:
+      - NET_RAW
+      - NET_ADMIN
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      TZ: America/Los_Angeles
+    volumes:
+      - ./openclaw:/home/node/.openclaw
+      - ./openclaw-workspace/workspace/openclaw-ssh-agent-main-25bffc4d/workspace:/home/node/.openclaw/workspace/main
+      - ./openclaw-workspace/workspace/openclaw-ssh-agent-dina-25b7f644/workspace:/home/node/.openclaw/workspace/dina
+    ports:
+      - 18789:18789 # gateway
+      # - 18790:18790 # bridge
+    networks:
+      - homelab
+      - litellm
+  openclaw-workspace:
+    # image: lscr.io/linuxserver/openssh-server
+    build: ./openclaw-workspace
+    restart: unless-stopped
+    environment:
+      - PUID=${UID}
+      - PGID=${GID}
+      - TZ=America/Los_Angeles
+    volumes:
+      - ./openclaw-workspace/config:/config
+      - ./openclaw-workspace/workspace:/workspace
+    networks:
+      - homelab
+
 networks:
   homelab:
     name: homelab

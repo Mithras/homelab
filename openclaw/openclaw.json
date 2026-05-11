@@ -1,0 +1,330 @@
+{
+  "gateway": {
+    "auth": {
+      "mode": "token",
+      "token": "${OPENCLAW_GATEWAY_TOKEN}"
+    },
+    "controlUi": {
+      // TODO: harden
+      "allowInsecureAuth": true,
+      "allowedOrigins": ["http://192.168.0.6:18789", "http://ubuntu1:18789"],
+      "dangerouslyDisableDeviceAuth": true
+    },
+    "mode": "local",
+    "port": 18789,
+    "bind": "lan"
+  },
+  "agents": {
+    "defaults": {
+      "skipBootstrap": true,
+      "model": "litellm/qwen-dense",
+      "params": {
+        "temperature": 0.6,
+        "presence_penalty": 0
+      },
+      "heartbeat": {
+        "every": "30m",
+        "lightContext": false,
+        "skipWhenBusy": false,
+        "isolatedSession": false,
+        "includeReasoning": false,
+        "activeHours": {
+          "start": "09:00",
+          "end": "22:00"
+        }
+      },
+      "sandbox": {
+        "mode": "all",
+        "backend": "ssh",
+        "scope": "agent",
+        "workspaceAccess": "rw",
+        "ssh": {
+          "target": "linuxserver.io@openclaw-workspace:2222",
+          "workspaceRoot": "/workspace",
+          "strictHostKeyChecking": true,
+          "updateHostKeys": true,
+          "identityFile": "~/.openclaw/.ssh/id_rsa",
+          "certificateFile": "~/.openclaw/.ssh/id_rsa.pub",
+          "knownHostsFile": "~/.openclaw/.ssh/known_hosts"
+        }
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "name": "main",
+        "workspace": "/home/node/.openclaw/workspace/main",
+        "heartbeat": {
+          "session": "agent:main:telegram:direct:${TELEGRAM_MITHRAS}",
+          "target": "telegram",
+          "to": "${TELEGRAM_MITHRAS}"
+        }
+      },
+      {
+        "id": "dina",
+        "name": "dina",
+        "workspace": "/home/node/.openclaw/workspace/dina",
+        "tools": {
+          "elevated": {
+            "enabled": false
+          }
+        },
+        "heartbeat": {
+          "session": "agent:dina:telegram:direct:${TELEGRAM_DINA}",
+          "target": "telegram",
+          "to": "${TELEGRAM_DINA}"
+        }
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": { "channel": "telegram", "accountId": "default" }
+    },
+    {
+      "agentId": "dina",
+      "match": {
+        "channel": "telegram",
+        "peer": { "kind": "direct", "id": "${TELEGRAM_DINA}" }
+      }
+    }
+  ],
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "tools": {
+    "profile": "full",
+    "sandbox": {
+      "tools": {
+        "alsoAllow": [
+          "group:memory",
+          "group:web"
+        ]
+      }
+    },
+    "web": {
+      "search": {
+        "provider": "searxng",
+        "enabled": true
+      }
+    },
+    "elevated": {
+      "enabled": true,
+      "allowFrom": {
+        "telegram": ["${TELEGRAM_MITHRAS}"]
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "litellm": {
+        "enabled": true
+      },
+      "telegram": {
+        "enabled": true
+      },
+      "searxng": {
+        "enabled": true,
+        "config": {
+          "webSearch": {
+            "baseUrl": "http://searxng:8080/"
+          }
+        }
+      }
+    }
+  },
+  "models": {
+    "providers": {
+      "litellm": {
+        "baseUrl": "http://litellm:4000",
+        "apiKey": "${LITELLM_API_KEY}",
+        "api": "openai-completions",
+        "auth": "api-key",
+        "models": [
+          {
+            "id": "qwen-dense",
+            "name": "qwen-dense",
+            "api": "openai-completions",
+            "reasoning": false,
+            "input": ["text", "image"],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 262144,
+            "maxTokens": 65536
+          }
+        ]
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "groups": {
+        "*": {
+          "requireMention": true
+        }
+      },
+      "botToken": "${TELEGRAM_BOT_TOKEN}"
+    }
+  },
+  "wizard": {
+    "lastRunAt": "2026-05-09T04:21:36.921Z",
+    "lastRunVersion": "2026.5.7",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "meta": {
+    "lastTouchedVersion": "2026.5.7",
+    "lastTouchedAt": "2026-05-10T03:35:51.113Z"
+  },
+  "commands": {
+    "ownerAllowFrom": ["telegram:${TELEGRAM_MITHRAS}"]
+  },
+  "skills": {
+    "entries": {
+      "1password": {
+        "enabled": false
+      },
+      "apple-notes": {
+        "enabled": false
+      },
+      "apple-reminders": {
+        "enabled": false
+      },
+      "bear-notes": {
+        "enabled": false
+      },
+      "blucli": {
+        "enabled": false
+      },
+      "blogwatcher": {
+        "enabled": false
+      },
+      "bluebubbles": {
+        "enabled": false
+      },
+      "camsnap": {
+        "enabled": false
+      },
+      "clawhub": {
+        "enabled": false
+      },
+      "coding-agent": {
+        "enabled": false
+      },
+      "discord": {
+        "enabled": false
+      },
+      "eightctl": {
+        "enabled": false
+      },
+      "gemini": {
+        "enabled": false
+      },
+      "gh-issues": {
+        "enabled": false
+      },
+      "gifgrep": {
+        "enabled": false
+      },
+      "github": {
+        "enabled": false
+      },
+      "gog": {
+        "enabled": false
+      },
+      "goplaces": {
+        "enabled": false
+      },
+      "healthcheck": {
+        "enabled": false
+      },
+      "himalaya": {
+        "enabled": false
+      },
+      "imsg": {
+        "enabled": false
+      },
+      "mcporter": {
+        "enabled": false
+      },
+      "model-usage": {
+        "enabled": false
+      },
+      "nano-pdf": {
+        "enabled": false
+      },
+      "node-connect": {
+        "enabled": false
+      },
+      "notion": {
+        "enabled": false
+      },
+      "obsidian": {
+        "enabled": false
+      },
+      "openai-whisper": {
+        "enabled": false
+      },
+      "openai-whisper-api": {
+        "enabled": false
+      },
+      "openhue": {
+        "enabled": false
+      },
+      "oracle": {
+        "enabled": false
+      },
+      "ordercli": {
+        "enabled": false
+      },
+      "peekaboo": {
+        "enabled": false
+      },
+      "sag": {
+        "enabled": false
+      },
+      "sherpa-onnx-tts": {
+        "enabled": false
+      },
+      "slack": {
+        "enabled": false
+      },
+      "songsee": {
+        "enabled": false
+      },
+      "sonoscli": {
+        "enabled": false
+      },
+      "spotify-player": {
+        "enabled": false
+      },
+      "things-mac": {
+        "enabled": false
+      },
+      "tmux": {
+        "enabled": false
+      },
+      "trello": {
+        "enabled": false
+      },
+      "voice-call": {
+        "enabled": false
+      },
+      "wacli": {
+        "enabled": false
+      },
+      "xurl": {
+        "enabled": false
+      },
+      "browser-automation": {
+        "enabled": false
+      }
+    }
+  }
+}

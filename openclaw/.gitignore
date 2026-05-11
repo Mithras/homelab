@@ -1,0 +1,11 @@
+*
+
+!cron/
+!cron/jobs.json
+
+!.gitignore
+!.env.example
+!Dockerfile
+!build.sh
+!run.sh
+!openclaw.json
