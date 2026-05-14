@@ -4,8 +4,8 @@ model_list:
       litellm_credential_name: pc
       custom_llm_provider: custom_openai
       model: qwen36-27
-      max_parallel_requests: 2
       tags: ["pc"]
+      additional_drop_params: ["reasoning_effort"]
     model_info:
       mode: chat
   - model_name: gemma4-31
@@ -13,8 +13,8 @@ model_list:
       litellm_credential_name: pc
       custom_llm_provider: custom_openai
       model: gemma4-31
-      max_parallel_requests: 2
       tags: ["pc"]
+      additional_drop_params: ["reasoning_effort"]
     model_info:
       mode: chat
   - model_name: qwen36-35
@@ -22,10 +22,18 @@ model_list:
       litellm_credential_name: ms-s1-max-0
       custom_llm_provider: custom_openai
       model: qwen36-35
-      max_parallel_requests: 4
       tags: ["ms-s1-max-0"]
+      additional_drop_params: ["reasoning_effort"]
     model_info:
       mode: chat
+  - model_name: qwen3-0.6-embedding
+    litellm_params:
+      litellm_credential_name: pc-embedding
+      custom_llm_provider: openai_like
+      model: Qwen/Qwen3-Embedding-0.6B-GGUF
+      tags: ["pc"]
+    model_info:
+      mode: embedding
 
 credential_list:
   - credential_name: pc
@@ -33,11 +41,19 @@ credential_list:
       api_base: http://192.168.0.2:8080/v1
       api_key: na
     credential_info: {}
+  - credential_name: pc-embedding
+    credential_values:
+      api_base: http://192.168.0.2:8081/v1
+      api_key: na
+    credential_info: {}
   - credential_name: ms-s1-max-0
     credential_values:
       api_base: http://192.168.0.3:8080/v1
       api_key: na
     credential_info: {}
+
+general_settings:
+  always_include_stream_usage: true
 
 # litellm_settings:
 #   callbacks:
@@ -62,3 +78,4 @@ router_settings:
     # gemma-moe: 
     # experimental: 
     Qwen3.5-27B: qwen36-27
+    qwen-embedding: qwen3-0.6-embedding

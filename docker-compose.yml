@@ -254,8 +254,14 @@ services:
       TZ: America/Los_Angeles
     volumes:
       - ./openclaw:/home/node/.openclaw
-      - ./openclaw-workspace/workspace/openclaw-ssh-agent-main-25bffc4d/workspace:/home/node/.openclaw/workspace/main
-      - ./openclaw-workspace/workspace/openclaw-ssh-agent-dina-25b7f644/workspace:/home/node/.openclaw/workspace/dina
+      # Main
+      - ./syncthing/Obsidian/Main/openclaw:/home/node/.openclaw/workspace/main
+      - ./syncthing/Obsidian/Main:/home/node/.openclaw/workspace/main/obsidian
+      - ./openclaw-workspace/empty:/home/node/.openclaw/workspace/main/obsidian/openclaw
+      # Dina
+      - ./syncthing/Obsidian-dina/main/openclaw:/home/node/.openclaw/workspace/dina
+      - ./syncthing/Obsidian-dina/main:/home/node/.openclaw/workspace/dina/obsidian
+      - ./openclaw-workspace/empty:/home/node/.openclaw/workspace/dina/obsidian/openclaw
     ports:
       - 18789:18789 # gateway
       # - 18790:18790 # bridge
@@ -273,6 +279,14 @@ services:
     volumes:
       - ./openclaw-workspace/config:/config
       - ./openclaw-workspace/workspace:/workspace
+      # Main
+      - ./syncthing/Obsidian/Main/openclaw:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace
+      - ./syncthing/Obsidian/Main:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian
+      - ./openclaw-workspace/empty:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian/openclaw
+      # Dina
+      - ./syncthing/Obsidian-dina/main/openclaw:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace
+      - ./syncthing/Obsidian-dina/main:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian
+      - ./openclaw-workspace/empty:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian/openclaw
     networks:
       - homelab
 
