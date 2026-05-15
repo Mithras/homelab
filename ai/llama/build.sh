@@ -3,6 +3,8 @@ set -e
 
 if [ ! -d 'llama.cpp' ]; then
     git clone --depth 1 https://github.com/ggerganov/llama.cpp.git
+    # MTP
+    # git clone --depth 1 -b mtp-clean https://github.com/am17an/llama.cpp.git
 fi
 
 pushd llama.cpp

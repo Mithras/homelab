@@ -26,12 +26,18 @@ WORKDIR /home/$UNAME
 
 RUN mkdir -p ~/.config/opencode ~/.local/share/opencode ~/.local/state/opencode
 
+# RUN sudo pacman -Sy --noconfirm xxx
+
 # RUN git clone https://aur.archlinux.org/paru.git \
 #     && cd paru \
 #     && makepkg -si --noconfirm
 
+# RUN paru -Sy --noconfirm xxx
+
 RUN sudo rm /etc/sudoers.d/temp
 
+ENV TERM=xterm-256color
+ENV COLORTERM=truecolor
 ENV OPENCODE_ENABLE_EXA=1
 
 ENTRYPOINT ["opencode"]

@@ -63,6 +63,8 @@ services:
       --host 0.0.0.0
       --port 8080
       --offline
+      --models-preset /app/config.ini
+      --models-max 1
 
       --threads 16
       -ngl all
@@ -75,24 +77,6 @@ services:
       --cache-ram 32768
       --cache-reuse 256
       --no-kv-unified
-
-      --model /download/qwen3.5-27/Qwen3.5-27B-UD-Q5_K_XL.gguf
-      --mmproj /download/qwen3.5-27/mmproj-BF16.gguf
-      -dev CUDA0,CUDA1
-      --ctx-size 700000
-      --fit-target 4096,1024
-      --cache-type-k q8_0
-      --cache-type-v q8_0
-      --parallel 3
-
-      --temp 1.0
-      --top-p 0.95
-      --top-k 20
-      --min-p 0.0
-      --presence-penalty 1.5
-      --repeat-penalty 1.0
-      --reasoning-budget 4096
-      --reasoning-budget-message ". Okay enough thinking. Let's just jump to it."
     devices:
       - /dev/infiniband:/dev/infiniband
     volumes:
@@ -139,6 +123,21 @@ services:
       # ibv_devinfo -v
       # GGML_RDMA_DEV: rocep6s0
       # GGML_RDMA_GID: "5"
+    volumes:
+      - ./llama/cache:/root/.cache/llama.cpp
+    network_mode: host
+
+  llama-embedding:
+    <<: [*gpu-3090]
+    restart: unless-stopped
+    image: llama:server-cuda
+    command: >
+      --host 0.0.0.0
+      --port 8081
+      --embedding
+      -hf Qwen/Qwen3-Embedding-0.6B-GGUF
+      --ctx-size 12288
+      --parallel 4
     volumes:
       - ./llama/cache:/root/.cache/llama.cpp
     network_mode: host
