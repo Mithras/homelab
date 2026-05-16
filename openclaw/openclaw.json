@@ -1,13 +1,14 @@
-// P1: https://docs.openclaw.ai/plugins/memory-wiki
 // P1: tts/stt?
 
-// P1: Home Assistant
 // P1: Email
 // P1: Digest
+//   - new anime
 
-// P2: skills?
-// P2: pdf?
-// P2: browser?
+// P2: skills/tools
+//   - Home Assistant
+//   - pdf?
+//   - rag?
+//   - browser?
 {
   "gateway": {
     "auth": {
@@ -28,11 +29,12 @@
     "defaults": {
       "skipBootstrap": true,
       "model": "litellm/qwen-dense",
-      "params": {
-        "temperature": 0.6,
-        "presence_penalty": 0
+      "imageModel": "litellm/qwen-moe",
+      "subagents": {
+        "model": "litellm/qwen-moe"
       },
       "heartbeat": {
+        "model": "litellm/qwen-moe",
         "every": "30m",
         "lightContext": false,
         "skipWhenBusy": false,
@@ -187,39 +189,52 @@
           }
         }
       },
+      // openclaw plugins update @martian-engineering/lossless-claw
       "lossless-claw": {
         "enabled": true,
         "config": {
+          "summaryModel": "litellm/qwen-moe",
+          "largeFileSummaryModel": "litellm/qwen-moe",
+          "expansionModel": "litellm/qwen-moe",
           "ignoreSessionPatterns": ["agent:*:cron:**"],
           "statelessSessionPatterns": ["agent:*:subagent:**"],
           "skipStatelessSessions": true
+        },
+        "llm": {
+          "allowModelOverride": true,
+          "allowedModels": ["litellm/qwen-moe"]
         }
       },
       "active-memory": {
         "enabled": true,
         "config": {
           "enabled": true,
+          "model": "litellm/qwen-moe",
           "agents": ["main", "dina"],
           "queryMode": "recent",
-          // TODO: enable in 2026.5.9
-          // "toolsAllow": [
-          //   "memory_search",
-          //   "memory_get",
-          //   "lcm_grep",
-          //   "lcm_describe",
-          //   "lcm_expand_query"
-          // ],
-          // "promptAppend": "Use LCM tools for recall:\n1. `lcm_grep` — Search all conversations by keyword/regex. Prefer `mode: \"full_text\"` for short topic terms, use `mode: \"regex\"` for alternation or other regex syntax, quote exact phrases, use `sort: \"relevance\"` for older-topic lookups, and `sort: \"hybrid\"` when recency should still matter.\n2. `lcm_describe` — Inspect a specific summary (cheap, no sub-agent)\n3. `lcm_expand_query` — Deep recall with bounded sub-agent expansion\n\nWhen summaries in context have an \"Expand for details about:\" footer listing something you need, use `lcm_expand_query` to get the full detail.",
-          "timeoutMs": 15000,
-          "setupGraceTimeoutMs": 15000,
-          "logging": false
+          "toolsAllow": [
+            "memory_search",
+            "memory_get",
+            "lcm_grep",
+            "lcm_describe",
+            "lcm_expand_query"
+          ],
+          "promptAppend": "Use LCM tools for recall:\n1. `lcm_grep` — Search all conversations by keyword/regex. Prefer `mode: \"full_text\"` for short topic terms, use `mode: \"regex\"` for alternation or other regex syntax, quote exact phrases, use `sort: \"relevance\"` for older-topic lookups, and `sort: \"hybrid\"` when recency should still matter.\n2. `lcm_describe` — Inspect a specific summary (cheap, no sub-agent)\n3. `lcm_expand_query` — Deep recall with bounded sub-agent expansion\n\nWhen summaries in context have an \"Expand for details about:\" footer listing something you need, use `lcm_expand_query` to get the full detail.",
+          "timeoutMs": 30000,
+          "setupGraceTimeoutMs": 30000,
+          "logging": true
         }
       },
       "memory-core": {
         "config": {
           "dreaming": {
-            "enabled": true
+            "enabled": true,
+            "model": "litellm/qwen-moe"
           }
+        },
+        "subagent": {
+          "allowModelOverride": true,
+          "allowedModels": ["litellm/qwen-moe"]
         }
       }
     }
@@ -231,6 +246,9 @@
         "apiKey": "${LITELLM_API_KEY}",
         "api": "openai-completions",
         "auth": "api-key",
+        "request": {
+          "allowPrivateNetwork": true
+        },
         "models": [
           {
             "id": "qwen-dense",
@@ -238,14 +256,25 @@
             "api": "openai-completions",
             "reasoning": true,
             "input": ["text", "image"],
-            "cost": {
-              "input": 0,
-              "output": 0,
-              "cacheRead": 0,
-              "cacheWrite": 0
-            },
             "contextWindow": 150000,
-            "maxTokens": 65536
+            "maxTokens": 65536,
+            "params": {
+              "temperature": 0.6,
+              "presence_penalty": 0
+            }
+          },
+          {
+            "id": "qwen-moe",
+            "name": "qwen-moe",
+            "api": "openai-completions",
+            "reasoning": true,
+            "input": ["text", "image"],
+            "contextWindow": 150000,
+            "maxTokens": 65536,
+            "params": {
+              "temperature": 0.6,
+              "presence_penalty": 0
+            }
           }
         ]
       }
