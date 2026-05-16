@@ -40,6 +40,12 @@ elif [[ "$(uname -n)" == "mithras-pc" ]]; then
         -f .devops/cuda.Dockerfile \
         --target server \
         --tag llama:server-cuda
+elif [[ "$(uname -n)" == "gx10-88f0" ]]; then
+    DOCKER_BUILDKIT=1 docker build . \
+        --build-arg CUDA_DOCKER_ARCH=121 \
+        -f .devops/cuda.Dockerfile \
+        --target server \
+        --tag llama:server-cuda
 else
     echo "Unknown environment."
 fi

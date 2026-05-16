@@ -2,23 +2,16 @@
 
 docker run -it --rm -v ./download:/download hf-cli /bin/bash
 
-# hf download 'unsloth/Qwen3.5-122B-A10B-GGUF' --local-dir /download/qwen3.5-122 --include 'UD-Q5_K_XL/*'
-# hf download 'unsloth/Qwen3.5-122B-A10B-GGUF' --local-dir /download/qwen3.5-122 --include 'mmproj-BF16.gguf'
+# hf download 'unsloth/Qwen3.5-122B-A10B-GGUF' --local-dir /download/qwen3.5-122 --include 'UD-Q5_K_XL/*' --include 'mmproj-BF16.gguf'
 
-# hf download 'unsloth/Qwen3.6-35B-A3B-GGUF' --local-dir /download/qwen3.6-35 --include 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf'
-# hf download 'unsloth/Qwen3.6-35B-A3B-GGUF' --local-dir /download/qwen3.6-35 --include 'mmproj-BF16.gguf'
+# hf download 'unsloth/Qwen3.6-35B-A3B-GGUF' --local-dir /download/qwen3.6-35 --include 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf' --include 'mmproj-BF16.gguf'
+# hf download 'unsloth/Qwen3.6-27B-GGUF' --local-dir /download/qwen3.6-27 --include 'Qwen3.6-27B-UD-Q5_K_XL.gguf' --include 'mmproj-BF16.gguf'
 
-# hf download 'unsloth/Qwen3.6-27B-GGUF' --local-dir /download/qwen3.6-27 --include 'Qwen3.6-27B-UD-Q5_K_XL.gguf'
-# hf download 'unsloth/Qwen3.6-27B-GGUF' --local-dir /download/qwen3.6-27 --include 'mmproj-BF16.gguf'
+# hf download 'unsloth/gemma-4-31B-it-GGUF' --local-dir /download/gemma-4-31B --include 'gemma-4-31B-it-UD-Q5_K_XL.gguf' --include 'mmproj-BF16.gguf'
+# hf download 'unsloth/gemma-4-26B-A4B-it-GGUF' --local-dir /download/gemma-4-26B-A4B --include 'gemma-4-26B-A4B-it-UD-Q5_K_XL.gguf' --include 'mmproj-BF16.gguf'
 
-# hf download 'unsloth/gemma-4-31B-it-GGUF' --local-dir /download/gemma-4-31B --include 'gemma-4-31B-it-UD-Q5_K_XL.gguf'
-# hf download 'unsloth/gemma-4-31B-it-GGUF' --local-dir /download/gemma-4-31B --include 'mmproj-BF16.gguf'
-
-# hf download 'unsloth/gemma-4-26B-A4B-it-GGUF' --local-dir /download/gemma-4-26B-A4B --include 'gemma-4-26B-A4B-it-UD-Q5_K_XL.gguf'
-# hf download 'unsloth/gemma-4-26B-A4B-it-GGUF' --local-dir /download/gemma-4-26B-A4B --include 'mmproj-BF16.gguf'
-
-# hf download 'unsloth/Qwen3.6-27B-MTP-GGUF' --local-dir /download/qwen3.6-27-mtp --include 'Qwen3.6-27B-UD-Q5_K_XL.gguf'
-# hf download 'unsloth/Qwen3.6-27B-MTP-GGUF' --local-dir /download/qwen3.6-27-mtp --include 'mmproj-BF16.gguf'
+# hf download 'unsloth/Qwen3.6-27B-MTP-GGUF' --local-dir /download/qwen3.6-27-mtp --include 'Qwen3.6-27B-UD-Q5_K_XL.gguf' --include 'mmproj-BF16.gguf'
+# hf download 'unsloth/Qwen3.6-35B-A3B-MTP-GGUF' --local-dir /download/qwen3.6-35-mtp --include 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf' --include 'mmproj-BF16.gguf'
 
 
 # ---

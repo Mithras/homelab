@@ -2,11 +2,11 @@ x-gpu-all: &gpu-all
   runtime: nvidia
   devices:
     - nvidia.com/gpu=all
-x-gpu-5090: &gpu-5090
+x-gpu-0: &gpu-0
   runtime: nvidia
   devices:
     - nvidia.com/gpu=0
-x-gpu-3090: &gpu-3090
+x-gpu-1: &gpu-1
   runtime: nvidia
   devices:
     - nvidia.com/gpu=1
@@ -128,7 +128,7 @@ services:
     network_mode: host
 
   llama-embedding:
-    <<: [*gpu-3090]
+    <<: [*gpu-1]
     restart: unless-stopped
     image: llama:server-cuda
     command: >
@@ -142,6 +142,40 @@ services:
       - ./llama/cache:/root/.cache/llama.cpp
     network_mode: host
 
+  vllm-gx10:
+    <<: [*gpu-all]
+    image: vllm/vllm-openai:latest-aarch64-cu130-ubuntu2404
+    restart: unless-stopped
+    command: >
+      Qwen/Qwen3.6-35B-A3B-FP8
+        --host 0.0.0.0
+        --port 8000
+        --gpu-memory-utilization 0.9
+        --max-num-seqs 3
+        --max-num-batched-tokens 32768
+        --kv-cache-dtype fp8
+        --enable-prefix-caching
+        --enable-auto-tool-choice
+        --trust-remote-code
+        --load-format fastsafetensors
+        --attention-backend flashinfer
+
+        --max-model-len 262144
+        --reasoning-parser qwen3
+        --tool-call-parser qwen3_coder
+        --speculative-config '{"method":"mtp","num_speculative_tokens":2}'
+        --default-chat-template-kwargs '{"preserve_thinking":true}'
+        --override-generation-config '{"temperature":0.6,"top_p":0.95,"top_k":20,"min_p":0.0,"presence_penalty":0.0,"repetition_penalty":1.0}'
+        --stream-interval 10
+    # --max-num-seqs 8 # https://github.com/vllm-project/vllm/issues/35288
+    volumes:
+      - ./vllm/cache:/root/.cache
+    network_mode: host
+    environment:
+      PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
+      OMP_NUM_THREADS: '8'
+      # VLLM_USE_FLASHINFER_MOE_FP8: '1'
+
   # https://github.com/speaches-ai/speaches/
   # http://localhost:8001/
   # http://localhost:8001/v1/registry?task=text-to-speech
@@ -150,7 +184,7 @@ services:
   # + curl http://localhost:8001/v1/models/Systran/faster-whisper-large-v3 -X POST
   # + curl http://localhost:8001/v1/models/distil-whisper/distil-large-v3.5-ct2 -X POST
   speaches:
-    <<: [*gpu-3090]
+    <<: [*gpu-1]
     restart: unless-stopped
     image: ghcr.io/speaches-ai/speaches:latest-cuda
     environment:
