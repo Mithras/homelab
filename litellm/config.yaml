@@ -5,6 +5,7 @@ model_list:
       custom_llm_provider: custom_openai
       model: qwen36-27
       tags: ["pc"]
+      additional_drop_params: ["reasoning_effort"]
     model_info:
       mode: chat
   - model_name: qwen3-0.6-embedding

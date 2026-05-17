@@ -53,7 +53,7 @@
         "ssh": {
           "target": "linuxserver.io@openclaw-workspace:2222",
           "workspaceRoot": "/workspace",
-          "strictHostKeyChecking": true,
+          "strictHostKeyChecking": false,
           "updateHostKeys": true,
           "identityFile": "~/.openclaw/.ssh/id_rsa",
           "certificateFile": "~/.openclaw/.ssh/id_rsa.pub",
@@ -153,7 +153,8 @@
           "image",
           "lcm_grep",
           "lcm_describe",
-          "lcm_expand_query"
+          "lcm_expand_query",
+          "summarize"
         ]
       }
     },
@@ -167,6 +168,18 @@
       "enabled": true,
       "allowFrom": {
         "telegram": ["${TELEGRAM_MITHRAS}"]
+      }
+    },
+    "media": {
+      "audio": {
+        "enabled": true,
+        "models": [
+          {
+            "type": "provider",
+            "provider": "openai",
+            "model": "distil-whisper/distil-large-v3.5-ct2"
+          }
+        ]
       }
     }
   },
@@ -214,15 +227,15 @@
           "queryMode": "recent",
           "toolsAllow": [
             "memory_search",
-            "memory_get",
-            "lcm_grep",
-            "lcm_describe",
-            "lcm_expand_query"
+            "memory_get"
+            // "lcm_grep",
+            // "lcm_describe",
+            // "lcm_expand_query"
           ],
-          "promptAppend": "Use LCM tools for recall:\n1. `lcm_grep` — Search all conversations by keyword/regex. Prefer `mode: \"full_text\"` for short topic terms, use `mode: \"regex\"` for alternation or other regex syntax, quote exact phrases, use `sort: \"relevance\"` for older-topic lookups, and `sort: \"hybrid\"` when recency should still matter.\n2. `lcm_describe` — Inspect a specific summary (cheap, no sub-agent)\n3. `lcm_expand_query` — Deep recall with bounded sub-agent expansion\n\nWhen summaries in context have an \"Expand for details about:\" footer listing something you need, use `lcm_expand_query` to get the full detail.",
-          "timeoutMs": 30000,
-          "setupGraceTimeoutMs": 30000,
-          "logging": true
+          // "promptAppend": "Use LCM tools for recall:\n1. `lcm_grep` — Search all conversations by keyword/regex. Prefer `mode: \"full_text\"` for short topic terms, use `mode: \"regex\"` for alternation or other regex syntax, quote exact phrases, use `sort: \"relevance\"` for older-topic lookups, and `sort: \"hybrid\"` when recency should still matter.\n2. `lcm_describe` — Inspect a specific summary (cheap, no sub-agent)\n3. `lcm_expand_query` — Deep recall with bounded sub-agent expansion\n\nWhen summaries in context have an \"Expand for details about:\" footer listing something you need, use `lcm_expand_query` to get the full detail.",
+          "timeoutMs": 15000,
+          "setupGraceTimeoutMs": 15000
+          // "logging": true
         }
       },
       "memory-core": {
@@ -275,6 +288,19 @@
               "temperature": 0.6,
               "presence_penalty": 0
             }
+          }
+        ]
+      },
+      "openai": {
+        "baseUrl": "http://192.168.0.2:8001/v1",
+        "apiKey": "na",
+        "request": {
+          "allowPrivateNetwork": true
+        },
+        "models": [
+          {
+            "id": "distil-whisper/distil-large-v3.5-ct2",
+            "name": "distil-whisper/distil-large-v3.5-ct2"
           }
         ]
       }
