@@ -12,7 +12,7 @@ x-gpu-1: &gpu-1
     - nvidia.com/gpu=1
 
 services:
-  llama:
+  llama-strix-halo:
     restart: unless-stopped
     # image: llama:server-rocm
     image: llama:server-vulkan
@@ -84,65 +84,7 @@ services:
       - ./download/download:/download
     network_mode: host
 
-  llama-rpc:
-    restart: unless-stopped
-    # image: llama:server-rocm
-    image: llama:server-vulkan
-    entrypoint: ./rpc-server
-    command: >
-      --host 0.0.0.0
-      --port 50052
-      --cache
-      --threads 16
-    environment:
-      ROCBLAS_USE_HIPBLASLT: "1"
-      # ibv_devinfo -v
-      # GGML_RDMA_DEV: rocep101s0
-      # GGML_RDMA_GID: "5"
-    devices:
-      - /dev/dri:/dev/dri
-      - /dev/kfd:/dev/kfd
-      - /dev/infiniband:/dev/infiniband
-    volumes:
-      - ./llama/cache:/root/.cache/llama.cpp
-    network_mode: host
-
-  llama-rpc-pc:
-    <<: [*gpu-all]
-    restart: unless-stopped
-    image: llama:server-cuda
-    entrypoint: ./rpc-server
-    command: >
-      --host 0.0.0.0
-      --port 50052
-      --cache
-      --threads 16
-    devices:
-      - /dev/infiniband:/dev/infiniband
-    environment: {}
-      # ibv_devinfo -v
-      # GGML_RDMA_DEV: rocep6s0
-      # GGML_RDMA_GID: "5"
-    volumes:
-      - ./llama/cache:/root/.cache/llama.cpp
-    network_mode: host
-
-  llama-embedding:
-    <<: [*gpu-1]
-    restart: unless-stopped
-    image: llama:server-cuda
-    command: >
-      --host 0.0.0.0
-      --port 8081
-      --embedding
-      -hf Qwen/Qwen3-Embedding-0.6B-GGUF
-      --ctx-size 12288
-      --parallel 4
-    volumes:
-      - ./llama/cache:/root/.cache/llama.cpp
-    network_mode: host
-
-  vllm-gx10:
+  vllm-gb10:
     <<: [*gpu-all]
     image: vllm/vllm-openai:latest-aarch64-cu130-ubuntu2404
     restart: unless-stopped
@@ -150,7 +92,7 @@ services:
       Qwen/Qwen3.6-35B-A3B-FP8
         --host 0.0.0.0
         --port 8000
-        --gpu-memory-utilization 0.9
+        --gpu-memory-utilization 0.85
         --max-num-seqs 3
         --max-num-batched-tokens 32768
         --kv-cache-dtype fp8
@@ -176,6 +118,22 @@ services:
       OMP_NUM_THREADS: '8'
       # VLLM_USE_FLASHINFER_MOE_FP8: '1'
 
+  llama-gb10-embedding:
+    <<: [*gpu-all]
+    restart: unless-stopped
+    image: llama:server-cuda
+    command: >
+      --host 0.0.0.0
+      --port 8081
+      --embedding
+      --model /download/Qwen3-Embedding-4B-GGUF/Qwen3-Embedding-4B-Q4_K_M.gguf
+      --ctx-size 12288
+      --parallel 4
+    volumes:
+      - ./download/download:/download
+    ports:
+      - 8081:8081
+
   # https://github.com/speaches-ai/speaches/
   # http://localhost:8001/
   # http://localhost:8001/v1/registry?task=text-to-speech
@@ -183,7 +141,7 @@ services:
   # http://localhost:8001/v1/registry?task=automatic-speech-recognition
   # + curl http://localhost:8001/v1/models/Systran/faster-whisper-large-v3 -X POST
   # + curl http://localhost:8001/v1/models/distil-whisper/distil-large-v3.5-ct2 -X POST
-  speaches:
+  speaches-pc:
     <<: [*gpu-1]
     image: ghcr.io/speaches-ai/speaches:latest-cuda
     # image: speaches
@@ -196,9 +154,6 @@ services:
       - ./speaches/cache:/home/ubuntu/.cache/huggingface/hub
     ports:
       - 8001:8001
-
-volumes:
-  opencode:
 
 
 # opencode:
