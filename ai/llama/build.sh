@@ -16,9 +16,6 @@ git pull
 # RPC: git format-patch -1 HEAD
 git apply ../0001-RPC-RDMA.patch
 
-# gfx1151: git format-patch -1 HEAD
-git apply ../0001-gfx1151.patch
-
 # XXX: https://github.com/ggml-org/llama.cpp/pull/XXX
 # curl -sL https://github.com/ggerganov/llama.cpp/pull/XXX.patch | git apply
 

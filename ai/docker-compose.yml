@@ -185,8 +185,9 @@ services:
   # + curl http://localhost:8001/v1/models/distil-whisper/distil-large-v3.5-ct2 -X POST
   speaches:
     <<: [*gpu-1]
-    restart: unless-stopped
     image: ghcr.io/speaches-ai/speaches:latest-cuda
+    # image: speaches
+    restart: unless-stopped
     environment:
       UVICORN_PORT: "8001"
       # ENABLE_UI: "False"
@@ -196,29 +197,29 @@ services:
     ports:
       - 8001:8001
 
-  opencode:
-    <<: [*gpu-all]
-    restart: unless-stopped
-    image: opencode
-    command: >
-      web
-      --hostname
-      0.0.0.0
-    working_dir: /home/opencode/workdir
-    environment:
-      LITELLM_API_KEY: ${LITELLM_API_KEY}
-    volumes:
-      - opencode:/home/opencode
-      - "$HOME/.config/opencode:/home/opencode/.config/opencode"
-      - "$HOME/.local/share/opencode:/home/opencode/.local/share/opencode"
-      - "$HOME/.local/state/opencode:/home/opencode/.local/state/opencode"
-      - ./opencode/workdir:/home/opencode/workdir
-    ports:
-      - 4096:4096
-
 volumes:
   opencode:
 
+
+# opencode:
+#   <<: [*gpu-all]
+#   restart: unless-stopped
+#   image: opencode
+#   command: >
+#     web
+#     --hostname
+#     0.0.0.0
+#   working_dir: /home/opencode/workdir
+#   environment:
+#     LITELLM_API_KEY: ${LITELLM_API_KEY}
+#   volumes:
+#     - opencode:/home/opencode
+#     - "$HOME/.config/opencode:/home/opencode/.config/opencode"
+#     - "$HOME/.local/share/opencode:/home/opencode/.local/share/opencode"
+#     - "$HOME/.local/state/opencode:/home/opencode/.local/state/opencode"
+#     - ./opencode/workdir:/home/opencode/workdir
+#   ports:
+#     - 4096:4096
 
 # vllm:
 #   privileged: true
