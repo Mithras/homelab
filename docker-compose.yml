@@ -269,8 +269,7 @@ services:
       - homelab
       - litellm
   openclaw-workspace:
-    # image: lscr.io/linuxserver/openssh-server
-    build: ./openclaw-workspace
+    image: openssh-server
     restart: unless-stopped
     environment:
       - PUID=${UID}
