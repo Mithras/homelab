@@ -8,4 +8,5 @@
 !Dockerfile
 !build.sh
 !run.sh
+!ssh-wrapper.sh
 !openclaw.json

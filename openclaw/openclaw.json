@@ -1,8 +1,7 @@
-// P1: tts/stt?
-
 // P1: Email
-// P1: Digest
-//   - new anime
+// P1: Anime tracker
+// P1: Community *.md
+// P1: telegram group+topics
 
 // P2: skills/tools
 //   - Home Assistant
@@ -51,6 +50,7 @@
         "scope": "agent",
         "workspaceAccess": "rw",
         "ssh": {
+          "command": "/home/node/.openclaw/ssh-wrapper.sh",
           "target": "linuxserver.io@openclaw-workspace:2222",
           "workspaceRoot": "/workspace",
           "strictHostKeyChecking": false,
@@ -60,6 +60,8 @@
           "knownHostsFile": "~/.openclaw/.ssh/known_hosts"
         }
       },
+      // openclaw memory index --force --agent main
+      // openclaw memory status --deep --agent main
       "memorySearch": {
         "provider": "openai",
         "model": "qwen-embedding",
@@ -127,6 +129,16 @@
       }
     },
     {
+      "agentId": "main",
+      "match": {
+        "channel": "telegram",
+        "peer": {
+          "kind": "group",
+          "id": "-1003720615070"
+        }
+      }
+    },
+    {
       "agentId": "dina",
       "match": {
         "channel": "telegram",
@@ -159,6 +171,7 @@
           "group:sessions", // "sessions_list", "sessions_history", "sessions_send", "sessions_spawn", "sessions_yield", "subagents", "session_status"
           "group:memory", // "memory_search", "memory_get"
           "group:web", // "web_search", "x_search", "web_fetch"
+          "group:messaging", // "message"
           "cron",
           "image",
           "lcm_grep",
@@ -262,7 +275,7 @@
   },
   "messages": {
     "tts": {
-      "auto": "always",
+      "auto": "inbound",
       "provider": "openai",
       "summaryModel": "litellm/qwen-moe",
       "modelOverrides": { "enabled": true },
@@ -340,7 +353,22 @@
       "enabled": true,
       "dmPolicy": "allowlist",
       "allowFrom": ["${TELEGRAM_MITHRAS}", "${TELEGRAM_DINA}"],
-      "groupPolicy": "disabled",
+
+      "groupPolicy": "allowlist",
+      "groupAllowFrom": ["${TELEGRAM_MITHRAS}", "${TELEGRAM_DINA}"],
+      "groups": {
+        "-1003720615070": {
+          "enabled": true,
+          "requireMention": false,
+          "allowFrom": ["${TELEGRAM_MITHRAS}"],
+          "topics": {
+            // "xxx": {
+            //   "agentId": "xxx"
+            // }
+          }
+        }
+      },
+      // TODO: threadBindings? autoTopicLabel? ackReaction? reactionLevel? reactionNotifications? markdown? linkPreview?
       "botToken": "${TELEGRAM_BOT_TOKEN}"
     }
   },

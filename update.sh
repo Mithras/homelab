@@ -4,8 +4,8 @@ sudo apt update
 sudo apt full-upgrade -y
 sudo apt autoremove -y
 
-docker compose pull
-docker compose up -d --pull always
+docker compose pull --ignore-pull-failures
+docker compose up -d
 docker system prune -af
 # docker image prune -af
 # docker volume prune -f
