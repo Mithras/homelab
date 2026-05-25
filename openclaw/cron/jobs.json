@@ -22,6 +22,100 @@
         "mode": "none"
       },
       "state": {}
+    },
+    {
+      "id": "4b1ca89a-307c-48f5-bb51-fec0a0eb963f",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:499285727",
+      "name": "Redfin Property Search",
+      "enabled": true,
+      "createdAtMs": 1779242660846,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 * * * *",
+        "tz": "America/Los_Angeles"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run the Redfin search workflow from `obsidian/redfin/README.md`. Follow all Cron Instructions in that file.",
+        "timeoutSeconds": 300,
+        "toolsAllow": [
+          "web_fetch",
+          "read",
+          "write",
+          "edit"
+        ]
+      },
+      "delivery": {
+        "mode": "none",
+        "channel": "telegram",
+        "to": "499285727"
+      },
+      "state": {}
+    },
+    {
+      "id": "6cb64883-b807-4557-9d94-97b0f0b9d590",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:499285727",
+      "name": "Redfin Daily Digest",
+      "enabled": true,
+      "createdAtMs": 1779336540560,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 7 * * *",
+        "tz": "America/Los_Angeles"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Read the Redfin search results from `obsidian/redfin/results.md`. Notify of any new items, otherwise reply HEARTBEAT_OK.",
+        "timeoutSeconds": 300,
+        "toolsAllow": [
+          "read"
+        ]
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "telegram",
+        "to": "499285727"
+      },
+      "state": {}
+    },
+    {
+      "id": "61f4e9b3-0c85-4ad5-9f4f-ceb833f7a425",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:499285727",
+      "name": "Anime Episode Tracker",
+      "enabled": true,
+      "createdAtMs": 1779591593734,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 * * * *",
+        "tz": "America/Los_Angeles",
+        "staggerMs": 300000
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run the anime tracking workflow from `obsidian/anime/README.md`. Follow all Cron Instructions in that file.",
+        "timeoutSeconds": 300,
+        "toolsAllow": [
+          "web_fetch",
+          "read",
+          "write",
+          "edit"
+        ]
+      },
+      "delivery": {
+        "mode": "none",
+        "channel": "telegram",
+        "to": "499285727"
+      },
+      "state": {}
     }
   ]
 }

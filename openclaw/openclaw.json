@@ -1,7 +1,5 @@
 // P1: Email
-// P1: Anime tracker
 // P1: Community *.md
-// P1: telegram group+topics
 
 // P2: skills/tools
 //   - Home Assistant
@@ -58,6 +56,10 @@
           "identityFile": "~/.openclaw/.ssh/id_rsa",
           "certificateFile": "~/.openclaw/.ssh/id_rsa.pub",
           "knownHostsFile": "~/.openclaw/.ssh/known_hosts"
+        },
+        "prune": {
+          "idleHours": 0,
+          "maxAgeDays": 0
         }
       },
       // openclaw memory index --force --agent main
@@ -147,6 +149,16 @@
           "id": "${TELEGRAM_DINA}"
         }
       }
+    },
+    {
+      "agentId": "dina",
+      "match": {
+        "channel": "telegram",
+        "peer": {
+          "kind": "group",
+          "id": "-1003945418098"
+        }
+      }
     }
   ],
   "session": {
@@ -195,6 +207,7 @@
     "media": {
       "audio": {
         "enabled": true,
+        "echoTranscript": true,
         "models": [
           {
             "provider": "openai",
@@ -278,7 +291,9 @@
       "auto": "inbound",
       "provider": "openai",
       "summaryModel": "litellm/qwen-moe",
-      "modelOverrides": { "enabled": true },
+      "modelOverrides": {
+        "enabled": true
+      },
       "providers": {
         "openai": {
           "apiKey": "na",
@@ -320,7 +335,7 @@
             "api": "openai-completions",
             "reasoning": true,
             "input": ["text", "image"],
-            "contextWindow": 150000,
+            "contextWindow": 262144,
             "maxTokens": 65536,
             "params": {
               "temperature": 0.6,
@@ -366,9 +381,14 @@
             //   "agentId": "xxx"
             // }
           }
+        },
+        "-1003945418098": {
+          "enabled": true,
+          "requireMention": false,
+          "allowFrom": ["${TELEGRAM_DINA}"],
+          "topics": {}
         }
       },
-      // TODO: threadBindings? autoTopicLabel? ackReaction? reactionLevel? reactionNotifications? markdown? linkPreview?
       "botToken": "${TELEGRAM_BOT_TOKEN}"
     }
   },
@@ -379,11 +399,14 @@
     "lastRunMode": "local"
   },
   "meta": {
-    "lastTouchedVersion": "2026.5.12",
-    "lastTouchedAt": "2026-05-17T02:18:04.837Z"
+    "lastTouchedVersion": "2026.5.18",
+    "lastTouchedAt": "2026-05-22T18:44:01.063Z"
   },
   "commands": {
-    "ownerAllowFrom": ["telegram:${TELEGRAM_MITHRAS}"]
+    "ownerAllowFrom": ["telegram:${TELEGRAM_MITHRAS}"],
+    "allowFrom": {
+      "telegram": ["${TELEGRAM_MITHRAS}", "${TELEGRAM_DINA}"]
+    }
   },
   "skills": {
     "entries": {
