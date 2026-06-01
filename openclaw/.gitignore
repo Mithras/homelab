@@ -9,4 +9,5 @@
 !build.sh
 !run.sh
 !ssh-wrapper.sh
+!empty.sh
 !openclaw.json

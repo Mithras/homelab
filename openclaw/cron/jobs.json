@@ -49,9 +49,7 @@
         ]
       },
       "delivery": {
-        "mode": "none",
-        "channel": "telegram",
-        "to": "499285727"
+        "mode": "none"
       },
       "state": {}
     },
@@ -111,7 +109,36 @@
         ]
       },
       "delivery": {
-        "mode": "none",
+        "mode": "none"
+      },
+      "state": {}
+    },
+    {
+      "id": "21e5c93f-9417-46d1-99a8-f2e4d3ac4395",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:499285727",
+      "name": "Daily OpenClaw Version Check",
+      "description": "Check for new OpenClaw releases each morning and summarize what's new since the current version.",
+      "enabled": true,
+      "createdAtMs": 1779851394875,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 7 * * *",
+        "tz": "America/Los_Angeles"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Check for new OpenClaw releases.\n\n1. Fetch https://github.com/openclaw/openclaw/releases using web_fetch\n2. Find all releases published in the last 24 hours (since yesterday)\n3. If there are new releases, send a concise summary of what's new, focusing on changes relevant to our setup:\n4. If no new releases in the last 24 hours, reply HEARTBEAT_OK and don't send anything.",
+        "timeoutSeconds": 300,
+        "toolsAllow": [
+          "web_fetch",
+          "read"
+        ]
+      },
+      "delivery": {
+        "mode": "announce",
         "channel": "telegram",
         "to": "499285727"
       },

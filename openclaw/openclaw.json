@@ -49,7 +49,6 @@
         "workspaceAccess": "rw",
         "ssh": {
           "command": "/home/node/.openclaw/ssh-wrapper.sh",
-          "target": "linuxserver.io@openclaw-workspace:2222",
           "workspaceRoot": "/workspace",
           "strictHostKeyChecking": false,
           "updateHostKeys": true,
@@ -89,6 +88,12 @@
         "id": "main",
         "name": "main",
         "workspace": "/home/node/.openclaw/workspace/main",
+        "sandbox":{
+          "ssh": {
+            // ssh -p 2222 -i ~/.openclaw/.ssh/id_rsa linuxserver.io@openclaw-workspace-main
+            "target": "linuxserver.io@openclaw-workspace-main:2222"
+          }
+        },
         "tools": {
           "sandbox": {
             "tools": {
@@ -106,6 +111,12 @@
         "id": "dina",
         "name": "dina",
         "workspace": "/home/node/.openclaw/workspace/dina",
+        "sandbox":{
+          "ssh": {
+            // ssh -p 2222 -i ~/.openclaw/.ssh/id_rsa linuxserver.io@openclaw-workspace-dina
+            "target": "linuxserver.io@openclaw-workspace-dina:2222"
+          }
+        },
         "tools": {
           "elevated": {
             "enabled": false
@@ -456,9 +467,6 @@
         "enabled": false
       },
       "github": {
-        "enabled": false
-      },
-      "gog": {
         "enabled": false
       },
       "goplaces": {

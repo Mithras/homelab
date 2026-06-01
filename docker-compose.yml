@@ -243,7 +243,7 @@ services:
 
   openclaw:
     # image: ghcr.io/openclaw/openclaw
-    image: openclaw
+    image: openclaw:20260528
     restart: unless-stopped
     cap_drop:
       - NET_RAW
@@ -254,6 +254,7 @@ services:
       TZ: America/Los_Angeles
     volumes:
       - ./openclaw:/home/node/.openclaw
+      - .//openclaw/empoty.sh:/usr/local/bin/gog
       # Main
       - ./syncthing/Obsidian/Main/openclaw:/home/node/.openclaw/workspace/main
       - ./syncthing/Obsidian/Main:/home/node/.openclaw/workspace/main/obsidian
@@ -270,24 +271,41 @@ services:
     networks:
       - homelab
       - litellm
-  openclaw-workspace:
-    image: openssh-server
+  openclaw-workspace-main:
+    # image: openclaw-workspace:full
+    image: openclaw-workspace:agent
     restart: unless-stopped
     environment:
-      - PUID=${UID}
-      - PGID=${GID}
-      - TZ=America/Los_Angeles
+      PUID: ${UID}
+      PGID: ${GID}
+      TZ: America/Los_Angeles
+      LOG_STDOUT: "true"
     volumes:
       - ./openclaw-workspace/config:/config
-      # Main
+      - ./openclaw-workspace/gogcli/main:/gogcli
+      - ./openclaw-workspace/gogcli/main/90-gogenv.conf:/etc/ssh/sshd_config.d/90-gogenv.conf
       - ./syncthing/Obsidian/Main/openclaw:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace
       - ./syncthing/Obsidian/Main:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian
-      - ./openclaw-workspace/empty:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian/openclaw
+      - /tmp/empty:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian/openclaw
       - ./openclaw-workspace/workspace/main/scrap:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/scrap
-      # Dina
+    networks:
+      - homelab
+  openclaw-workspace-dina:
+    # image: openclaw-workspace:full
+    image: openclaw-workspace:agent
+    restart: unless-stopped
+    environment:
+      PUID: ${UID}
+      PGID: ${GID}
+      TZ: America/Los_Angeles
+      LOG_STDOUT: "true"
+    volumes:
+      - ./openclaw-workspace/config:/config
+      - ./openclaw-workspace/gogcli/dina:/gogcli
+      - ./openclaw-workspace/gogcli/dina/90-gogenv.conf:/etc/ssh/sshd_config.d/90-gogenv.conf
       - ./syncthing/Obsidian-dina/main/openclaw:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace
       - ./syncthing/Obsidian-dina/main:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian
-      - ./openclaw-workspace/empty:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian/openclaw
+      - /tmp/empty:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian/openclaw
       - ./openclaw-workspace/workspace/dina/scrap:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/scrap
     networks:
       - homelab
