@@ -11,7 +11,7 @@
 
 # qwen35
 ./llama-fit-params \
-    --rpc 192.168.100.2:50052,192.168.0.2:50052 \
+    --rpc 192.168.100.2:50052,192.168.1.2:50052 \
     -dev RPC1,RPC2,Vulkan0 \
     -ngl -1 \
     --model /download/qwen3.5-122/UD-Q4_K_XL/Qwen3.5-122B-A10B-UD-Q4_K_XL-00001-of-00003.gguf \

@@ -10,11 +10,11 @@ Climate:
     sleep_input: input_boolean.sleep
     home_params:
       hvac_mode: heat
-      temperature: 21
+      temperature: 17 # 21
     not_home_params:
       hvac_mode: heat
-      temperature: 17
+      temperature: 15 # 17
     sleep_params:
       hvac_mode: heat
-      temperature: 19
+      temperature:  17 # 19
   constrain_enabled:

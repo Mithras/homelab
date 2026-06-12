@@ -1,6 +1,9 @@
-// P1: Email
+// ~: Email
+
 // P1: Community *.md
 
+// P2: mcp
+//   - linkedin
 // P2: skills/tools
 //   - Home Assistant
 //   - pdf?
@@ -15,7 +18,7 @@
     "controlUi": {
       // TODO: harden
       "allowInsecureAuth": true,
-      "allowedOrigins": ["http://192.168.0.6:18789", "http://ubuntu1:18789"],
+      "allowedOrigins": ["http://192.168.1.4:18789", "http://ubuntu1:18789"],
       "dangerouslyDisableDeviceAuth": true
     },
     "mode": "local",
@@ -28,14 +31,14 @@
       "model": "litellm/qwen-dense",
       "imageModel": "litellm/qwen-moe",
       "subagents": {
-        "model": "litellm/qwen-moe"
+        // "model": "litellm/qwen-moe"
       },
       "heartbeat": {
         "model": "litellm/qwen-moe",
         "every": "30m",
         "lightContext": false,
         "skipWhenBusy": false,
-        "isolatedSession": false,
+        "isolatedSession": true,
         "includeReasoning": false,
         "activeHours": {
           "start": "09:00",
@@ -88,7 +91,7 @@
         "id": "main",
         "name": "main",
         "workspace": "/home/node/.openclaw/workspace/main",
-        "sandbox":{
+        "sandbox": {
           "ssh": {
             // ssh -p 2222 -i ~/.openclaw/.ssh/id_rsa linuxserver.io@openclaw-workspace-main
             "target": "linuxserver.io@openclaw-workspace-main:2222"
@@ -111,7 +114,7 @@
         "id": "dina",
         "name": "dina",
         "workspace": "/home/node/.openclaw/workspace/dina",
-        "sandbox":{
+        "sandbox": {
           "ssh": {
             // ssh -p 2222 -i ~/.openclaw/.ssh/id_rsa linuxserver.io@openclaw-workspace-dina
             "target": "linuxserver.io@openclaw-workspace-dina:2222"
@@ -199,18 +202,27 @@
           "image",
           "lcm_grep",
           "lcm_describe",
-          "lcm_expand_query"
+          "lcm_expand_query",
+          "firecrawl_scrape",
+          "firecrawl_search"
         ]
       }
     },
     "web": {
       "search": {
-        "provider": "searxng",
-        "enabled": true
+        "enabled": true,
+        "provider": "firecrawl",
+        "maxResults": 10
+      },
+      "fetch": {
+        "firecrawl": {
+          "enabled": true,
+          "onlyMainContent": true
+        }
       }
     },
     "elevated": {
-      "enabled": true,
+      "enabled": false, // BUG: https://github.com/openclaw/openclaw/issues/46786
       "allowFrom": {
         "telegram": ["${TELEGRAM_MITHRAS}"]
       }
@@ -222,7 +234,7 @@
         "models": [
           {
             "provider": "openai",
-            "model": "distil-whisper/distil-large-v3.5-ct2"
+            "model": "istupakov/parakeet-tdt-0.6b-v3-onnx"
           }
         ]
       }
@@ -238,14 +250,6 @@
       },
       "telegram": {
         "enabled": true
-      },
-      "searxng": {
-        "enabled": true,
-        "config": {
-          "webSearch": {
-            "baseUrl": "http://searxng:8080/"
-          }
-        }
       },
       // openclaw plugins update @martian-engineering/lossless-claw
       "lossless-claw": {
@@ -294,6 +298,19 @@
           "allowModelOverride": true,
           "allowedModels": ["litellm/qwen-moe"]
         }
+      },
+      "firecrawl": {
+        "enabled": true,
+        "config": {
+          "webSearch": {
+            "baseUrl": "http://firecrawl:3002",
+            "apiKey": "na"
+          },
+          "webFetch": {
+            "baseUrl": "http://firecrawl:3002",
+            "apiKey": "na"
+          }
+        }
       }
     }
   },
@@ -309,7 +326,7 @@
         "openai": {
           "apiKey": "na",
           "model": "speaches-ai/Kokoro-82M-v1.0-ONNX",
-          "baseUrl": "http://192.168.0.2:8001/v1",
+          "baseUrl": "http://192.168.1.2:8001/v1",
           "voice": "af_heart",
           "responseFormat": "mp3"
         }
@@ -333,7 +350,7 @@
             "api": "openai-completions",
             "reasoning": true,
             "input": ["text", "image"],
-            "contextWindow": 150000,
+            "contextWindow": 200000,
             "maxTokens": 65536,
             "params": {
               "temperature": 0.6,
@@ -346,7 +363,7 @@
             "api": "openai-completions",
             "reasoning": true,
             "input": ["text", "image"],
-            "contextWindow": 262144,
+            "contextWindow": 200000,
             "maxTokens": 65536,
             "params": {
               "temperature": 0.6,
@@ -356,15 +373,15 @@
         ]
       },
       "openai": {
-        "baseUrl": "http://192.168.0.2:8001/v1",
+        "baseUrl": "http://192.168.1.2:8001/v1",
         "apiKey": "na",
         "request": {
           "allowPrivateNetwork": true
         },
         "models": [
           {
-            "id": "distil-whisper/distil-large-v3.5-ct2",
-            "name": "distil-whisper/distil-large-v3.5-ct2"
+            "id": "istupakov/parakeet-tdt-0.6b-v3-onnx",
+            "name": "istupakov/parakeet-tdt-0.6b-v3-onnx"
           },
           {
             "id": "speaches-ai/Kokoro-82M-v1.0-ONNX",
@@ -410,8 +427,8 @@
     "lastRunMode": "local"
   },
   "meta": {
-    "lastTouchedVersion": "2026.5.18",
-    "lastTouchedAt": "2026-05-22T18:44:01.063Z"
+    "lastTouchedVersion": "2026.6.1",
+    "lastTouchedAt": "2026-06-05T22:06:44.440Z"
   },
   "commands": {
     "ownerAllowFrom": ["telegram:${TELEGRAM_MITHRAS}"],
@@ -420,7 +437,12 @@
     }
   },
   "skills": {
+    // firecrawl setup skills --agent openclaw -g
+    // firecrawl setup workflows --agent openclaw -g
     "entries": {
+      "canvas": {
+        "enabled": false
+      },
       "1password": {
         "enabled": false
       },
@@ -566,6 +588,21 @@
         "enabled": false
       },
       "taskflow-inbox-triage": {
+        "enabled": false
+      },
+      "meme-maker": {
+        "enabled": false
+      },
+      "spike": {
+        "enabled": false
+      },
+      "node-inspect-debugger": {
+        "enabled": false
+      },
+      "diagram-maker": {
+        "enabled": false
+      },
+      "python-debugpy": {
         "enabled": false
       }
     }

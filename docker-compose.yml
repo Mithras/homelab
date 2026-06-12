@@ -1,6 +1,7 @@
 
 include:
   - path: litellm/docker-compose.yml
+  - path: firecrawl/docker-compose.yml
 
 services:
   mosquitto:
@@ -17,6 +18,7 @@ services:
     networks:
       - homelab
     user: "${UID}:${GID}"
+
   homeassistant:
     image: ghcr.io/home-assistant/home-assistant:stable
     container_name: homeassistant
@@ -36,10 +38,10 @@ services:
     # user: "${UID}:${GID}"
     networks:
       - homelab
-      - litellm
     cap_add:
       - NET_ADMIN
       - NET_RAW
+
   appdaemon:
     image: acockburn/appdaemon:latest
     container_name: appdaemon
@@ -53,6 +55,7 @@ services:
     user: "${UID}:${GID}"
     networks:
       - homelab
+
   zwavejs:
     image: zwavejs/zwave-js-ui:11.3 # 11.4 is busted
     container_name: zwavejs
@@ -72,6 +75,7 @@ services:
       - dialout
     networks:
       - homelab
+
   zigbee2mqtt:
     image: koenkk/zigbee2mqtt
     container_name: zigbee2mqtt
@@ -90,18 +94,7 @@ services:
       - dialout
     networks:
       - homelab
-  duckdns:
-    image: lscr.io/linuxserver/duckdns
-    container_name: duckdns
-    environment:
-      - PUID=${UID}
-      - PGID=${GID}
-      - TZ=America/Los_Angeles
-      - SUBDOMAINS=${DUCKDNS_SUBDOMAIN}
-      - TOKEN=${DUCKDNS_TOKEN}
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    restart: unless-stopped
+
   syncthing:
     image: syncthing/syncthing
     container_name: syncthing
@@ -120,6 +113,7 @@ services:
       # - 21027:21027/udp # Receive local discovery broadcasts
     networks:
       - homelab
+
   nginx-proxy-manager:
     image: jc21/nginx-proxy-manager
     restart: unless-stopped
@@ -129,38 +123,21 @@ services:
     ports:
       - 81:81 # Admin
       # - 3000:3000 # breaks nginx
-      - 3002:3002 # Open WebUI
+      # - 3002:3002 # Open WebUI
       - 8443:8443 # Home Assistant
       - 8384:8384 # Syncthing
       # - 6680:6680 # mpd
       - 8888:8888 # searxng
       # - 8001:8001 # Speaches
-      - 3003:3003 # Vane
-      - 4096:4096 # Opencode
+      # - 3003:3003 # Vane
+      # - 4096:4096 # Opencode
       - 4001:4001 # Litellm (litellm:4000)
     volumes:
       - ./nginx-proxy-manager/data:/data
       - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
     networks:
       - homelab
-      - litellm
-  open-webui:
-    image: ghcr.io/open-webui/open-webui:main
-    container_name: open-webui
-    restart: unless-stopped
-    hostname: open-webui
-    environment:
-      # https://docs.openwebui.com/getting-started/env-configuration/
-      # General
-      # - WEBUI_AUTH=0
-      - ENABLE_SIGNUP=0
-      # - RESET_CONFIG_ON_START=1
-    volumes:
-      - ./open-webui/data:/app/backend/data
-    # ports:
-    #   - 3003:8080 # Web UI
-    networks:
-      - homelab
+
   searxng:
     image: docker.io/searxng/searxng
     container_name: searxng
@@ -174,76 +151,10 @@ services:
       - homelab
     ports:
       - 8889:8080
-  # https://github.com/modelcontextprotocol/inspector
-  # http://ubuntu1:6274/?transport=sse&serverUrl=http://mcp-proxy:8096/servers/home-assistant/sse
-  # http://ubuntu1:6274/?transport=sse&serverUrl=http://mcp-proxy:8096/servers/time/sse
-  mcp-inspector:
-    image: ghcr.io/modelcontextprotocol/inspector
-    restart: unless-stopped
-    environment:
-      ALLOWED_ORIGINS: http://ubuntu1:6274,http://192.168.0.6:6274
-      HOST: 0.0.0.0
-      DANGEROUSLY_OMIT_AUTH: "true"
-    ports:
-      - 6274:6274 # ui
-      - 6277:6277 # api/proxy
-    networks:
-      - homelab
-  # https://github.com/sparfenyuk/mcp-proxy
-  # http://ubuntu1:8096/status
-  mcp-proxy:
-    build:
-      context: ./mcp-proxy
-    restart: unless-stopped
-    command: >
-      --transport sse
-      --port 8096
-      --host 0.0.0.0
-      --named-server-config /app/config.json
-      --pass-environment
-    # --debug
-    environment:
-      API_ACCESS_TOKEN: ${HA_API_ACCESS_TOKEN}
-      SEARXNG_URL: http://searxng:8080/
-    volumes:
-      - ./mcp-proxy/config.json:/app/config.json
-      - ./mcp-proxy/memory:/app/memory
-      - ./mcp-proxy/basic-memory:/app/basic-memory
-    networks:
-      - homelab
-  # https://github.com/roryeckel/wyoming_openai/
-  wyoming-openai:
-    restart: unless-stopped
-    image: ghcr.io/roryeckel/wyoming_openai:latest
-    environment:
-      STT_OPENAI_URL: http://mithras-pc:8001/v1
-      STT_MODELS: distil-whisper/distil-large-v3.5-ct2
-      # STT_STREAMING_MODELS: distil-whisper/distil-large-v3.5-ct2
-      STT_BACKEND: SPEACHES
-      TTS_OPENAI_URL: http://mithras-pc:8001/v1
-      TTS_MODELS: speaches-ai/Kokoro-82M-v1.0-ONNX
-      TTS_BACKEND: SPEACHES
-      TTS_SPEED: "1.1"
-    networks:
-      - homelab
-
-  # https://github.com/ItzCrazyKns/Vane
-  vane:
-    image: itzcrazykns1337/vane:slim-latest
-    environment:
-      SEARXNG_API_URL: http://searxng:8080
-    restart: unless-stopped
-    ports:
-      - 3004:3000
-    volumes:
-      - ./vane:/home/vane/data
-    networks:
-      - homelab
-      - litellm
 
   openclaw:
     # image: ghcr.io/openclaw/openclaw
-    image: openclaw:20260528
+    image: openclaw:20260605
     restart: unless-stopped
     cap_drop:
       - NET_RAW
@@ -254,7 +165,9 @@ services:
       TZ: America/Los_Angeles
     volumes:
       - ./openclaw:/home/node/.openclaw
-      - .//openclaw/empoty.sh:/usr/local/bin/gog
+      - ./openclaw/empoty.sh:/usr/local/bin/gog
+      - ./openclaw/empoty.sh:/usr/local/bin/summarize
+      - ./openclaw/empoty.sh:/usr/local/bin/ffmpeg
       # Main
       - ./syncthing/Obsidian/Main/openclaw:/home/node/.openclaw/workspace/main
       - ./syncthing/Obsidian/Main:/home/node/.openclaw/workspace/main/obsidian
@@ -270,7 +183,8 @@ services:
       # - 18790:18790 # bridge
     networks:
       - homelab
-      - litellm
+      - openclaw-main
+      - openclaw-dina
   openclaw-workspace-main:
     # image: openclaw-workspace:full
     image: openclaw-workspace:agent
@@ -284,12 +198,13 @@ services:
       - ./openclaw-workspace/config:/config
       - ./openclaw-workspace/gogcli/main:/gogcli
       - ./openclaw-workspace/gogcli/main/90-gogenv.conf:/etc/ssh/sshd_config.d/90-gogenv.conf
+      - ./openclaw-workspace/90-firecrawl.conf:/etc/ssh/sshd_config.d/90-firecrawl.conf
       - ./syncthing/Obsidian/Main/openclaw:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace
       - ./syncthing/Obsidian/Main:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian
       - /tmp/empty:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian/openclaw
       - ./openclaw-workspace/workspace/main/scrap:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/scrap
     networks:
-      - homelab
+      - openclaw-main
   openclaw-workspace-dina:
     # image: openclaw-workspace:full
     image: openclaw-workspace:agent
@@ -303,64 +218,15 @@ services:
       - ./openclaw-workspace/config:/config
       - ./openclaw-workspace/gogcli/dina:/gogcli
       - ./openclaw-workspace/gogcli/dina/90-gogenv.conf:/etc/ssh/sshd_config.d/90-gogenv.conf
+      - ./openclaw-workspace/90-firecrawl.conf:/etc/ssh/sshd_config.d/90-firecrawl.conf
       - ./syncthing/Obsidian-dina/main/openclaw:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace
       - ./syncthing/Obsidian-dina/main:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian
       - /tmp/empty:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian/openclaw
       - ./openclaw-workspace/workspace/dina/scrap:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/scrap
     networks:
-      - homelab
+      - openclaw-dina
 
 networks:
-  homelab:
-    name: homelab
-
-# ---
-
-# wyoming-piper:
-#   image: rhasspy/wyoming-piper
-#   command: --voice en_US-libritts_r-medium
-#   container_name: wyoming-piper
-#   restart: unless-stopped
-#   hostname: wyoming-piper
-#   volumes:
-#     - ./wyoming-piper/data:/data
-#   ports:
-#     - 10200:10200
-#   networks:
-#     - homelab
-
-# wyoming-whisper:
-#   image: rhasspy/wyoming-whisper
-#   command:
-#     - --model
-#     # - medium-int8 # 3-4s
-#     # - distil-medium.en # 4-5s
-#     # - medium.en # 5-6s
-#     # - distil-large-v2 # 8-9s
-#     - ellisd/faster-whisper-distil-medium-en-int8 # 3s
-#     # - ellisd/faster-whisper-distil-large-v2-en-int8 # 5s
-#     - --language
-#     - en
-#   container_name: wyoming-whisper
-#   restart: unless-stopped
-#   hostname: wyoming-whisper
-#   volumes:
-#     - ./wyoming-whisper/data:/data
-#   ports:
-#     - 10300:10300
-#   networks:
-#     - homelab
-
-# adguardhome:
-#   image: adguard/adguardhome
-#   container_name: adguardhome
-#   restart: unless-stopped
-#   volumes:
-#     - ./adguard/work:/opt/adguardhome/work
-#     - ./adguard/conf:/opt/adguardhome/conf
-#     - /etc/localtime:/etc/localtime:ro
-#   ports:
-#     - 53:53/tcp
-#     - 53:53/udp
-#     - 3000:3000
-#   user: "${UID}:${GID}"
+  homelab: {}
+  openclaw-main: {}
+  openclaw-dina: {}

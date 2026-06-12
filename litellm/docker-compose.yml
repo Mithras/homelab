@@ -16,6 +16,7 @@ services:
     depends_on:
       - db
     networks:
+      - homelab
       - litellm
     healthcheck:
       test:

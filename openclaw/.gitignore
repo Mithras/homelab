@@ -1,7 +1,6 @@
 *
 
 !cron/
-!cron/jobs.json
 
 !.gitignore
 !.env.example

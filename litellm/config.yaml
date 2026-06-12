@@ -3,7 +3,7 @@ model_list:
     litellm_params:
       litellm_credential_name: pc
       custom_llm_provider: custom_openai
-      model: qwen36-27
+      model: Qwen3.6-27B-UD-Q5_K_XL.gguf
       tags: ["pc"]
       additional_drop_params: ["reasoning_effort"]
     model_info:
@@ -29,17 +29,17 @@ model_list:
 credential_list:
   - credential_name: pc
     credential_values:
-      api_base: http://192.168.0.2:8080/v1
+      api_base: http://192.168.1.2:8080/v1
       api_key: na
     credential_info: {}
   - credential_name: gx10
     credential_values:
-      api_base: http://192.168.0.126:8000/v1
+      api_base: http://192.168.1.8:8000/v1
       api_key: na
     credential_info: {}
   - credential_name: gx10-embedding
     credential_values:
-      api_base: http://192.168.0.126:8081/v1
+      api_base: http://192.168.1.8:8081/v1
       api_key: na
     credential_info: {}
 
@@ -60,7 +60,7 @@ litellm_settings:
 #   - search_tool_name: searxng-search
 #     litellm_params:
 #       search_provider: searxng
-#       api_base: http://192.168.0.6:8889/
+#       api_base: http://192.168.1.4:8889/
 
 router_settings:
   routing_strategy: simple-shuffle  # `least-busy` doesn't work
@@ -69,3 +69,4 @@ router_settings:
     qwen-moe: qwen36-35
     qwen-embedding: qwen3-4-embedding
     # experimental: 
+    o3-mini: qwen36-27 # BUG: https://github.com/firecrawl/firecrawl/pull/3332

@@ -19,33 +19,21 @@
       "type": "openai",
       "config": {
         "name": "litellm",
-        "apiKey": "",
+        "apiKey": "TODO",
         "baseURL": "http://litellm:4000/v1"
       },
       "chatModels": [
         {
-          "name": "Qwen3.5-27B",
-          "key": "Qwen3.5-27B"
+          "name": "qwen-dense",
+          "key": "qwen-dense"
         },
         {
-          "name": "qwen36-35",
-          "key": "qwen36-35"
+          "name": "qwen-moe",
+          "key": "qwen-moe"
         }
       ],
       "embeddingModels": [],
       "hash": "3d0442a40018e0a9239d733d8f8a1dbcdf3ee94fd8337eb7f63d8f20734f4d0d"
-    },
-    {
-      "id": "66d5e575-a49e-474a-a38f-d50dc15c7ea0",
-      "name": "OpenAI",
-      "type": "openai",
-      "chatModels": [],
-      "embeddingModels": [],
-      "config": {
-        "apiKey": "sk-3-FrQ25jfPLKN2Nwp7AwyQ",
-        "baseURL": "https://api.openai.com/v1"
-      },
-      "hash": "72f170e6aea23e44d0c41cd2531e104cf21eca8931bd426c17df177d0d8e1675"
     }
   ],
   "search": {
