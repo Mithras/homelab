@@ -2,6 +2,8 @@
 
 docker run -it --rm --env-file .env -v ./download:/download hf-cli /bin/bash
 
+# hf download 'istupakov/parakeet-tdt-0.6b-v3-onnx' --local-dir /download/parakeet-tdt-0.6b-v3-onnx --include '*'
+
 # hf download 'Qwen/Qwen3-Embedding-4B-GGUF' --local-dir /download/Qwen3-Embedding-4B-GGUF --include 'Qwen3-Embedding-4B-Q4_K_M.gguf'
 
 # hf download 'unsloth/Qwen3.5-122B-A10B-GGUF' --local-dir /download/qwen3.5-122 --include 'UD-Q5_K_XL/*' --include 'mmproj-BF16.gguf'
