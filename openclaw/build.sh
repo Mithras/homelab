@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -e
 
-OLD_SSH_BACKEND_SHA="7134fceb3403afb9b78eea851ff1a3518afd1bc1dece68c8493656a2afa6c292"
+OLD_SSH_BACKEND_SHA="0be2fa9b8bfe0f8fe1c0f2ce89eaee95a36561aa4fadbb6e1e97cb295a3781f1"
 NEW_SSH_BACKEND_SHA=$(curl -sL "https://raw.githubusercontent.com/openclaw/openclaw/main/src/agents/sandbox/ssh-backend.ts" | sha256sum | awk '{print $1}')
 if [ "$NEW_SSH_BACKEND_SHA" != "$OLD_SSH_BACKEND_SHA" ]; then
   echo "⚠️  ssh-backend.ts has changed! Review https://github.com/openclaw/openclaw/blob/main/src/agents/sandbox/ssh-backend.ts and make sure ssh-wrapper.sh still works."

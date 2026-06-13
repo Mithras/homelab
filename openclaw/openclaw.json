@@ -91,6 +91,11 @@
         "id": "main",
         "name": "main",
         "workspace": "/home/node/.openclaw/workspace/main",
+        "heartbeat": {
+          "session": "agent:main:telegram:direct:${TELEGRAM_MITHRAS}",
+          "target": "telegram",
+          "to": "${TELEGRAM_MITHRAS}"
+        },
         "sandbox": {
           "ssh": {
             // ssh -p 2222 -i ~/.openclaw/.ssh/id_rsa linuxserver.io@openclaw-workspace-main
@@ -103,17 +108,17 @@
               "alsoAllow": ["gateway"]
             }
           }
-        },
-        "heartbeat": {
-          "session": "agent:main:telegram:direct:${TELEGRAM_MITHRAS}",
-          "target": "telegram",
-          "to": "${TELEGRAM_MITHRAS}"
         }
       },
       {
         "id": "dina",
         "name": "dina",
         "workspace": "/home/node/.openclaw/workspace/dina",
+        "heartbeat": {
+          "session": "agent:dina:telegram:direct:${TELEGRAM_DINA}",
+          "target": "telegram",
+          "to": "${TELEGRAM_DINA}"
+        },
         "sandbox": {
           "ssh": {
             // ssh -p 2222 -i ~/.openclaw/.ssh/id_rsa linuxserver.io@openclaw-workspace-dina
@@ -124,11 +129,6 @@
           "elevated": {
             "enabled": false
           }
-        },
-        "heartbeat": {
-          "session": "agent:dina:telegram:direct:${TELEGRAM_DINA}",
-          "target": "telegram",
-          "to": "${TELEGRAM_DINA}"
         }
       }
     ]
@@ -216,8 +216,7 @@
       },
       "fetch": {
         "firecrawl": {
-          "enabled": true,
-          "onlyMainContent": true
+          "enabled": true
         }
       }
     },
@@ -265,6 +264,10 @@
         "llm": {
           "allowModelOverride": true,
           "allowedModels": ["litellm/qwen-moe"]
+        },
+        "subagent": {
+          "allowModelOverride": true,
+          "allowedModels": ["litellm/qwen-moe"]
         }
       },
       "active-memory": {
@@ -288,6 +291,7 @@
         }
       },
       "memory-core": {
+        "enabled": true,
         "config": {
           "dreaming": {
             "enabled": true,
@@ -308,7 +312,8 @@
           },
           "webFetch": {
             "baseUrl": "http://firecrawl:3002",
-            "apiKey": "na"
+            "apiKey": "na",
+            "onlyMainContent": true
           }
         }
       }
@@ -327,8 +332,8 @@
           "apiKey": "na",
           "model": "speaches-ai/Kokoro-82M-v1.0-ONNX",
           "baseUrl": "http://192.168.1.2:8001/v1",
-          "voice": "af_heart",
-          "responseFormat": "mp3"
+          "responseFormat": "mp3",
+          "speakerVoice": "af_heart"
         }
       }
     }
@@ -417,18 +422,22 @@
           "topics": {}
         }
       },
-      "botToken": "${TELEGRAM_BOT_TOKEN}"
+      "botToken": "${TELEGRAM_BOT_TOKEN}",
+      "webhookUrl": "${TELEGRAM_WEBHOOK_URL}",
+      "webhookPath": "${TELEGRAM_WEBHOOK_PATH}",
+      "webhookHost": "0.0.0.0",
+      "webhookSecret": "${TELEGRAM_WEBHOOK_SECRET}"
     }
   },
   "wizard": {
-    "lastRunAt": "2026-05-09T04:21:36.921Z",
-    "lastRunVersion": "2026.5.7",
-    "lastRunCommand": "onboard",
+    "lastRunAt": "2026-06-13T02:48:16.444Z",
+    "lastRunVersion": "2026.6.6",
+    "lastRunCommand": "doctor",
     "lastRunMode": "local"
   },
   "meta": {
-    "lastTouchedVersion": "2026.6.1",
-    "lastTouchedAt": "2026-06-05T22:06:44.440Z"
+    "lastTouchedVersion": "2026.6.6",
+    "lastTouchedAt": "2026-06-13T02:48:16.542Z"
   },
   "commands": {
     "ownerAllowFrom": ["telegram:${TELEGRAM_MITHRAS}"],

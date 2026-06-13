@@ -154,7 +154,7 @@ services:
 
   openclaw:
     # image: ghcr.io/openclaw/openclaw
-    image: openclaw:20260605
+    image: openclaw:20260612
     restart: unless-stopped
     cap_drop:
       - NET_RAW
@@ -165,9 +165,6 @@ services:
       TZ: America/Los_Angeles
     volumes:
       - ./openclaw:/home/node/.openclaw
-      - ./openclaw/empoty.sh:/usr/local/bin/gog
-      - ./openclaw/empoty.sh:/usr/local/bin/summarize
-      - ./openclaw/empoty.sh:/usr/local/bin/ffmpeg
       # Main
       - ./syncthing/Obsidian/Main/openclaw:/home/node/.openclaw/workspace/main
       - ./syncthing/Obsidian/Main:/home/node/.openclaw/workspace/main/obsidian
@@ -181,6 +178,7 @@ services:
     ports:
       - 18789:18789 # gateway
       # - 18790:18790 # bridge
+      - 8787:8787 # telegram
     networks:
       - homelab
       - openclaw-main
@@ -189,6 +187,11 @@ services:
     # image: openclaw-workspace:full
     image: openclaw-workspace:agent
     restart: unless-stopped
+    cap_drop:
+      - NET_RAW
+      - NET_ADMIN
+    security_opt:
+      - no-new-privileges:true
     environment:
       PUID: ${UID}
       PGID: ${GID}
@@ -209,6 +212,11 @@ services:
     # image: openclaw-workspace:full
     image: openclaw-workspace:agent
     restart: unless-stopped
+    cap_drop:
+      - NET_RAW
+      - NET_ADMIN
+    security_opt:
+      - no-new-privileges:true
     environment:
       PUID: ${UID}
       PGID: ${GID}
