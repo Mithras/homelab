@@ -1,0 +1,9 @@
+tmp
+
+data/*
+!data/config.yaml
+!data/.env.example
+# !data/cron
+# !data/hooks
+# !data/kanban
+# !data/skills

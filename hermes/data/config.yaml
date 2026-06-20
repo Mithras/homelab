@@ -1,0 +1,171 @@
+# P1
+#  - context (lcm?) / reset
+#  - memory (rag/embeding/reranker, data/memories)
+#  - firecrawl cli + skills
+#  - telegram webhook
+#  - tools/skills (data/skills)
+#  - multiline tui
+#  - Email
+#  - default (local) + mithras (sandbox) profiles
+#  - mithras-pc (PC) profile
+
+# P2
+# - mcp: linkedin
+# - Home Assistant
+# - pdf?
+# - rag?
+# - browser?
+
+_config_version: 30
+
+terminal:
+  # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@openclaw-workspace-main
+  # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@openclaw-workspace-dina
+  backend: ssh
+  cwd: /opt/data/home
+  file_sync_enabled: false
+platforms:
+  telegram:
+    extra:
+      ignore_root_dm: true
+      # disable_link_previews: true
+      dm_topics:
+        - chat_id: ${TELEGRAM_USER}
+          topics:
+          - name: System
+            thread_id: ${TELEGRAM_USER_SYSTEM}
+        # - name: Research
+        #   skill: xxx
+      group_topics: {}
+telegram:
+  reactions: true
+display:
+  interface: tui
+  busy_input_mode: steer # interrupt | queue | steer
+  streaming: true
+  platforms:
+    telegram:
+      streaming: true
+  # runtime_footer:
+  #   enabled: true
+  #   fields: ["model", "context_pct", "cwd"]
+skills: {}
+# agent:
+#   enabled_toolsets: []
+#   disabled_toolsets: []
+# quick_commands:
+#   xxx:
+#     type: exec
+#     command: yyy
+#   xxx:
+#     type: alias
+#     target: /yyy
+# context:
+#   engine: "lcm"
+compression:
+  threshold: 0.7
+  target_ratio: 0.2
+  protect_first_n: 0
+  protect_last_n: 20
+platform_toolsets:
+  cli:
+  - browser
+  - clarify
+  - code_execution
+  - context_engine
+  - cronjob
+  - delegation
+  - file
+  # - homeassistant
+  # - image_gen
+  - memory
+  - session_search
+  - skills
+  - terminal
+  - todo
+  - tts
+  - vision
+  - web
+  telegram:
+  - browser
+  - clarify
+  - code_execution
+  - context_engine
+  - cronjob
+  - delegation
+  - file
+  # - homeassistant
+  # - image_gen
+  - memory
+  - session_search
+  - skills
+  - terminal
+  - todo
+  - tts
+  - vision
+  - web
+security:
+  tirith_enabled: true
+approvals:
+  mode: smart  # manual | smart
+  destructive_slash_confirm: false
+timezone: America/Los_Angeles
+onboarding:
+  seen:
+    busy_input_prompt: true
+
+model:
+  default: qwen-dense
+  provider: litellm
+providers:
+  litellm:
+    api: http://litellm:4000
+    name: litellm
+    api_key: ${LITELLM_API_KEY}
+    models:
+      qwen-dense:
+        context_length: 262144
+      qwen-moe:
+        context_length: 262144
+      # qwen-embedding: {}
+    default_model: qwen-dense
+auxiliary:
+  approval:
+    model: qwen-moe
+    provider: litellm
+  profile_describer:
+    model: qwen-moe
+    provider: litellm
+  title_generation:
+    model: qwen-moe
+    provider: litellm
+  tts_audio_tags:
+    model: qwen-moe
+    provider: litellm
+  vision:
+    model: qwen-moe
+    provider: litellm
+  web_extract: {}
+  compression: {}
+  skills_hub: {}
+  mcp: {}
+  triage_specifier: {}
+  kanban_decomposer: {}
+  curator: {}
+  monitor: {}
+delegation: {}
+tts:
+  provider: openai
+  openai:
+    model: speaches-ai/Kokoro-82M-v1.0-ONNX
+    voice: af_heart
+    speed: 1.25
+    base_url: http://mithras-pc:8001/v1
+    api_key: na
+stt:
+  enabled: true
+  provider: openai
+  openai:
+    model: istupakov/parakeet-tdt-0.6b-v3-onnx
+    base_url: http://mithras-pc:8001/v1
+    api_key: na

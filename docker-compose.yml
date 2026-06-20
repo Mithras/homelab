@@ -1,4 +1,3 @@
-
 include:
   - path: litellm/docker-compose.yml
   - path: firecrawl/docker-compose.yml
@@ -57,7 +56,7 @@ services:
       - homelab
 
   zwavejs:
-    image: zwavejs/zwave-js-ui:11.3 # 11.4 is busted
+    image: zwavejs/zwave-js-ui
     container_name: zwavejs
     restart: unless-stopped
     environment:
@@ -200,12 +199,16 @@ services:
     volumes:
       - ./openclaw-workspace/config:/config
       - ./openclaw-workspace/gogcli/main:/gogcli
-      - ./openclaw-workspace/gogcli/main/90-gogenv.conf:/etc/ssh/sshd_config.d/90-gogenv.conf
-      - ./openclaw-workspace/90-firecrawl.conf:/etc/ssh/sshd_config.d/90-firecrawl.conf
       - ./syncthing/Obsidian/Main/openclaw:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace
       - ./syncthing/Obsidian/Main:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian
       - /tmp/empty:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian/openclaw
       - ./openclaw-workspace/workspace/main/scrap:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/scrap
+      - ./openclaw-workspace/workspace/main/90-envs.conf:/etc/ssh/sshd_config.d/90-envs.conf
+
+      - ./hermes/data:/config/.hermes:ro
+      - ./hermes/data:/opt/data:ro
+      - ./syncthing/Obsidian/Main:/opt/data/home
+      - ./hermes/tmp:/tmp
     networks:
       - openclaw-main
   openclaw-workspace-dina:
@@ -225,13 +228,40 @@ services:
     volumes:
       - ./openclaw-workspace/config:/config
       - ./openclaw-workspace/gogcli/dina:/gogcli
-      - ./openclaw-workspace/gogcli/dina/90-gogenv.conf:/etc/ssh/sshd_config.d/90-gogenv.conf
-      - ./openclaw-workspace/90-firecrawl.conf:/etc/ssh/sshd_config.d/90-firecrawl.conf
       - ./syncthing/Obsidian-dina/main/openclaw:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace
       - ./syncthing/Obsidian-dina/main:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian
       - /tmp/empty:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian/openclaw
       - ./openclaw-workspace/workspace/dina/scrap:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/scrap
+      - ./openclaw-workspace/workspace/dina/90-envs.conf:/etc/ssh/sshd_config.d/90-envs.conf
     networks:
+      - openclaw-dina
+
+  # docker exec -it hermes hermes
+  hermes:
+    container_name: hermes
+    image: hermes-agent
+    command: gateway run
+    restart: unless-stopped
+    cap_drop:
+      - NET_RAW
+      - NET_ADMIN
+    security_opt:
+      - no-new-privileges:true
+    env_file:
+      - ./hermes/.env
+    environment:
+      HERMES_UID: ${UID}
+      HERMES_GID: ${GID}
+      HERMES_DASHBOARD: "1"
+      HERMES_DASHBOARD_INSECURE: "1"
+    volumes:
+      - ./hermes/data:/opt/data
+      - ./hermes/tmp:/tmp
+    ports:
+      - 9119:9119 # dashboard
+    networks:
+      - homelab
+      - openclaw-main
       - openclaw-dina
 
 networks:

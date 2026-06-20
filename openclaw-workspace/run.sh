@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker run -it --rm openssh-server /bin/ash
+docker run -it --rm openclaw-workspace:full /bin/ash

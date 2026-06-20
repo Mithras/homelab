@@ -16,7 +16,7 @@ RUN go build -o /out/gog-full ./cmd/gog && \
 FROM lscr.io/linuxserver/openssh-server AS agent
 
 RUN apk add --no-cache \
-    ca-certificates tzdata curl git jq python3 ripgrep ffmpeg nodejs npm
+    ca-certificates tzdata curl git jq python3 ripgrep ffmpeg nodejs npm tar
 
 RUN npm i -g @steipete/summarize firecrawl-cli
 
@@ -26,7 +26,7 @@ COPY --from=build /out/gog-agent /usr/local/bin/gog
 FROM lscr.io/linuxserver/openssh-server AS full
 
 RUN apk add --no-cache \
-    ca-certificates tzdata curl git jq python3 ripgrep ffmpeg nodejs npm
+    ca-certificates tzdata curl git jq python3 ripgrep ffmpeg nodejs npm tar
 
 RUN npm i -g @steipete/summarize firecrawl-cli
 
