@@ -205,9 +205,8 @@ services:
       - ./openclaw-workspace/workspace/main/scrap:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/scrap
       - ./openclaw-workspace/workspace/main/90-envs.conf:/etc/ssh/sshd_config.d/90-envs.conf
 
-      - ./hermes/data:/config/.hermes:ro
-      - ./hermes/data:/opt/data:ro
-      - ./syncthing/Obsidian/Main:/opt/data/home
+      - ./hermes/mithras:/home/hermes/.hermes:ro
+      - ./syncthing/Obsidian/Main:/home/hermes/obsidian
       - ./hermes/tmp:/tmp
     networks:
       - openclaw-main
@@ -233,11 +232,15 @@ services:
       - /tmp/empty:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian/openclaw
       - ./openclaw-workspace/workspace/dina/scrap:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/scrap
       - ./openclaw-workspace/workspace/dina/90-envs.conf:/etc/ssh/sshd_config.d/90-envs.conf
+
+      - ./hermes/dina:/home/hermes/.hermes:ro
+      - ./syncthing/Obsidian-dina/main:/home/hermes/obsidian
+      - ./hermes/tmp:/tmp
     networks:
       - openclaw-dina
 
   # docker exec -it hermes hermes
-  hermes:
+  hermes-mithras:
     container_name: hermes
     image: hermes-agent
     command: gateway run
@@ -255,13 +258,39 @@ services:
       HERMES_DASHBOARD: "1"
       HERMES_DASHBOARD_INSECURE: "1"
     volumes:
-      - ./hermes/data:/opt/data
+      - ./hermes/mithras:/opt/data
       - ./hermes/tmp:/tmp
     ports:
       - 9119:9119 # dashboard
     networks:
       - homelab
       - openclaw-main
+      - openclaw-dina
+  
+  hermes-dina:
+    container_name: hermes-dina
+    image: hermes-agent
+    command: gateway run
+    restart: unless-stopped
+    cap_drop:
+      - NET_RAW
+      - NET_ADMIN
+    security_opt:
+      - no-new-privileges:true
+    env_file:
+      - ./hermes/.env
+    environment:
+      HERMES_UID: ${UID}
+      HERMES_GID: ${GID}
+      HERMES_DASHBOARD: "1"
+      HERMES_DASHBOARD_INSECURE: "1"
+    volumes:
+      - ./hermes/dina:/opt/data
+      - ./hermes/tmp:/tmp
+    ports:
+      - 9120:9119 # dashboard
+    networks:
+      - homelab
       - openclaw-dina
 
 networks:

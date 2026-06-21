@@ -13,21 +13,21 @@ RUN go build -o /out/gog-full ./cmd/gog && \
     ./build-safe.sh safety-profiles/agent-safe.yaml -o /out/gog-agent
 
 # Stage 2: Final image with agent-safe gog binary
-FROM lscr.io/linuxserver/openssh-server AS agent
+FROM lscr.io/linuxserver/openssh-server AS openssh-server
 
 RUN apk add --no-cache \
     ca-certificates tzdata curl git jq python3 ripgrep ffmpeg nodejs npm tar
 
 RUN npm i -g @steipete/summarize firecrawl-cli
+
+
+# Stage 3: Final image with agent-safe gog binary
+FROM openssh-server AS agent
 
 COPY --from=build /out/gog-agent /usr/local/bin/gog
 
-# Stage 3: Final image with full gog binary
-FROM lscr.io/linuxserver/openssh-server AS full
 
-RUN apk add --no-cache \
-    ca-certificates tzdata curl git jq python3 ripgrep ffmpeg nodejs npm tar
-
-RUN npm i -g @steipete/summarize firecrawl-cli
+# Stage 4: Final image with full gog binary
+FROM openssh-server AS full
 
 COPY --from=build /out/gog-full /usr/local/bin/gog
