@@ -1,11 +1,11 @@
+# P0
+#   - memory (rag/embeding/reranker, data/memories)
+
 # P1
-#  - context (lcm?) / reset
-#  - memory (rag/embeding/reranker, data/memories)
 #  - firecrawl cli + skills
 #  - tools/skills (data/skills)
 #  - multiline tui
 #  - Email
-#  - default (local) + mithras (sandbox) profiles
 #  - mithras-pc (PC) profile
 
 # P2
@@ -50,11 +50,14 @@ display:
   streaming: true
   platforms:
     telegram:
-      streaming: true
+      streaming: false # `true` causes duplicated/intemediate messages
   # runtime_footer:
   #   enabled: true
   #   fields: ["model", "context_pct", "cwd"]
 skills: {}
+plugins:
+  enabled:
+    - hermes-lcm
 # agent:
 #   enabled_toolsets: []
 #   disabled_toolsets: []
@@ -65,13 +68,14 @@ skills: {}
 #   xxx:
 #     type: alias
 #     target: /yyy
-# context:
-#   engine: "lcm"
-compression:
-  threshold: 0.7
-  target_ratio: 0.2
-  protect_first_n: 0
-  protect_last_n: 20
+memory:
+  provider: byterover
+  memory_char_limit: 5000
+  user_char_limit: 2500
+context:
+  engine: "lcm"
+session_reset:
+  mode: none
 platform_toolsets:
   cli:
     - browser

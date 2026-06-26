@@ -208,6 +208,9 @@ services:
       - ./hermes/mithras:/home/hermes/.hermes:ro
       - ./syncthing/Obsidian/Main:/home/hermes/obsidian
       - ./hermes/tmp:/tmp
+      - ./syncthing/Obsidian/Main/hermes:/home/hermes/obsidian/hermes:ro
+      - ./syncthing/Obsidian/Main/hermes/memories:/home/hermes/.hermes/memories:ro
+      - ./syncthing/Obsidian/Main/hermes/skills:/home/hermes/.hermes/skills:ro
     networks:
       - openclaw-main
   openclaw-workspace-dina:
@@ -236,12 +239,14 @@ services:
       - ./hermes/dina:/home/hermes/.hermes:ro
       - ./syncthing/Obsidian-dina/main:/home/hermes/obsidian
       - ./hermes/tmp:/tmp
+      - ./syncthing/Obsidian-dina/main/hermes:/home/hermes/obsidian/hermes:ro
+      - ./syncthing/Obsidian-dina/main/hermes/memories:/home/hermes/.hermes/memories:ro
+      - ./syncthing/Obsidian-dina/main/hermes/skills:/home/hermes/.hermes/skills:ro
     networks:
       - openclaw-dina
 
   # docker exec -it hermes hermes
   hermes-mithras:
-    container_name: hermes
     image: hermes-agent
     command: gateway run
     restart: unless-stopped
@@ -260,15 +265,15 @@ services:
     volumes:
       - ./hermes/mithras:/opt/data
       - ./hermes/tmp:/tmp
+      - ./syncthing/Obsidian/Main/hermes/memories:/opt/data/memories
+      - ./syncthing/Obsidian/Main/hermes/skills:/opt/data/skills
     ports:
       - 9119:9119 # dashboard
     networks:
       - homelab
       - openclaw-main
-      - openclaw-dina
   
   hermes-dina:
-    container_name: hermes-dina
     image: hermes-agent
     command: gateway run
     restart: unless-stopped
@@ -287,6 +292,8 @@ services:
     volumes:
       - ./hermes/dina:/opt/data
       - ./hermes/tmp:/tmp
+      - ./syncthing/Obsidian-dina/main/hermes/memories:/opt/data/memories
+      - ./syncthing/Obsidian-dina/main/hermes/skills:/opt/data/skills
     ports:
       - 9120:9119 # dashboard
     networks:

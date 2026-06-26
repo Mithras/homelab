@@ -73,4 +73,5 @@ class LivingRoom(globals.Hass):
         self._tv_timer = await self.run_in(self._turn_off_tv_async, self._tv_delay)
 
     async def _turn_off_tv_async(self, kwargs):
-        await self.common.turn_off_async(self._tv_input)
+        # await self.common.turn_off_async(self._tv_input)
+        pass
