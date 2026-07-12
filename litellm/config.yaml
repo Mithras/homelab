@@ -16,11 +16,11 @@ model_list:
       tags: ["gx10"]
     model_info:
       mode: embedding
-  - model_name: qwen36-35
+  - model_name: gb10-qwen36-27
     litellm_params:
       litellm_credential_name: gx10
       custom_llm_provider: custom_openai
-      model: Qwen/Qwen3.6-35B-A3B-FP8
+      model: gb10-qwen36-27
       tags: ["gx10"]
       additional_drop_params: ["reasoning_effort"]
     model_info:
@@ -48,7 +48,8 @@ general_settings:
 
 litellm_settings:
   fallbacks: 
-    - "qwen-dense": ["qwen-moe"]
+    - "pc": ["gb10"]
+    - "qwen36-27": ["gb10-qwen36-27"]
   # callbacks:
   #   - websearch_interception
   # websearch_interception_params:
@@ -65,8 +66,11 @@ litellm_settings:
 router_settings:
   routing_strategy: simple-shuffle  # `least-busy` doesn't work
   model_group_alias:
-    qwen-dense: qwen36-27
-    qwen-moe: qwen36-35
-    qwen-embedding: qwen3-4-embedding
-    # experimental: 
+    pc: qwen36-27
+    gb10: gb10-qwen36-27
+    embedding: qwen3-4-embedding
     o3-mini: qwen36-27 # BUG: https://github.com/firecrawl/firecrawl/pull/3332
+    # legacy
+    qwen-dense: qwen36-27
+    qwen-moe: gb10-qwen36-27
+    qwen-embedding: qwen3-4-embedding

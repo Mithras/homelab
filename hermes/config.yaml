@@ -1,25 +1,30 @@
 # P0
-#   - memory (rag/embeding/reranker, data/memories)
+#   - update
+#   - /journey
+#   - kanban
+#   - proper git
+#   - tui
 
 # P1
-#  - firecrawl cli + skills
-#  - tools/skills (data/skills)
-#  - multiline tui
-#  - Email
-#  - mithras-pc (PC) profile
+#   - memory (rag/embeding/reranker, data/memories)
+#   - firecrawl cli + skills
+#   - tools/skills (data/skills)
+#   - multiline tui
+#   - Email
+#   - mithras-pc (PC) profile
 
 # P2
-# - mcp: linkedin
-# - Home Assistant
-# - pdf?
-# - rag?
-# - browser?
+#   - mcp: linkedin
+#   - Home Assistant
+#   - pdf?
+#   - rag?
+#   - browser?
 
 _config_version: 30
 
 terminal:
-  # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@openclaw-workspace-main
-  # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@openclaw-workspace-dina
+  # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@sandbox-mithras
+  # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@sandbox-dina
   backend: ssh
   cwd: ${TERMINAL_CWD}
   file_sync_enabled: false
@@ -27,21 +32,6 @@ platforms:
   telegram:
     extra:
       ignore_root_dm: true
-      # disable_link_previews: true
-      dm_topics:
-        - chat_id: 499285727
-          topics:
-            - name: System
-              thread_id: 497283
-              # - name: Research
-              #   skill: xxx
-        - chat_id: 1476281988
-          topics:
-            - name: System
-              thread_id: 162266
-              # - name: Research
-              #   skill: xxx
-      group_topics: {}
 telegram:
   reactions: true
 display:
@@ -51,9 +41,6 @@ display:
   platforms:
     telegram:
       streaming: false # `true` causes duplicated/intemediate messages
-  # runtime_footer:
-  #   enabled: true
-  #   fields: ["model", "context_pct", "cwd"]
 skills: {}
 plugins:
   enabled:
@@ -61,13 +48,6 @@ plugins:
 # agent:
 #   enabled_toolsets: []
 #   disabled_toolsets: []
-# quick_commands:
-#   xxx:
-#     type: exec
-#     command: yyy
-#   xxx:
-#     type: alias
-#     target: /yyy
 memory:
   provider: byterover
   memory_char_limit: 5000
@@ -113,6 +93,11 @@ platform_toolsets:
     - tts
     - vision
     - web
+  cron:
+    - browser
+    - file
+    - terminal
+    - web
 security:
   tirith_enabled: true
 approvals:
@@ -124,7 +109,7 @@ onboarding:
     busy_input_prompt: true
 
 model:
-  default: qwen-dense
+  default: qwen36-27
   provider: litellm
 providers:
   litellm:
@@ -132,37 +117,15 @@ providers:
     name: litellm
     api_key: ${LITELLM_API_KEY}
     models:
-      qwen-dense:
+      qwen36-27:
         context_length: 262144
-      qwen-moe:
+        supports_vision: true
+      gb10-qwen36-27:
         context_length: 262144
-      # qwen-embedding: {}
-    default_model: qwen-dense
+    default_model: qwen36-27
 auxiliary:
-  approval:
-    model: qwen-moe
-    provider: litellm
-  profile_describer:
-    model: qwen-moe
-    provider: litellm
-  title_generation:
-    model: qwen-moe
-    provider: litellm
-  tts_audio_tags:
-    model: qwen-moe
-    provider: litellm
   vision:
-    model: qwen-moe
     provider: litellm
-  web_extract: {}
-  compression: {}
-  skills_hub: {}
-  mcp: {}
-  triage_specifier: {}
-  kanban_decomposer: {}
-  curator: {}
-  monitor: {}
-delegation: {}
 tts:
   provider: openai
   openai:

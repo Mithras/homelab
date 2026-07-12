@@ -1,3 +1,35 @@
+# openclaw:
+#   # image: ghcr.io/openclaw/openclaw
+#   image: openclaw:20260612
+#   restart: unless-stopped
+#   cap_drop:
+#     - NET_RAW
+#     - NET_ADMIN
+#   security_opt:
+#     - no-new-privileges:true
+#   environment:
+#     TZ: America/Los_Angeles
+#   volumes:
+#     - ./openclaw:/home/node/.openclaw
+#     # Main
+#     - ./syncthing/Obsidian/Main/openclaw:/home/node/.openclaw/workspace/main
+#     - ./syncthing/Obsidian/Main:/home/node/.openclaw/workspace/main/obsidian
+#     - ./openclaw-workspace/empty:/home/node/.openclaw/workspace/main/obsidian/openclaw
+#     - ./openclaw-workspace/workspace/main/scrap:/home/node/.openclaw/workspace/main/scrap
+#     # Dina
+#     - ./syncthing/Obsidian-dina/main/openclaw:/home/node/.openclaw/workspace/dina
+#     - ./syncthing/Obsidian-dina/main:/home/node/.openclaw/workspace/dina/obsidian
+#     - ./openclaw-workspace/empty:/home/node/.openclaw/workspace/dina/obsidian/openclaw
+#     - ./openclaw-workspace/workspace/dina/scrap:/home/node/.openclaw/workspace/dina/scrap
+#   ports:
+#     - 18789:18789 # gateway
+#     # - 18790:18790 # bridge
+#     - 8787:8787 # telegram
+#   networks:
+#     - homelab
+#     - openclaw-main
+#     - openclaw-dina
+
 # https://github.com/ItzCrazyKns/Vane
 # vane:
 #   image: itzcrazykns1337/vane:slim-latest

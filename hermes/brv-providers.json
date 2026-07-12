@@ -2,12 +2,12 @@
   "activeProvider": "openai-compatible",
   "providers": {
     "openai-compatible": {
-      "activeModel": "qwen-moe",
+      "activeModel": "gb10-qwen36-27",
       "authMethod": "api-key",
       "baseUrl": "http://litellm:4000/v1",
       "connectedAt": "2026-06-22T01:51:13.971Z",
       "favoriteModels": [],
-      "recentModels": ["qwen-moe"],
+      "recentModels": ["gb10-qwen36-27"],
       "activeModelContextLength": 262144
     }
   }

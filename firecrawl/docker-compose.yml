@@ -75,8 +75,6 @@ services:
         condition: service_started
       rabbitmq:
         condition: service_healthy
-    ports:
-      - "${PORT:-3002}:${INTERNAL_PORT:-3002}"
     ulimits:
       nofile:
         soft: 65535
@@ -84,6 +82,9 @@ services:
     networks:
       - homelab
       - firecrawl
+      - sandbox-main
+      - sandbox-dina
+      - sandbox-mom
 
   redis:
     image: redis:alpine
@@ -107,6 +108,7 @@ services:
   
   nuq-postgres:
     image: ghcr.io/firecrawl/nuq-postgres:latest
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}

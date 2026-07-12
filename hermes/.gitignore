@@ -8,8 +8,5 @@ mithras/*
 # !mithras/skills
 
 dina/*
-!dina/.env.example
-# !dina/cron
-# !dina/hooks
-# !dina/kanban
-# !dina/skills
+
+mom/*

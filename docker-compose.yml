@@ -1,3 +1,26 @@
+x-security-base: &security-base
+  restart: unless-stopped
+  cap_drop:
+    - NET_RAW
+    - NET_ADMIN
+  security_opt:
+    - no-new-privileges:true
+x-sandbox-base: &sandbox-base
+  <<: *security-base
+  # image: sandbox:full
+  image: sandbox:agent
+  environment:
+    PUID: ${UID}
+    PGID: ${GID}
+    TZ: America/Los_Angeles
+    LOG_STDOUT: "true"
+x-hermes-base: &hermes-base
+  <<: *security-base
+  image: hermes-agent
+  command: gateway run
+  env_file:
+    - ./hermes/.env
+
 include:
   - path: litellm/docker-compose.yml
   - path: firecrawl/docker-compose.yml
@@ -131,6 +154,8 @@ services:
       # - 3003:3003 # Vane
       # - 4096:4096 # Opencode
       - 4001:4001 # Litellm (litellm:4000)
+      - 9119:9119 # Hermes (mithras)
+      - 9120:9120 # Hermes (dina)
     volumes:
       - ./nginx-proxy-manager/data:/data
       - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
@@ -151,156 +176,98 @@ services:
     ports:
       - 8889:8080
 
-  openclaw:
-    # image: ghcr.io/openclaw/openclaw
-    image: openclaw:20260612
+  sandbox-mithras:
+    <<: *sandbox-base
     restart: unless-stopped
-    cap_drop:
-      - NET_RAW
-      - NET_ADMIN
-    security_opt:
-      - no-new-privileges:true
-    environment:
-      TZ: America/Los_Angeles
     volumes:
-      - ./openclaw:/home/node/.openclaw
-      # Main
-      - ./syncthing/Obsidian/Main/openclaw:/home/node/.openclaw/workspace/main
-      - ./syncthing/Obsidian/Main:/home/node/.openclaw/workspace/main/obsidian
-      - ./openclaw-workspace/empty:/home/node/.openclaw/workspace/main/obsidian/openclaw
-      - ./openclaw-workspace/workspace/main/scrap:/home/node/.openclaw/workspace/main/scrap
-      # Dina
-      - ./syncthing/Obsidian-dina/main/openclaw:/home/node/.openclaw/workspace/dina
-      - ./syncthing/Obsidian-dina/main:/home/node/.openclaw/workspace/dina/obsidian
-      - ./openclaw-workspace/empty:/home/node/.openclaw/workspace/dina/obsidian/openclaw
-      - ./openclaw-workspace/workspace/dina/scrap:/home/node/.openclaw/workspace/dina/scrap
-    ports:
-      - 18789:18789 # gateway
-      # - 18790:18790 # bridge
-      - 8787:8787 # telegram
-    networks:
-      - homelab
-      - openclaw-main
-      - openclaw-dina
-  openclaw-workspace-main:
-    # image: openclaw-workspace:full
-    image: openclaw-workspace:agent
-    restart: unless-stopped
-    cap_drop:
-      - NET_RAW
-      - NET_ADMIN
-    security_opt:
-      - no-new-privileges:true
-    environment:
-      PUID: ${UID}
-      PGID: ${GID}
-      TZ: America/Los_Angeles
-      LOG_STDOUT: "true"
-    volumes:
-      - ./openclaw-workspace/config:/config
-      - ./openclaw-workspace/gogcli/main:/gogcli
-      - ./syncthing/Obsidian/Main/openclaw:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace
-      - ./syncthing/Obsidian/Main:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian
-      - /tmp/empty:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/obsidian/openclaw
-      - ./openclaw-workspace/workspace/main/scrap:/workspace/openclaw-ssh-agent-main-25bffc4d/workspace/scrap
-      - ./openclaw-workspace/workspace/main/90-envs.conf:/etc/ssh/sshd_config.d/90-envs.conf
-
-      - ./hermes/mithras:/home/hermes/.hermes:ro
-      - ./syncthing/Obsidian/Main:/home/hermes/obsidian
+      # system
+      - ./sandbox/config:/config
+      - ./sandbox/sshd/mithras-envs.conf:/etc/ssh/sshd_config.d/90-envs.conf
       - ./hermes/tmp:/tmp
-      - ./syncthing/Obsidian/Main/hermes:/home/hermes/obsidian/hermes:ro
+      - ./sandbox/gogcli/main:/gogcli
+      # hermes
+      - ./hermes/mithras:/home/hermes/.hermes:ro
       - ./syncthing/Obsidian/Main/hermes/memories:/home/hermes/.hermes/memories:ro
       - ./syncthing/Obsidian/Main/hermes/skills:/home/hermes/.hermes/skills:ro
+      # obsidian
+      - ./syncthing/Obsidian/Main:/home/hermes/obsidian
+      - ./syncthing/Obsidian/Main/hermes:/home/hermes/obsidian/hermes:ro
     networks:
-      - openclaw-main
-  openclaw-workspace-dina:
-    # image: openclaw-workspace:full
-    image: openclaw-workspace:agent
+      - sandbox-main
+  sandbox-dina:
+    <<: *sandbox-base
     restart: unless-stopped
-    cap_drop:
-      - NET_RAW
-      - NET_ADMIN
-    security_opt:
-      - no-new-privileges:true
-    environment:
-      PUID: ${UID}
-      PGID: ${GID}
-      TZ: America/Los_Angeles
-      LOG_STDOUT: "true"
     volumes:
-      - ./openclaw-workspace/config:/config
-      - ./openclaw-workspace/gogcli/dina:/gogcli
-      - ./syncthing/Obsidian-dina/main/openclaw:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace
-      - ./syncthing/Obsidian-dina/main:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian
-      - /tmp/empty:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/obsidian/openclaw
-      - ./openclaw-workspace/workspace/dina/scrap:/workspace/openclaw-ssh-agent-dina-25b7f644/workspace/scrap
-      - ./openclaw-workspace/workspace/dina/90-envs.conf:/etc/ssh/sshd_config.d/90-envs.conf
-
-      - ./hermes/dina:/home/hermes/.hermes:ro
-      - ./syncthing/Obsidian-dina/main:/home/hermes/obsidian
+      # system
+      - ./sandbox/config:/config
+      - ./sandbox/sshd/dina-envs.conf:/etc/ssh/sshd_config.d/90-envs.conf
       - ./hermes/tmp:/tmp
-      - ./syncthing/Obsidian-dina/main/hermes:/home/hermes/obsidian/hermes:ro
+      - ./sandbox/gogcli/dina:/gogcli
+      # hermes
+      - ./hermes/dina:/home/hermes/.hermes:ro
       - ./syncthing/Obsidian-dina/main/hermes/memories:/home/hermes/.hermes/memories:ro
       - ./syncthing/Obsidian-dina/main/hermes/skills:/home/hermes/.hermes/skills:ro
+      # obsidian
+      - ./syncthing/Obsidian-dina/main:/home/hermes/obsidian
+      - ./syncthing/Obsidian-dina/main/hermes:/home/hermes/obsidian/hermes:ro
     networks:
-      - openclaw-dina
+      - sandbox-dina
+  sandbox-mom:
+    <<: *sandbox-base
+    restart: unless-stopped
+    volumes:
+      # system
+      - ./sandbox/config:/config
+      - ./sandbox/sshd/mom-envs.conf:/etc/ssh/sshd_config.d/90-envs.conf
+      - ./hermes/tmp:/tmp
+      # hermes
+      - ./hermes/dina:/home/hermes/.hermes:ro
+    networks:
+      - sandbox-mom
 
   # docker exec -it hermes hermes
   hermes-mithras:
-    image: hermes-agent
-    command: gateway run
+    <<: *hermes-base
     restart: unless-stopped
-    cap_drop:
-      - NET_RAW
-      - NET_ADMIN
-    security_opt:
-      - no-new-privileges:true
-    env_file:
-      - ./hermes/.env
     environment:
-      HERMES_UID: ${UID}
-      HERMES_GID: ${GID}
-      HERMES_DASHBOARD: "1"
-      HERMES_DASHBOARD_INSECURE: "1"
+      HERMES_DASHBOARD_BASIC_AUTH_USERNAME: mithras
+      HERMES_DASHBOARD_BASIC_AUTH_PASSWORD: ${HERMES_DASHBOARD_PASSWORD_MITHRAS}
+      HERMES_DASHBOARD_BASIC_AUTH_SECRET: ${HERMES_DASHBOARD_SECRET_MITHRAS}
     volumes:
       - ./hermes/mithras:/opt/data
       - ./hermes/tmp:/tmp
       - ./syncthing/Obsidian/Main/hermes/memories:/opt/data/memories
       - ./syncthing/Obsidian/Main/hermes/skills:/opt/data/skills
-    ports:
-      - 9119:9119 # dashboard
     networks:
       - homelab
-      - openclaw-main
-  
+      - sandbox-main
   hermes-dina:
-    image: hermes-agent
-    command: gateway run
+    <<: *hermes-base
     restart: unless-stopped
-    cap_drop:
-      - NET_RAW
-      - NET_ADMIN
-    security_opt:
-      - no-new-privileges:true
-    env_file:
-      - ./hermes/.env
     environment:
-      HERMES_UID: ${UID}
-      HERMES_GID: ${GID}
-      HERMES_DASHBOARD: "1"
-      HERMES_DASHBOARD_INSECURE: "1"
+      HERMES_DASHBOARD_BASIC_AUTH_USERNAME: dina
+      HERMES_DASHBOARD_BASIC_AUTH_PASSWORD: ${HERMES_DASHBOARD_PASSWORD_DINA}
+      HERMES_DASHBOARD_BASIC_AUTH_SECRET: ${HERMES_DASHBOARD_SECRET_DINA}
     volumes:
       - ./hermes/dina:/opt/data
       - ./hermes/tmp:/tmp
       - ./syncthing/Obsidian-dina/main/hermes/memories:/opt/data/memories
       - ./syncthing/Obsidian-dina/main/hermes/skills:/opt/data/skills
-    ports:
-      - 9120:9119 # dashboard
     networks:
       - homelab
-      - openclaw-dina
+      - sandbox-dina
+  hermes-mom:
+    <<: *hermes-base
+    restart: unless-stopped
+    volumes:
+      - ./hermes/mom:/opt/data
+      - ./hermes/tmp:/tmp
+    networks:
+      - homelab
+      - sandbox-mom
 
 networks:
   homelab: {}
-  openclaw-main: {}
-  openclaw-dina: {}
+  sandbox-main: {}
+  sandbox-dina: {}
+  sandbox-mom: {}
