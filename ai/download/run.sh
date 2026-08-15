@@ -13,6 +13,8 @@ docker run -it --rm --env-file .env -v ./download:/download hf-cli /bin/bash
 # hf download 'unsloth/Qwen3.6-35B-A3B-GGUF' --local-dir /download/qwen3.6-35 --include 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf' --include 'mmproj-BF16.gguf'
 # hf download 'unsloth/Qwen3.6-35B-A3B-MTP-GGUF' --local-dir /download/qwen3.6-35-mtp --include 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf' --include 'mmproj-BF16.gguf'
 
+# hf download 'unsloth/Qwen3.8-27B-GGUF' --local-dir /download/qwen3.8-27 --include 'Qwen3.8-27B-UD-Q5_K_XL.gguf' --include 'mmproj-BF16.gguf'
+
 
 # ---
 

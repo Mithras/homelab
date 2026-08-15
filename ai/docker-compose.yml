@@ -105,12 +105,57 @@ x-ds-env: &ds-env
   VLLM_DSPARK_HARDWARE_SCHEDULER_EARLY_STOP: "1"
 
 services:
+
+  vllm-5090-qwen38-27:
+    <<: [*gpu-0]
+    # image: vllm/vllm-openai:latest-cu130-ubuntu2404  # official
+    image: vllm/vllm-openai:qwen38-x86_64-cu130  # official qwen 3.8
+    restart: unless-stopped
+    entrypoint: vllm
+    command: >
+      serve unsloth/Qwen3.8-27B-NVFP4
+        --host 0.0.0.0 --port 8000
+        --gpu-memory-utilization 0.95
+        --max-num-seqs 1
+        --max-num-batched-tokens 4096
+        --enable-prefix-caching
+        --enable-auto-tool-choice
+        --trust-remote-code
+        --attention-backend flashinfer
+        --served-model-name qwen38-27
+
+        --kv-cache-dtype fp8
+        --max-model-len auto
+        --reasoning-parser qwen3
+        --tool-call-parser qwen3_xml
+        --speculative-config '{"method":"mtp","num_speculative_tokens":3}'
+        --default-chat-template-kwargs '{"preserve_thinking":true,"reasoning_effort": "medium"}'
+        --override-generation-config '{"temperature":0.6,"top_p":0.95,"top_k":20,"min_p":0.0,"presence_penalty":0.0,"repetition_penalty":1.0}'
+        --stream-interval 10
+        --enable-chunked-prefill
+        --no-scheduler-reserve-full-isl
+    # ---
+    # --language-model-only
+    # --max-num-seqs 4  # https://github.com/vllm-project/vllm/pull/42603
+    # GPU KV cache size: num_speculative_tokens=2: 142,400 tokens
+    # GPU KV cache size: num_speculative_tokens=3: 137,600 tokens
+    environment:
+      # Init
+      SAFETENSORS_FAST_GPU: "1"
+      VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS: "0"
+      # PYTORCH_TUNABLEOP_ENABLED: "1"
+
+      # Runtime
+      VLLM_ALLOW_LONG_MAX_MODEL_LEN: "1"
+    volumes:
+      - ./vllm/cache:/root/.cache
+    network_mode: host
+
   llama-pc:
     <<: [*gpu-all]
     restart: unless-stopped
-    image: llama:server-cuda
-    # --models-preset /app/config.ini
-    # --models-max 1
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda13
+    # image: llama:server-cuda
     command: >
       --host 0.0.0.0
       --port 8080
@@ -132,7 +177,8 @@ services:
       --mmproj /download/qwen3.6-27-mtp/mmproj-BF16.gguf
       -dev CUDA0,CUDA1
       --ctx-size 524288
-      --tensor-split 100,55
+      --split-mode layer
+      --tensor-split 100,45
       --cache-type-k q8_0
       --cache-type-v q8_0
       --parallel 2
@@ -148,11 +194,62 @@ services:
       --reasoning-budget 4096
       --reasoning-budget-message ". Okay enough thinking. Let's just jump to it."
       --chat-template-kwargs "{\"preserve_thinking\": true}"
+    # --split-mode tensor  # slower pp, faster tg
+    # --spec-draft-p-min 0.75  # slower
+    # --tensor-split 100,55  # 5090 is main
+      # --tensor-split 100,40  # 3090 is main
+    # --models-preset /app/config.ini
+    # --models-max 1
     volumes:
       - ./llama/config-pc.ini:/app/config.ini
       - ./download/download:/download
     network_mode: host
 
+  llama-pc-5090:
+    <<: [*gpu-all]
+    restart: unless-stopped
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda13
+    command: >
+      --host 0.0.0.0
+      --port 8080
+      --offline
+
+      --threads 16
+      -ngl all
+      --no-mmap
+      --prio 2
+      --prio-batch 2
+
+      --flash-attn on
+      --jinja
+      --cache-ram 32768
+      --cache-reuse 256
+      --no-kv-unified
+
+      --model /download/qwen3.8-27/Qwen3.8-27B-UD-Q5_K_XL.gguf
+      --mmproj /download/qwen3.8-27/mmproj-BF16.gguf
+      -dev CUDA0
+      --ctx-size 196608
+      --cache-type-k q8_0
+      --cache-type-v q8_0
+      --parallel 1
+      --spec-type draft-mtp
+      --spec-draft-n-max 2
+
+      --temp 1.0
+      --top-p 0.95
+      --top-k 20
+      --min-p 0.0
+      --presence-penalty 0.0
+      --repeat-penalty 1.0
+      --reasoning-budget 4096
+      --reasoning-budget-message ". Okay enough thinking. Let's just jump to it."
+      --chat-template-kwargs '{"preserve_thinking": true, "reasoning_effort": "medium"}'
+    volumes:
+      - ./llama/config-pc.ini:/app/config.ini
+      - ./download/download:/download
+    network_mode: host
+    
   llama-gb10-embedding:
     <<: [*gpu-all]
     restart: unless-stopped

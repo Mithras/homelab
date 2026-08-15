@@ -11,3 +11,4 @@ docker run -it --rm \
     "$@"
 
 # ./run.sh --base-url 'http://localhost:8000/v1' --model 'deepseek-v4-flash-0731'
+# ./run.sh --base-url 'http://mithras-pc:8001/v1' --model 'qwen38-27'
