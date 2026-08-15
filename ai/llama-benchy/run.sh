@@ -7,7 +7,7 @@ docker run -it --rm \
     --pp 2048 \
     --tg 128 \
     --concurrency 1 \
-    --depth 16384 65536 131072 \
+    --depth 16384 \
     "$@"
 
-# ./run.sh --base-url 'http://localhost:8080/v1' --model 'Qwen3.6-27B-UD-Q5_K_XL.gguf'
+# ./run.sh --base-url 'http://localhost:8000/v1' --model 'deepseek-v4-flash-0731'
