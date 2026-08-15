@@ -16,7 +16,7 @@ x-sandbox-base: &sandbox-base
     LOG_STDOUT: "true"
 x-hermes-base: &hermes-base
   <<: *security-base
-  image: hermes-agent:20260717  # v0.18.2
+  image: hermes-agent:20260808  # v0.20.0
   command: gateway run
   env_file:
     - ./hermes/.env

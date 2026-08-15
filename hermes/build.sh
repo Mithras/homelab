@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 set -e
 
-DOCKER_BUILDKIT=1 docker build . --tag hermes-agent --tag hermes-agent:$(date +%Y%m%d) # --pull
+DOCKER_BUILDKIT=1 docker build . --tag hermes-agent --tag hermes-agent:$(date +%Y%m%d) --pull

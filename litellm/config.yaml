@@ -1,35 +1,35 @@
 model_list:
-  - model_name: qwen36-27
+  - model_name: qwen38-27
     litellm_params:
       litellm_credential_name: pc
       custom_llm_provider: custom_openai
-      model: Qwen3.6-27B-UD-Q5_K_XL.gguf
+      model: qwen38-27
       tags: ["pc"]
-      additional_drop_params: ["reasoning_effort"]
+      allowed_openai_params: ["reasoning_effort"]
     model_info:
       mode: chat
-  - model_name: qwen3-4-embedding
-    litellm_params:
-      litellm_credential_name: gx10-embedding
-      custom_llm_provider: openai_like
-      model: Qwen3-Embedding-4B-Q4_K_M.gguf
-      tags: ["gx10"]
-    model_info:
-      mode: embedding
-  - model_name: gb10-qwen36-27
+  - model_name: deepseek-v4-flash-0731
     litellm_params:
       litellm_credential_name: gx10
       custom_llm_provider: custom_openai
-      model: gb10-qwen36-27
+      model: deepseek-v4-flash-0731
       tags: ["gx10"]
-      additional_drop_params: ["reasoning_effort"]
+      allowed_openai_params: ["reasoning_effort"]
     model_info:
       mode: chat
+  # - model_name: qwen3-4-embedding
+  #   litellm_params:
+  #     litellm_credential_name: gx10-embedding
+  #     custom_llm_provider: openai_like
+  #     model: Qwen3-Embedding-4B-Q4_K_M.gguf
+  #     tags: ["gx10"]
+  #   model_info:
+  #     mode: embedding
 
 credential_list:
   - credential_name: pc
     credential_values:
-      api_base: http://192.168.1.2:8080/v1
+      api_base: http://192.168.1.2:8000/v1
       api_key: na
     credential_info: {}
   - credential_name: gx10
@@ -46,16 +46,15 @@ credential_list:
 general_settings:
   always_include_stream_usage: true
 
-litellm_settings:
-  fallbacks: 
-    - "pc": ["gb10"]
-    - "qwen36-27": ["gb10-qwen36-27"]
-  # callbacks:
-  #   - websearch_interception
-  # websearch_interception_params:
-  #   enabled_providers:
-  #     - openai
-  #   search_tool_name: searxng-search
+# litellm_settings:
+#   fallbacks:
+#     - "primary": ["secondary"]
+#   callbacks:
+#     - websearch_interception
+#   websearch_interception_params:
+#     enabled_providers:
+#       - openai
+#     search_tool_name: searxng-search
 
 # search_tools:
 #   - search_tool_name: searxng-search
@@ -66,11 +65,8 @@ litellm_settings:
 router_settings:
   routing_strategy: simple-shuffle  # `least-busy` doesn't work
   model_group_alias:
-    pc: qwen36-27
-    gb10: gb10-qwen36-27
-    embedding: qwen3-4-embedding
-    o3-mini: qwen36-27 # BUG: https://github.com/firecrawl/firecrawl/pull/3332
-    # legacy
-    qwen-dense: qwen36-27
-    qwen-moe: gb10-qwen36-27
-    qwen-embedding: qwen3-4-embedding
+    primary: deepseek-v4-flash-0731
+    secondary: qwen38-27
+    # embedding: qwen3-4-embedding
+
+    o3-mini: qwen38-27 # BUG: https://github.com/firecrawl/firecrawl/pull/3332

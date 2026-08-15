@@ -13,7 +13,7 @@ RUN chmod -R u+w /opt/hermes && \
     
 # Install byterover
 RUN npm install -g byterover-cli
-  
+
 # Override sshd config
 RUN cat > /etc/ssh/sshd_config <<EOF
 PubkeyAuthentication yes

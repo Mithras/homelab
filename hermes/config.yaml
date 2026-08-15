@@ -1,14 +1,13 @@
 # P1
+#   - browser
 #   - memory (rag/embeding/reranker, data/memories)
-#   - firecrawl cli + skills
-#   - tools/skills (data/skills)
-#   - Email
-#   - mithras-pc (PC) profile
+#   - cleanup gog cli
+#   - cleanup firecrawl cli
+#   - email
 
 # P2
 #   - mcp: linkedin
-#   - Home Assistant
-#   - pdf?
+#   - pdf
 
 _config_version: 33
 
@@ -16,7 +15,6 @@ terminal:
   # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@sandbox-mithras
   # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@sandbox-dina
   backend: ssh
-  cwd: ${TERMINAL_CWD}
   file_sync_enabled: false
 platforms:
   telegram:
@@ -43,7 +41,7 @@ browser:
 #   enabled_toolsets: []
 #   disabled_toolsets: []
 memory:
-  provider: byterover
+  # provider: byterover
   memory_char_limit: 5000
   user_char_limit: 2500
 context:
@@ -108,7 +106,7 @@ onboarding:
     busy_input_prompt: true
 
 model:
-  default: qwen36-27
+  default: deepseek-v4-flash-0731
   provider: litellm
 providers:
   litellm:
@@ -116,12 +114,12 @@ providers:
     name: litellm
     api_key: ${LITELLM_API_KEY}
     models:
-      qwen36-27:
-        context_length: 262144
+      qwen38-27:
+        context_length: 137600
         supports_vision: true
-      gb10-qwen36-27:
+      deepseek-v4-flash-0731:
         context_length: 262144
-    default_model: qwen36-27
+    default_model: deepseek-v4-flash-0731
 auxiliary:
   vision:
     provider: litellm
@@ -132,11 +130,27 @@ tts:
     voice: af_heart
     speed: 1.25
     base_url: http://mithras-pc:8001/v1
-    api_key: na
+    api_key: none
 stt:
   enabled: true
   provider: openai
   openai:
     model: istupakov/parakeet-tdt-0.6b-v3-onnx
     base_url: http://mithras-pc:8001/v1
-    api_key: na
+    api_key: none
+moa:
+  default_preset: default
+  presets:
+    default:
+      enabled: true
+      aggregator:
+        provider: litellm
+        model: deepseek-v4-flash-0731
+        # reasoning_effort: xxx
+      reference_models:
+        - provider: litellm
+          model: qwen38-27
+          # reasoning_effort: xxx
+      fanout: user_turn  # per_iteration | every_n:XXX | user_turn
+      # reference_max_tokens: XXX
+  save_traces: true
