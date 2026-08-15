@@ -1,15 +1,7 @@
-# P0
-#   - update
-#   - /journey
-#   - kanban
-#   - proper git
-#   - tui
-
 # P1
 #   - memory (rag/embeding/reranker, data/memories)
 #   - firecrawl cli + skills
 #   - tools/skills (data/skills)
-#   - multiline tui
 #   - Email
 #   - mithras-pc (PC) profile
 
@@ -17,10 +9,8 @@
 #   - mcp: linkedin
 #   - Home Assistant
 #   - pdf?
-#   - rag?
-#   - browser?
 
-_config_version: 30
+_config_version: 33
 
 terminal:
   # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@sandbox-mithras
@@ -41,10 +31,14 @@ display:
   platforms:
     telegram:
       streaming: false # `true` causes duplicated/intemediate messages
+kanban:
+  max_in_progress: 2
 skills: {}
 plugins:
   enabled:
     - hermes-lcm
+browser:
+  cdp_url: ws://localhost:9222
 # agent:
 #   enabled_toolsets: []
 #   disabled_toolsets: []
@@ -53,7 +47,7 @@ memory:
   memory_char_limit: 5000
   user_char_limit: 2500
 context:
-  engine: "lcm"
+  engine: lcm
 session_reset:
   mode: none
 platform_toolsets:
@@ -65,8 +59,6 @@ platform_toolsets:
     - cronjob
     - delegation
     - file
-    # - homeassistant
-    # - image_gen
     - memory
     - session_search
     - skills
@@ -75,6 +67,9 @@ platform_toolsets:
     - tts
     - vision
     - web
+    # - homeassistant
+    # - image_gen
+    # - kanban
   telegram:
     - browser
     - clarify
@@ -83,8 +78,6 @@ platform_toolsets:
     - cronjob
     - delegation
     - file
-    # - homeassistant
-    # - image_gen
     - memory
     - session_search
     - skills
@@ -93,13 +86,19 @@ platform_toolsets:
     - tts
     - vision
     - web
+    # - homeassistant
+    # - image_gen
+    # - kanban
   cron:
     - browser
     - file
     - terminal
     - web
+    # - kanban
 security:
   tirith_enabled: true
+  tirith_fail_open: false
+  allow_lazy_installs: false
 approvals:
   mode: smart # manual | smart
   destructive_slash_confirm: false

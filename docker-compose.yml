@@ -16,7 +16,7 @@ x-sandbox-base: &sandbox-base
     LOG_STDOUT: "true"
 x-hermes-base: &hermes-base
   <<: *security-base
-  image: hermes-agent
+  image: hermes-agent:20260717  # v0.18.2
   command: gateway run
   env_file:
     - ./hermes/.env
@@ -128,6 +128,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
     volumes:
       - ./syncthing:/var/syncthing
+      - ./hermes/mithras:/var/syncthing/hermes-mithras
+      - ./hermes/dina:/var/syncthing/hermes-dina
     ports:
       # - 3004:8384 # Web UI
       - 22000:22000/tcp # TCP file transfers
@@ -187,11 +189,12 @@ services:
       - ./sandbox/gogcli/main:/gogcli
       # hermes
       - ./hermes/mithras:/home/hermes/.hermes:ro
-      - ./syncthing/Obsidian/Main/hermes/memories:/home/hermes/.hermes/memories:ro
-      - ./syncthing/Obsidian/Main/hermes/skills:/home/hermes/.hermes/skills:ro
-      # obsidian
+      - ./hermes/mithras/cache:/home/hermes/.hermes/cache
+      - ./hermes/mithras/plans:/home/hermes/.hermes/plans
+      - ./hermes/mithras/kanban:/home/hermes/.hermes/kanban
+      - ./hermes/mithras/skills:/home/hermes/.hermes/skills
+      # extra
       - ./syncthing/Obsidian/Main:/home/hermes/obsidian
-      - ./syncthing/Obsidian/Main/hermes:/home/hermes/obsidian/hermes:ro
     networks:
       - sandbox-main
   sandbox-dina:
@@ -205,11 +208,12 @@ services:
       - ./sandbox/gogcli/dina:/gogcli
       # hermes
       - ./hermes/dina:/home/hermes/.hermes:ro
-      - ./syncthing/Obsidian-dina/main/hermes/memories:/home/hermes/.hermes/memories:ro
-      - ./syncthing/Obsidian-dina/main/hermes/skills:/home/hermes/.hermes/skills:ro
-      # obsidian
+      - ./hermes/dina/cache:/home/hermes/.hermes/cache
+      - ./hermes/dina/plans:/home/hermes/.hermes/plans
+      - ./hermes/dina/kanban:/home/hermes/.hermes/kanban
+      - ./hermes/dina/skills:/home/hermes/.hermes/skills
+      # extra
       - ./syncthing/Obsidian-dina/main:/home/hermes/obsidian
-      - ./syncthing/Obsidian-dina/main/hermes:/home/hermes/obsidian/hermes:ro
     networks:
       - sandbox-dina
   sandbox-mom:
@@ -221,23 +225,29 @@ services:
       - ./sandbox/sshd/mom-envs.conf:/etc/ssh/sshd_config.d/90-envs.conf
       - ./hermes/tmp:/tmp
       # hermes
-      - ./hermes/dina:/home/hermes/.hermes:ro
+      - ./hermes/mom:/home/hermes/.hermes:ro
+      - ./hermes/mom/cache:/home/hermes/.hermes/cache
+      - ./hermes/mom/plans:/home/hermes/.hermes/plans
+      - ./hermes/mom/kanban:/home/hermes/.hermes/kanban
+      - ./hermes/mom/skills:/home/hermes/.hermes/skills
     networks:
       - sandbox-mom
 
   # docker exec -it hermes hermes
   hermes-mithras:
     <<: *hermes-base
-    restart: unless-stopped
+    # restart: unless-stopped
     environment:
+      HERMES_DASHBOARD: "1"
       HERMES_DASHBOARD_BASIC_AUTH_USERNAME: mithras
       HERMES_DASHBOARD_BASIC_AUTH_PASSWORD: ${HERMES_DASHBOARD_PASSWORD_MITHRAS}
       HERMES_DASHBOARD_BASIC_AUTH_SECRET: ${HERMES_DASHBOARD_SECRET_MITHRAS}
+    ports:
+      - 2222:22
     volumes:
+      - ./hermes/.env:/etc/hermes-compose.env:ro
       - ./hermes/mithras:/opt/data
       - ./hermes/tmp:/tmp
-      - ./syncthing/Obsidian/Main/hermes/memories:/opt/data/memories
-      - ./syncthing/Obsidian/Main/hermes/skills:/opt/data/skills
     networks:
       - homelab
       - sandbox-main
@@ -245,20 +255,24 @@ services:
     <<: *hermes-base
     restart: unless-stopped
     environment:
+      HERMES_DASHBOARD: "1"
       HERMES_DASHBOARD_BASIC_AUTH_USERNAME: dina
       HERMES_DASHBOARD_BASIC_AUTH_PASSWORD: ${HERMES_DASHBOARD_PASSWORD_DINA}
       HERMES_DASHBOARD_BASIC_AUTH_SECRET: ${HERMES_DASHBOARD_SECRET_DINA}
+    ports:
+      - 2223:22
     volumes:
+      - ./hermes/.env:/etc/hermes-compose.env:ro
       - ./hermes/dina:/opt/data
       - ./hermes/tmp:/tmp
-      - ./syncthing/Obsidian-dina/main/hermes/memories:/opt/data/memories
-      - ./syncthing/Obsidian-dina/main/hermes/skills:/opt/data/skills
     networks:
       - homelab
       - sandbox-dina
   hermes-mom:
     <<: *hermes-base
     restart: unless-stopped
+    environment:
+      HERMES_DASHBOARD: "0"
     volumes:
       - ./hermes/mom:/opt/data
       - ./hermes/tmp:/tmp

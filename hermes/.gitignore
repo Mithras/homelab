@@ -1,12 +1,4 @@
+mithras
+dina
+mom
 tmp
-
-mithras/*
-!mithras/.env.example
-# !mithras/cron
-# !mithras/hooks
-# !mithras/kanban
-# !mithras/skills
-
-dina/*
-
-mom/*
