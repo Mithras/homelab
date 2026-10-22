@@ -1,0 +1,24 @@
+[Unit]
+Description=Firecrawl nuq postgres
+PartOf=firecrawl.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=firecrawl.target
+
+[Container]
+ContainerName=firecrawl-nuq-postgres
+Image=ghcr.io/firecrawl/nuq-postgres:latest
+AutoUpdate=registry
+# postgres
+User=999
+NoNewPrivileges=true
+PidsLimit=512
+
+EnvironmentFile=/home/mithras/homelab/firecrawl/quadlet/.env
+Environment=POSTGRES_USER=postgres
+Environment=POSTGRES_DB=postgres
+
+Network=firecrawl.network

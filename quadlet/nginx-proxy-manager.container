@@ -1,0 +1,50 @@
+[Unit]
+Description=Nginx Proxy Manager
+PartOf=homelab.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=homelab.target
+
+[Container]
+ContainerName=nginx-proxy-manager
+Image=docker.io/jc21/nginx-proxy-manager
+AutoUpdate=registry
+# root -=> npm
+User=0
+UIDMap=+0:@%U
+GIDMap=+0:@%U
+UIDMap=+10000:@%U
+GIDMap=+10000:@%U
+NoNewPrivileges=true
+PidsLimit=512
+
+Environment=TZ=America/Los_Angeles
+Environment=PUID=10000
+Environment=PGID=10000
+
+Volume=/home/mithras/homelab/nginx-proxy-manager/data:/data
+Volume=/home/mithras/homelab/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+
+# Admin
+PublishPort=8081:81
+# Homeassistant
+PublishPort=8443:8443
+# Syncthing
+PublishPort=8384:8384
+# Searxng
+PublishPort=8888:8888
+# Litellm
+PublishPort=4001:4001
+# Hermes
+PublishPort=9119:9119
+PublishPort=9120:9120
+# Browser
+PublishPort=3111:3111
+PublishPort=3112:3112
+PublishPort=3113:3113
+
+Network=homelab.network
+Sysctl=net.ipv4.ip_unprivileged_port_start=0

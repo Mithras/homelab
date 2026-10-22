@@ -1,0 +1,27 @@
+[Unit]
+Description=Firecrawl rabbitmq
+PartOf=firecrawl.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=firecrawl.target
+
+[Container]
+ContainerName=firecrawl-rabbitmq
+Image=docker.io/library/rabbitmq:3-management
+AutoUpdate=registry
+Exec=rabbitmq-server
+# rabbitmq
+User=999
+NoNewPrivileges=true
+PidsLimit=512
+
+Network=firecrawl.network
+
+HealthCmd=rabbitmq-diagnostics -q check_running
+HealthInterval=5s
+HealthTimeout=5s
+HealthRetries=3
+HealthStartPeriod=5s

@@ -1,0 +1,25 @@
+[Unit]
+Description=Searxng
+PartOf=homelab.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=homelab.target
+
+[Container]
+ContainerName=searxng
+Image=docker.io/searxng/searxng
+AutoUpdate=registry
+# searxng
+User=977
+UserNS=keep-id:uid=977,gid=977
+NoNewPrivileges=true
+PidsLimit=512
+
+EnvironmentFile=/home/mithras/homelab/quadlet/searxng.env
+
+Volume=/home/mithras/homelab/searxng:/etc/searxng
+
+Network=homelab.network

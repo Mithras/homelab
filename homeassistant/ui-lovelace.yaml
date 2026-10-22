@@ -285,3 +285,376 @@ views:
           - zone.meta
           - zone.gym
           - zone.safeway
+
+  # - title: vLLM
+  #   path: vllm
+  #   type: sections
+  #   max_columns: 3
+  #   sections:
+  #     - type: grid
+  #       cards:
+  #         - type: markdown
+  #           grid_options:
+  #             columns: full
+  #           content: >
+  #             {% set run = states('sensor.vllm_running_requests') %}
+  #             {% if run is number or run is match('^\d') %}
+  #             **vLLM:** ✅ reachable
+  #             {% else %}
+  #             **vLLM:** ❌ **unreachable**
+  #             {% endif %}
+  #         - type: tile
+  #           entity: sensor.vllm_running_requests
+  #           name: Running
+  #           icon: mdi:engine
+  #         - type: tile
+  #           entity: sensor.vllm_waiting_requests
+  #           name: Waiting
+  #           icon: mdi:queue
+  #         - type: tile
+  #           entity: sensor.vllm_current_pp
+  #           name: PP now
+  #           icon: mdi:fast-forward
+  #         - type: tile
+  #           entity: sensor.vllm_current_tg
+  #           name: TG now
+  #           icon: mdi:speedometer
+  #     - type: grid
+  #       cards:
+  #         - type: tile
+  #           entity: sensor.vllm_finished_requests
+  #           name: Requests
+  #           icon: mdi:counter
+  #         - type: tile
+  #           entity: sensor.vllm_preemptions
+  #           name: Preemptions
+  #           icon: mdi:alert
+  #         - type: tile
+  #           entity: sensor.vllm_prompt_tokens_total
+  #           name: Prompt tokens
+  #           icon: mdi:import
+  #         - type: tile
+  #           entity: sensor.vllm_generation_tokens_total
+  #           name: Generation tokens
+  #           icon: mdi:export
+  #         - type: tile
+  #           entity: sensor.vllm_average_pp
+  #           name: Average PP
+  #           icon: mdi:average
+  #         - type: tile
+  #           entity: sensor.vllm_average_tg
+  #           name: Average TG
+  #           icon: mdi:trending-up
+  #     - type: grid
+  #       cards:
+  #         - type: markdown
+  #           grid_options:
+  #             columns: full
+  #           title: Spec acceptance by draft position
+  #           content: |
+  #             | pos 0 | pos 1 | pos 2 | pos 3 | pos 4 | pos 5 | pos 6 |
+  #             |---|---|---|---|---|---|---|
+  #             | {% for i in range(7) %}{% set s = states('sensor.vllm_spec_accept_pos_' ~ i) %}{% set n = s | float(none) %}{{ ((n | round(1) ~ '%') if n is not none else 'null') }}{% if not loop.last %} |{% endif %}{% endfor %} |
+  #     - type: grid
+  #       cards:
+  #         - type: history-graph
+  #           grid_options:
+  #             columns: full
+  #           title: Prompt processing
+  #           hours_to_show: 6
+  #           entities:
+  #             - entity: sensor.vllm_current_pp
+  #               name: Current PP
+  #               color: '#fb8c00'
+  #     - type: grid
+  #       cards:
+  #         - type: history-graph
+  #           grid_options:
+  #             columns: full
+  #           title: Token generation
+  #           hours_to_show: 6
+  #           entities:
+  #             - entity: sensor.vllm_current_tg
+  #               name: Current TG
+  #               color: '#43a047'
+  #     - type: grid
+  #       cards:
+  #         - type: history-graph
+  #           grid_options:
+  #             columns: full
+  #           title: Percentages
+  #           hours_to_show: 6
+  #           entities:
+  #             - entity: sensor.vllm_kv_cache_usage
+  #               name: KV cache
+  #               color: '#00bcd4'
+  #             - entity: sensor.vllm_spec_decode_acceptance
+  #               name: Spec acceptance
+  #               color: '#ab47bc'
+  #             - entity: sensor.vllm_prefix_cache_hit_rate
+  #               name: Prefix hit rate
+  #               color: '#e53935'
+  #     - type: grid
+  #       cards:
+  #         - type: history-graph
+  #           grid_options:
+  #             columns: full
+  #           title: Power
+  #           hours_to_show: 6
+  #           entities:
+  #             - entity: sensor.smart_plug_05_power
+  #             - entity: sensor.smart_plug_06_power
+  #     - type: grid
+  #       cards:
+  #         - type: statistics-graph
+  #           grid_options:
+  #             columns: full
+  #           title: Energy
+  #           entities:
+  #             - entity: sensor.smart_plug_05_energy
+  #             - entity: sensor.smart_plug_06_energy
+  #           days_to_show: 30
+  #           chart_type: bar
+  #           stat_types:
+  #             - sum
+  #             - change
+  #           period: day
+
+  # - title: TensorFold (v0)
+  #   path: tensorfold
+  #   type: sections
+  #   max_columns: 3
+  #   sections:
+  #     - type: grid
+  #       cards:
+  #         - type: tile
+  #           entity: sensor.tensorfold_running_requests
+  #           name: Running
+  #           icon: mdi:engine
+  #         - type: tile
+  #           entity: sensor.tensorfold_acceptance_length
+  #           name: Acceptance length
+  #           icon: mdi:check-decagram
+  #         - type: tile
+  #           entity: sensor.tensorfold_current_pp
+  #           name: PP now
+  #           icon: mdi:fast-forward
+  #         - type: tile
+  #           entity: sensor.tensorfold_current_tg
+  #           name: TG now
+  #           icon: mdi:speedometer
+  #     - type: grid
+  #       cards:
+  #         - type: tile
+  #           entity: sensor.tensorfold_average_pp
+  #           name: Average PP
+  #           icon: mdi:average
+  #         - type: tile
+  #           entity: sensor.tensorfold_average_tg
+  #           name: Average TG
+  #           icon: mdi:trending-up
+  #         - type: tile
+  #           entity: sensor.tensorfold_ttft_average
+  #           name: TTFT avg
+  #         - type: tile
+  #           entity: sensor.tensorfold_e2e_latency_average
+  #           name: E2E avg
+  #     - type: grid
+  #       cards:
+  #         - type: tile
+  #           entity: sensor.tensorfold_finished_requests
+  #           name: Requests
+  #           icon: mdi:counter
+  #         - type: tile
+  #           entity: sensor.tensorfold_prompt_tokens_total
+  #           name: Prompt tokens
+  #           icon: mdi:import
+  #         - type: tile
+  #           entity: sensor.tensorfold_uncached_prompt_tokens_total
+  #           name: Uncached Prompt tokens
+  #           icon: mdi:import
+  #         - type: tile
+  #           entity: sensor.tensorfold_generation_tokens_total
+  #           name: Generation tokens
+  #           icon: mdi:export
+
+  #     - type: grid
+  #       cards:
+  #         - type: history-graph
+  #           grid_options:
+  #             columns: full
+  #           title: Prompt processing
+  #           hours_to_show: 6
+  #           entities:
+  #             - entity: sensor.tensorfold_current_pp
+  #               name: Current PP
+  #               color: '#fb8c00'
+  #     - type: grid
+  #       cards:
+  #         - type: history-graph
+  #           grid_options:
+  #             columns: full
+  #           title: Token generation
+  #           hours_to_show: 6
+  #           entities:
+  #             - entity: sensor.tensorfold_current_tg
+  #               name: Current TG
+  #               color: '#43a047'
+  #     - type: grid
+  #       cards:
+  #         - type: history-graph
+  #           grid_options:
+  #             columns: full
+  #           title: Percentages
+  #           hours_to_show: 6
+  #           entities:
+  #             - entity: sensor.tensorfold_pool_occupancy
+  #               name: Pool occupancy
+  #               color: '#00bcd4'
+  #             - entity: sensor.tensorfold_spec_acceptance
+  #               name: Spec acceptance
+  #               color: '#ab47bc'
+  #             - entity: sensor.tensorfold_prefix_cache_hit_rate
+  #               name: Prefix hit rate
+  #               color: '#e53935'
+  #     - type: grid
+  #       cards:
+  #         - type: history-graph
+  #           grid_options:
+  #             columns: full
+  #           title: Power
+  #           hours_to_show: 6
+  #           entities:
+  #             - entity: sensor.smart_plug_05_power
+  #             - entity: sensor.smart_plug_06_power
+  #     - type: grid
+  #       cards:
+  #         - type: statistics-graph
+  #           grid_options:
+  #             columns: full
+  #           title: Energy
+  #           entities:
+  #             - entity: sensor.smart_plug_05_energy
+  #             - entity: sensor.smart_plug_06_energy
+  #           days_to_show: 30
+  #           chart_type: bar
+  #           stat_types:
+  #             - sum
+  #             - change
+  #           period: day
+
+  - title: TensorFold
+    path: tensorfold
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        cards:
+          - type: tile
+            entity: sensor.tensorfold_running_requests
+            name: Running
+            icon: mdi:engine
+          - type: tile
+            entity: sensor.tensorfold_acceptance_length
+            name: Acceptance length
+            icon: mdi:check-decagram
+          - type: tile
+            entity: sensor.tensorfold_current_pp
+            name: PP now
+            icon: mdi:fast-forward
+          - type: tile
+            entity: sensor.tensorfold_current_tg
+            name: TG now
+            icon: mdi:speedometer
+      - type: grid
+        cards:
+          - type: tile
+            entity: sensor.tensorfold_average_pp
+            name: Average PP (effective)
+            icon: mdi:average
+          - type: tile
+            entity: sensor.tensorfold_average_tg
+            name: Average TG
+            icon: mdi:trending-up
+          - type: tile
+            entity: sensor.tensorfold_ttft_average
+            name: TTFT avg
+          - type: tile
+            entity: sensor.tensorfold_e2e_latency_average
+            name: E2E avg
+      - type: grid
+        cards:
+          - type: tile
+            entity: sensor.tensorfold_finished_requests
+            name: Requests
+            icon: mdi:counter
+          - type: tile
+            entity: sensor.tensorfold_prompt_tokens_total
+            name: Prompt tokens
+            icon: mdi:import
+          - type: tile
+            entity: sensor.tensorfold_generation_tokens_total
+            name: Generation tokens
+            icon: mdi:export
+
+      - type: grid
+        cards:
+          - type: history-graph
+            grid_options:
+              columns: full
+            title: Prompt processing
+            hours_to_show: 6
+            entities:
+              - entity: sensor.tensorfold_current_pp
+                name: Current PP (effective)
+                color: '#fb8c00'
+      - type: grid
+        cards:
+          - type: history-graph
+            grid_options:
+              columns: full
+            title: Token generation
+            hours_to_show: 6
+            entities:
+              - entity: sensor.tensorfold_current_tg
+                name: Current TG
+                color: '#43a047'
+      - type: grid
+        cards:
+          - type: history-graph
+            grid_options:
+              columns: full
+            title: Percentages
+            hours_to_show: 6
+            entities:
+              - entity: sensor.tensorfold_pool_occupancy
+                name: Cache occupancy (max stream)
+                color: '#00bcd4'
+              - entity: sensor.tensorfold_spec_acceptance
+                name: Spec acceptance
+                color: '#ab47bc'
+      - type: grid
+        cards:
+          - type: history-graph
+            grid_options:
+              columns: full
+            title: Power
+            hours_to_show: 6
+            entities:
+              - entity: sensor.smart_plug_05_power
+              - entity: sensor.smart_plug_06_power
+      - type: grid
+        cards:
+          - type: statistics-graph
+            grid_options:
+              columns: full
+            title: Energy
+            entities:
+              - entity: sensor.smart_plug_05_energy
+              - entity: sensor.smart_plug_06_energy
+            days_to_show: 30
+            chart_type: bar
+            stat_types:
+              - sum
+              - change
+            period: day

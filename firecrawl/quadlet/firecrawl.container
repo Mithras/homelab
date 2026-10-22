@@ -1,0 +1,41 @@
+[Unit]
+Description=Firecrawl API
+Wants=firecrawl-redis.service firecrawl-rabbitmq.service firecrawl-nuq-postgres.service firecrawl-playwright.service
+After=firecrawl-redis.service firecrawl-rabbitmq.service firecrawl-nuq-postgres.service firecrawl-playwright.service
+PartOf=firecrawl.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=firecrawl.target
+
+[Container]
+ContainerName=firecrawl
+Image=ghcr.io/firecrawl/firecrawl
+AutoUpdate=registry
+Exec=node dist/src/harness.js --start-docker
+# node
+User=1000
+NoNewPrivileges=true
+PidsLimit=512
+
+EnvironmentFile=/home/mithras/homelab/firecrawl/quadlet/.env
+Environment=HOST=0.0.0.0
+Environment=PORT=3002
+Environment=EXTRACT_WORKER_PORT=3004
+Environment=WORKER_PORT=3005
+Environment=POSTGRES_USER=postgres
+Environment=POSTGRES_DB=postgres
+Environment=POSTGRES_HOST=firecrawl-nuq-postgres
+Environment=POSTGRES_PORT=5432
+Environment=NUQ_RABBITMQ_URL=amqp://firecrawl-rabbitmq:5672
+Environment=REDIS_URL=redis://firecrawl-redis:6379
+Environment=REDIS_RATE_LIMIT_URL=redis://firecrawl-redis:6379
+Environment=PLAYWRIGHT_MICROSERVICE_URL=http://firecrawl-playwright:3000/scrape
+Environment=ENV=local
+
+Ulimit=NOFILE=65535:65535
+
+Network=homelab.network
+Network=firecrawl.network

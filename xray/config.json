@@ -1,0 +1,33 @@
+{
+  "log": { "loglevel": "warning" },
+  "inbounds": [
+    {
+      "port": 9443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "a13101c3-bed6-40ae-97b3-3e3b289da0bb",
+            "flow": "xtls-rprx-vision"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+          "minClientVer": "0",
+          "dest": "www.samsung.com:443",
+          "serverNames": ["www.samsung.com"],
+          "privateKey": "UCbLvSE27N68vtr-gJBvmdqz5t9beId63WAu4-0cUXA",
+          "shortIds": ["eda83a63"]
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    { "protocol": "freedom", "tag": "direct" },
+    { "protocol": "blackhole", "tag": "block" }
+  ]
+}

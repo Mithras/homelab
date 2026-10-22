@@ -1,0 +1,23 @@
+[Unit]
+Description=Xray (VLESS+Reality)
+PartOf=homelab.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=homelab.target
+
+[Container]
+ContainerName=xray
+# BUG: https://github.com/SagerNet/sing-box/issues/4520
+Image=ghcr.io/xtls/xray-core:26.7.28
+AutoUpdate=registry
+# nonroot
+User=65532
+NoNewPrivileges=true
+PidsLimit=512
+
+PublishPort=9443:9443
+
+Volume=/home/mithras/homelab/xray:/usr/local/etc/xray:ro

@@ -1,0 +1,32 @@
+[Unit]
+Description=Home Assistant
+PartOf=homelab.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=homelab.target
+
+[Container]
+ContainerName=homeassistant
+Image=lscr.io/linuxserver/homeassistant
+AutoUpdate=registry
+# root -> abc
+User=0
+UserNS=keep-id:uid=1000,gid=1000
+NoNewPrivileges=true
+PidsLimit=512
+
+Environment=TZ=America/Los_Angeles
+Environment=PUID=1000
+Environment=PGID=1000
+Environment=OPENAI_BASE_URL=http://litellm:4000/v1
+
+Volume=/run/dbus:/run/dbus:ro
+Volume=/home/mithras/homelab/homeassistant:/config
+Volume=/home/mithras/homelab/tmp:/config/tmp
+
+# PublishPort=8123:8123
+
+Network=homelab.network

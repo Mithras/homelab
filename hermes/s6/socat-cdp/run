@@ -1,0 +1,3 @@
+#!/command/with-contenv sh
+
+exec socat TCP-LISTEN:9222,bind=127.0.0.1,fork,reuseaddr TCP:browser:9223

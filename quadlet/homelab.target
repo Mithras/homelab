@@ -1,0 +1,6 @@
+[Unit]
+Description=Homelab
+Wants=firecrawl.target litellm.target
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,8 @@
+[Unit]
+Description=Hermes browser (%i)
+
+[Install]
+WantedBy=default.target
+
+[Network]
+NetworkName=browser-%i

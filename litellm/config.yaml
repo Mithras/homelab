@@ -1,46 +1,42 @@
 model_list:
-  - model_name: qwen38-27
+  - model_name: qwen3.6-35b-a3b
     litellm_params:
       litellm_credential_name: pc
       custom_llm_provider: custom_openai
-      model: qwen38-27
+      model: qwen3.6-35b-a3b
       tags: ["pc"]
       allowed_openai_params: ["reasoning_effort"]
     model_info:
       mode: chat
-  - model_name: deepseek-v4-flash-0731
+  - model_name: glm-53-flash
     litellm_params:
       litellm_credential_name: gx10
       custom_llm_provider: custom_openai
-      model: deepseek-v4-flash-0731
+      model: glm-53-flash
       tags: ["gx10"]
       allowed_openai_params: ["reasoning_effort"]
     model_info:
       mode: chat
-  # - model_name: qwen3-4-embedding
-  #   litellm_params:
-  #     litellm_credential_name: gx10-embedding
-  #     custom_llm_provider: openai_like
-  #     model: Qwen3-Embedding-4B-Q4_K_M.gguf
-  #     tags: ["gx10"]
-  #   model_info:
-  #     mode: embedding
+  - model_name: deepseek-v41-flash-1017
+    litellm_params:
+      litellm_credential_name: gx10
+      custom_llm_provider: custom_openai
+      model: deepseek-v41-flash-1017
+      tags: ["gx10"]
+      allowed_openai_params: ["reasoning_effort"]
+    model_info:
+      mode: chat
 
 credential_list:
   - credential_name: pc
     credential_values:
       api_base: http://192.168.1.2:8000/v1
-      api_key: na
+      api_key: none
     credential_info: {}
   - credential_name: gx10
     credential_values:
       api_base: http://192.168.1.8:8000/v1
-      api_key: na
-    credential_info: {}
-  - credential_name: gx10-embedding
-    credential_values:
-      api_base: http://192.168.1.8:8081/v1
-      api_key: na
+      api_key: none
     credential_info: {}
 
 general_settings:
@@ -65,8 +61,6 @@ general_settings:
 router_settings:
   routing_strategy: simple-shuffle  # `least-busy` doesn't work
   model_group_alias:
-    primary: deepseek-v4-flash-0731
-    secondary: qwen38-27
-    # embedding: qwen3-4-embedding
-
-    o3-mini: qwen38-27 # BUG: https://github.com/firecrawl/firecrawl/pull/3332
+    # primary: glm-53-flash
+    primary: deepseek-v41-flash-1017
+    secondary: qwen3.6-35b-a3b

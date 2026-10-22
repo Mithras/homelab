@@ -7,6 +7,6 @@ sudo apt autoremove -y
 docker compose pull --ignore-pull-failures
 docker compose up -d
 docker system prune -af
-# docker image prune -af
-# docker volume prune -f
-# sudo rm -rf /var/log/*
+
+# podman system df
+podman system prune -af

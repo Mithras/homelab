@@ -1,25 +1,23 @@
 # P1
-#   - browser
-#   - memory (rag/embeding/reranker, data/memories)
-#   - cleanup gog cli
-#   - cleanup firecrawl cli
+#   ~ browser
 #   - email
-
 # P2
 #   - mcp: linkedin
 #   - pdf
 
-_config_version: 33
-
+_config_version: 51
 terminal:
-  # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@sandbox-mithras
-  # ssh -p 2222 -i /opt/data/.ssh/id_rsa linuxserver.io@sandbox-dina
+  # ssh -p 2222 -i /opt/data/.ssh/id_rsa -o UserKnownHostsFile=/opt/data/.ssh/known_hosts hermes@sandbox-mithras
+  # ssh -p 2222 -i /opt/data/.ssh/id_rsa -o UserKnownHostsFile=/opt/data/.ssh/known_hosts hermes@sandbox-dina
   backend: ssh
   file_sync_enabled: false
 platforms:
   telegram:
     extra:
       ignore_root_dm: true
+      dm_topic_auto_transfer: true
+      group_allow_admin_from: ["499285727"]
+      group_user_allowed_commands: ["status"]
 telegram:
   reactions: true
 display:
@@ -31,7 +29,8 @@ display:
       streaming: false # `true` causes duplicated/intemediate messages
 kanban:
   max_in_progress: 2
-skills: {}
+skills:
+  create_dir: /opt/data/skills-custom
 plugins:
   enabled:
     - hermes-lcm
@@ -41,7 +40,7 @@ browser:
 #   enabled_toolsets: []
 #   disabled_toolsets: []
 memory:
-  # provider: byterover
+  # provider: openviking
   memory_char_limit: 5000
   user_char_limit: 2500
 context:
@@ -94,8 +93,6 @@ platform_toolsets:
     - web
     # - kanban
 security:
-  tirith_enabled: true
-  tirith_fail_open: false
   allow_lazy_installs: false
 approvals:
   mode: smart # manual | smart
@@ -104,9 +101,11 @@ timezone: America/Los_Angeles
 onboarding:
   seen:
     busy_input_prompt: true
+compression:
+  context_total_ceiling_seconds: 1800
 
 model:
-  default: deepseek-v4-flash-0731
+  default: primary
   provider: litellm
 providers:
   litellm:
@@ -114,29 +113,42 @@ providers:
     name: litellm
     api_key: ${LITELLM_API_KEY}
     models:
-      qwen38-27:
-        context_length: 137600
-        supports_vision: true
-      deepseek-v4-flash-0731:
+      primary:
         context_length: 262144
-    default_model: deepseek-v4-flash-0731
+        supports_vision: true
+      secondary:
+        context_length: 262144
+        supports_vision: true
+    default_model: primary
 auxiliary:
   vision:
     provider: litellm
+    model: primary
+  compression:
+    provider: litellm
+    model: secondary
+    # extra_body:
+    #   reasoning_effort: none  # vllm adds `chat_template_kwargs.enable_thinking = false`
+  title_generation:
+    provider: litellm
+    model: secondary
+web:
+  backend: firecrawl
+  keyless_fallback: false
 tts:
   provider: openai
   openai:
     model: speaches-ai/Kokoro-82M-v1.0-ONNX
     voice: af_heart
     speed: 1.25
-    base_url: http://mithras-pc:8001/v1
+    base_url: http://192.168.1.2:8001/v1
     api_key: none
 stt:
   enabled: true
   provider: openai
   openai:
     model: istupakov/parakeet-tdt-0.6b-v3-onnx
-    base_url: http://mithras-pc:8001/v1
+    base_url: http://192.168.1.2:8001/v1
     api_key: none
 moa:
   default_preset: default
@@ -145,12 +157,10 @@ moa:
       enabled: true
       aggregator:
         provider: litellm
-        model: deepseek-v4-flash-0731
-        # reasoning_effort: xxx
+        model: primary
       reference_models:
         - provider: litellm
-          model: qwen38-27
-          # reasoning_effort: xxx
+          model: secondary
       fanout: user_turn  # per_iteration | every_n:XXX | user_turn
       # reference_max_tokens: XXX
   save_traces: true

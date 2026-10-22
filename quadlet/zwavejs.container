@@ -1,0 +1,31 @@
+[Unit]
+Description=Z-Wave JS UI
+PartOf=homelab.target
+
+[Service]
+Restart=always
+# SupplementaryGroups=dialout
+
+[Install]
+WantedBy=homelab.target
+
+[Container]
+ContainerName=zwavejs
+Image=docker.io/zwavejs/zwave-js-ui
+AutoUpdate=registry
+# <none>
+User=10000
+UserNS=keep-id:uid=10000,gid=10000
+GroupAdd=keep-groups
+NoNewPrivileges=true
+PidsLimit=512
+
+Environment=TZ=America/Los_Angeles
+
+AddDevice=/dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_51300097-if00-port0:/dev/zwave
+
+Volume=/home/mithras/homelab/zwavejs:/usr/src/app/store
+
+# PublishPort=8091:8091
+
+Network=homelab.network

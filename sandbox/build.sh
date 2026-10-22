@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
+set -e
 
-docker build . --target agent --tag sandbox:agent
-docker build . --target full --tag sandbox:full
+podman build . --tag sandbox

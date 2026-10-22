@@ -1,0 +1,100 @@
+resource: http://192.168.1.8:8000/metrics
+scan_interval: 10
+timeout: 5
+sensor:
+  - name: TensorFold Running Requests
+    unique_id: tensorfold_running
+    value_template: >-
+      {{ value | regex_findall_index('(?m)^tensorfold:requests_running\s+([0-9.eE+-]+)$') | float(0) }}
+    state_class: measurement
+  - name: TensorFold Waiting Requests
+    unique_id: tensorfold_waiting
+    value_template: >-
+      {{ value | regex_findall_index('(?m)^tensorfold:requests_waiting\s+([0-9.eE+-]+)$') | float(0) }}
+    state_class: measurement
+  - name: TensorFold Pool Occupancy
+    unique_id: tensorfold_pool_occupancy
+    value_template: >-
+      {% set v = value | regex_findall('(?m)^tensorfold:kv_cache_usage_ratio\{[^}]*\}\s+([0-9.eE+-]+)$') %}
+      {{ ((v | map('float') | list | max) * 100) | round(1) if v else 0 }}
+    state_class: measurement
+    unit_of_measurement: "%"
+  - name: TensorFold Prompt Tokens Total
+    unique_id: tensorfold_prompt_tokens
+    value_template: >-
+      {{ value | regex_findall_index('(?m)^tensorfold:prompt_tokens_total\s+([0-9.eE+-]+)$') | float(0) }}
+    state_class: total
+    unit_of_measurement: tokens
+  # - name: TensorFold Uncached Prompt Tokens Total
+  #   unique_id: tensorfold_uncached_prompt
+  #   value_template: >-
+  #     {{ value | regex_findall_index('(?m)^tensorfold:prompt_tokens_total\s+([0-9.eE+-]+)$') | float(0) }}
+  #   state_class: total_increasing
+  #   unit_of_measurement: tokens
+  - name: TensorFold Generation Tokens Total
+    unique_id: tensorfold_gen_tokens
+    value_template: >-
+      {{ value | regex_findall_index('(?m)^tensorfold:generation_tokens_total\s+([0-9.eE+-]+)$') | float(0) }}
+    state_class: total
+    unit_of_measurement: tokens
+  - name: TensorFold Finished Requests
+    unique_id: tensorfold_finished
+    value_template: >-
+      {{ value | regex_findall_index('(?m)^tensorfold:request_latency_seconds_count\s+([0-9.eE+-]+)$') | float(0) }}
+    state_class: total_increasing
+  - name: TensorFold Spec Acceptance
+    unique_id: tensorfold_spec_acceptance
+    value_template: >-
+      {% set a = value | regex_findall_index('(?m)^tensorfold:mtp_accepted_total\s+([0-9.eE+-]+)$') | float(0) %}
+      {% set d = value | regex_findall_index('(?m)^tensorfold:mtp_drafted_total\s+([0-9.eE+-]+)$') | float(0) %}
+      {{ ((a / d) * 100) | round(1) if d > 0 else 0 }}
+    state_class: measurement
+    unit_of_measurement: "%"
+  - name: TensorFold Acceptance Length
+    unique_id: tensorfold_acceptance_length
+    value_template: >-
+      {% set g = value | regex_findall_index('(?m)^tensorfold:generation_tokens_total\s+([0-9.eE+-]+)$') | float(0) %}
+      {% set r = value | regex_findall_index('(?m)^tensorfold:decode_rounds_total\s+([0-9.eE+-]+)$') | float(0) %}
+      {{ (g / r) | round(2) if r > 0 else 0 }}
+    state_class: measurement
+    unit_of_measurement: "tok/round"
+  - name: TensorFold TTFT Average
+    unique_id: tensorfold_ttft_avg
+    value_template: >-
+      {% set s = value | regex_findall_index('(?m)^tensorfold:time_to_first_token_seconds_sum\s+([0-9.eE+-]+)$') | float(0) %}
+      {% set c = value | regex_findall_index('(?m)^tensorfold:time_to_first_token_seconds_count\s+([0-9.eE+-]+)$') | float(0) %}
+      {{ (s / c) | round(2) if c > 0 else 0 }}
+    state_class: measurement
+    unit_of_measurement: s
+  - name: TensorFold E2E Latency Average
+    unique_id: tensorfold_e2e_avg
+    value_template: >-
+      {% set s = value | regex_findall_index('(?m)^tensorfold:request_latency_seconds_sum\s+([0-9.eE+-]+)$') | float(0) %}
+      {% set c = value | regex_findall_index('(?m)^tensorfold:request_latency_seconds_count\s+([0-9.eE+-]+)$') | float(0) %}
+      {{ (s / c) | round(2) if c > 0 else 0 }}
+    state_class: measurement
+    unit_of_measurement: s
+  - name: TensorFold Average TG
+    unique_id: tensorfold_avg_tg
+    value_template: >-
+      {% set g = value | regex_findall_index('(?m)^tensorfold:generation_tokens_total\s+([0-9.eE+-]+)$') | float(0) %}
+      {% set d = value | regex_findall_index('(?m)^tensorfold:request_decode_seconds_sum\s+([0-9.eE+-]+)$') | float(0) %}
+      {{ (g / d) | round(1) if d > 0 else 0 }}
+    state_class: measurement
+    unit_of_measurement: "tok/s"
+  - name: TensorFold Average PP
+    unique_id: tensorfold_avg_pp
+    value_template: >-
+      {% set p = value | regex_findall_index('(?m)^tensorfold:prompt_tokens_total\s+([0-9.eE+-]+)$') | float(0) %}
+      {% set t = value | regex_findall_index('(?m)^tensorfold:request_prefill_seconds_sum\s+([0-9.eE+-]+)$') | float(0) %}
+      {{ (p / t) | round(0) if t > 0 else 0 }}
+    state_class: measurement
+    unit_of_measurement: "tok/s"
+  - name: TensorFold TPOT Average
+    unique_id: tensorfold_tpot_avg
+    value_template: >-
+      {% set s = value | regex_findall_index('(?m)^tensorfold:request_time_per_output_token_seconds_sum\s+([0-9.eE+-]+)$') | float(0) %}
+      {% set c = value | regex_findall_index('(?m)^tensorfold:request_time_per_output_token_seconds_count\s+([0-9.eE+-]+)$') | float(0) %}
+      {{ (s / c) | round(3) if c > 0 else 0 }}
+    state_class: measurement
+    unit_of_measurement: s

@@ -1,3 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
+set -e
 
-docker run -it --rm sandbox:full /bin/ash
+podman run -it --rm sandbox /bin/ash

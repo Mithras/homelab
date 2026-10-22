@@ -22,8 +22,7 @@ assist_pipeline:
 
 homeassistant:
   external_url: !secret external_url
-  # internal_url: https://ubuntu1:8443/
-  internal_url: http://ubuntu1:8123/
+  internal_url: http://192.168.1.4:8123/
   latitude: !secret latitude
   longitude: !secret longitude
   country: US
@@ -36,10 +35,10 @@ homeassistant:
 
 recorder: !include recorder.yaml
 
-http:
-  use_x_forwarded_for: true
-  trusted_proxies:
-    - 172.16.0.0/12
+# http:
+#   use_x_forwarded_for: true
+#   trusted_proxies:
+#     - 10.89.0.0/16
 
 device_tracker:
   - platform: google_maps
@@ -107,3 +106,8 @@ intent_script:
   # Test:
   #   speech:
   #     text: Test
+
+rest:
+  # - !include vllm.yaml
+  # - !include tensorfold-v0.yaml
+  - !include tensorfold-v1.yaml

@@ -1,0 +1,25 @@
+[Unit]
+Description=Firecrawl playwright service
+PartOf=firecrawl.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=firecrawl.target
+
+[Container]
+ContainerName=firecrawl-playwright
+Image=ghcr.io/firecrawl/playwright-service
+AutoUpdate=registry
+# node
+User=1000
+NoNewPrivileges=true
+PidsLimit=512
+
+Environment=PORT=3000
+Environment=MAX_CONCURRENT_PAGES=10
+
+Tmpfs=/tmp/.cache:noexec,nosuid,size=1g
+
+Network=firecrawl.network
