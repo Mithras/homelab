@@ -1,0 +1,35 @@
+[Unit]
+Description=Hermes sandbox (mom)
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+[Container]
+ContainerName=sandbox-mom
+Image=localhost/sandbox
+Pull=never
+UserNS=keep-id:uid=10000,gid=10000
+DropCapability=NET_RAW NET_ADMIN
+NoNewPrivileges=true
+
+# SSH
+Volume=/home/mithras/homelab/sandbox/.ssh/mom/host_keys:/etc/ssh/host_keys:ro
+Volume=/home/mithras/homelab/sandbox/.ssh/mom/id_rsa.pub:/etc/ssh/authorized_keys:ro
+
+# Hermes
+Volume=/home/mithras/homelab/hermes/mom:/opt/data:ro
+Volume=/home/mithras/homelab/hermes/mom/cache:/opt/data/cache
+Volume=/home/mithras/homelab/hermes/mom/kanban:/opt/data/kanban
+Volume=/home/mithras/homelab/hermes/mom/plans:/opt/data/plans
+Volume=/home/mithras/homelab/hermes/mom/skills:/opt/data/skills
+Volume=/home/mithras/homelab/hermes/mom/price-watches:/opt/data/price-watches
+
+# Extra
+
+
+Environment=TZ=America/Los_Angeles
+
+Network=sandbox-mom.network

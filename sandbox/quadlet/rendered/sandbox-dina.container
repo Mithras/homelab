@@ -1,0 +1,35 @@
+[Unit]
+Description=Hermes sandbox (dina)
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+[Container]
+ContainerName=sandbox-dina
+Image=localhost/sandbox
+Pull=never
+UserNS=keep-id:uid=10000,gid=10000
+DropCapability=NET_RAW NET_ADMIN
+NoNewPrivileges=true
+
+# SSH
+Volume=/home/mithras/homelab/sandbox/.ssh/dina/host_keys:/etc/ssh/host_keys:ro
+Volume=/home/mithras/homelab/sandbox/.ssh/dina/id_rsa.pub:/etc/ssh/authorized_keys:ro
+
+# Hermes
+Volume=/home/mithras/homelab/hermes/dina:/opt/data:ro
+Volume=/home/mithras/homelab/hermes/dina/cache:/opt/data/cache
+Volume=/home/mithras/homelab/hermes/dina/kanban:/opt/data/kanban
+Volume=/home/mithras/homelab/hermes/dina/plans:/opt/data/plans
+Volume=/home/mithras/homelab/hermes/dina/skills:/opt/data/skills
+Volume=/home/mithras/homelab/hermes/dina/price-watches:/opt/data/price-watches
+
+# Extra
+Volume=/home/mithras/homelab/syncthing/Obsidian-dina/main:/home/hermes/obsidian
+
+Environment=TZ=America/Los_Angeles
+
+Network=sandbox-dina.network

@@ -1,3 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
+set -e
 
-docker run -it --rm hermes-agent /bin/bash
+podman run -it --rm hermes-agent /bin/bash

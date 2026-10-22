@@ -82,9 +82,8 @@ services:
     networks:
       - homelab
       - firecrawl
-      - sandbox-main
-      - sandbox-dina
-      - sandbox-mom
+    ports:
+      - 3002:3002
 
   redis:
     image: redis:alpine

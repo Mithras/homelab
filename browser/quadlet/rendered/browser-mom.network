@@ -1,0 +1,8 @@
+[Unit]
+Description=Hermes browser (mom)
+
+[Install]
+WantedBy=default.target
+
+[Network]
+NetworkName=browser-mom

@@ -1,0 +1,8 @@
+[Unit]
+Description=Hermes sandbox (mom)
+
+[Install]
+WantedBy=default.target
+
+[Network]
+NetworkName=sandbox-mom

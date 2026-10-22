@@ -8,21 +8,31 @@ model_list:
       allowed_openai_params: ["reasoning_effort"]
     model_info:
       mode: chat
-  - model_name: deepseek-v4-flash-0731
+  - model_name: qwen3.6-35b-a3b
+    litellm_params:
+      litellm_credential_name: pc
+      custom_llm_provider: custom_openai
+      model: qwen3.6-35b-a3b
+      tags: ["pc"]
+      allowed_openai_params: ["reasoning_effort"]
+    model_info:
+      mode: chat
+  - model_name: glm-53-flash
     litellm_params:
       litellm_credential_name: gx10
       custom_llm_provider: custom_openai
-      model: deepseek-v4-flash-0731
+      model: glm-53-flash
       tags: ["gx10"]
       allowed_openai_params: ["reasoning_effort"]
     model_info:
       mode: chat
-  # - model_name: qwen3-4-embedding
+  # - model_name: qwen3-0.6-embed
   #   litellm_params:
   #     litellm_credential_name: gx10-embedding
   #     custom_llm_provider: openai_like
-  #     model: Qwen3-Embedding-4B-Q4_K_M.gguf
+  #     model: qwen3-0.6-embed
   #     tags: ["gx10"]
+  #     additional_drop_params: ["encoding_format"]
   #   model_info:
   #     mode: embedding
 
@@ -30,17 +40,17 @@ credential_list:
   - credential_name: pc
     credential_values:
       api_base: http://192.168.1.2:8000/v1
-      api_key: na
+      api_key: none
     credential_info: {}
   - credential_name: gx10
     credential_values:
       api_base: http://192.168.1.8:8000/v1
-      api_key: na
+      api_key: none
     credential_info: {}
   - credential_name: gx10-embedding
     credential_values:
-      api_base: http://192.168.1.8:8081/v1
-      api_key: na
+      api_base: http://192.168.1.161:8001/v1
+      api_key: none
     credential_info: {}
 
 general_settings:
@@ -65,8 +75,8 @@ general_settings:
 router_settings:
   routing_strategy: simple-shuffle  # `least-busy` doesn't work
   model_group_alias:
-    primary: deepseek-v4-flash-0731
-    secondary: qwen38-27
-    # embedding: qwen3-4-embedding
+    primary: glm-53-flash
+    secondary: qwen3.6-35b-a3b
+    # embedding: qwen3-0.6-embed
 
-    o3-mini: qwen38-27 # BUG: https://github.com/firecrawl/firecrawl/pull/3332
+    o3-mini: qwen3.6-35b-a3b # BUG: https://github.com/firecrawl/firecrawl/pull/3332

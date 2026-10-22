@@ -1,0 +1,8 @@
+[Unit]
+Description=Hermes browser (mithras)
+
+[Install]
+WantedBy=default.target
+
+[Network]
+NetworkName=browser-mithras

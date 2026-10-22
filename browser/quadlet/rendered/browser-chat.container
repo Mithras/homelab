@@ -1,0 +1,41 @@
+[Unit]
+Description=Hermes browser (chat)
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+[Container]
+ContainerName=browser-chat
+Image=lscr.io/linuxserver/chromium
+AutoUpdate=registry
+UIDMap=+10000:@%U
+DropCapability=NET_RAW NET_ADMIN
+NoNewPrivileges=true
+PodmanArgs=--shm-size=1g
+# TODO: replace with `NetworkAlias=browser` after podman is 5.x
+PodmanArgs=--network-alias=browser
+
+PublishPort=3103:3000
+
+Volume=/home/mithras/homelab/browser/config/chat:/config
+Volume=/home/mithras/homelab/browser/s6/clean-profile-lock/run:/custom-cont-init.d/clean-profile-lock:ro
+Volume=/home/mithras/homelab/browser/s6/install-socat/run:/custom-cont-init.d/install-socat:ro
+Volume=/home/mithras/homelab/browser/s6/socat-cdp/run:/custom-services.d/socat-cdp:ro
+
+Environment=TZ=America/Los_Angeles
+Environment=PUID=10000
+Environment=PGID=10000
+Environment=CHROME_CLI='--remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --user-data-dir=/config/profile --no-first-run --no-default-browser-check --hide-crash-restore-bubble'
+Environment=HARDEN_DESKTOP=true
+Environment=NO_STEAM=true
+Environment=NO_GAMEPAD=true
+Environment=NO_WEBCAM=true
+Environment=SELKIES_MANUAL_WIDTH=1920
+Environment=SELKIES_MANUAL_HEIGHT=1080
+
+EnvironmentFile=/home/mithras/homelab/quadlet/profiles/chat/browser.env
+
+Network=browser-chat.network

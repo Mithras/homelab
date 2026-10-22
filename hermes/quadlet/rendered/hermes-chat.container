@@ -1,0 +1,38 @@
+[Unit]
+Description=Hermes gateway (chat)
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+[Container]
+ContainerName=hermes-chat
+Image=localhost/hermes-agent:20261022
+Pull=never
+Exec=gateway run
+UserNS=keep-id:uid=10000,gid=10000
+DropCapability=NET_RAW NET_ADMIN
+NoNewPrivileges=true
+
+
+
+# Sandbox SSH
+Volume=/home/mithras/homelab/sandbox/.ssh/chat/id_rsa:/opt/data/.ssh/id_rsa:ro
+Volume=/home/mithras/homelab/sandbox/.ssh/chat/known_hosts:/opt/data/.ssh/known_hosts:ro
+
+# Gateway SSH
+Volume=/home/mithras/homelab/hermes/.ssh/chat/host_keys:/etc/ssh/host_keys:ro
+Volume=/home/mithras/homelab/hermes/.ssh/chat/id_rsa.pub:/etc/ssh/authorized_keys:ro
+
+# Gateway
+Volume=/home/mithras/homelab/hermes/chat:/opt/data
+
+Environment=TZ=America/Los_Angeles
+EnvironmentFile=/home/mithras/homelab/hermes/quadlet/hermes.env
+EnvironmentFile=/home/mithras/homelab/quadlet/profiles/chat/hermes.env
+
+Network=homelab.network
+Network=sandbox-chat.network
+Network=browser-chat.network

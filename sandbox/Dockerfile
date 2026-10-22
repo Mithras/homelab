@@ -1,33 +1,23 @@
-# Stage 1: Build gog binaries
-FROM golang:alpine AS build
+FROM ubuntu
 
-RUN apk add --no-cache ca-certificates git curl jq bash
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssh-server bash git python3 python3-pip python3-venv nodejs npm \
+    curl jq ripgrep unzip procps ca-certificates tzdata rsync \
+    tmux xz-utils socat ffmpeg
 
-RUN GOG_VERSION=$(curl -fsSL https://api.github.com/repos/openclaw/gogcli/releases/latest \
-      | jq -r '.tag_name') && \
-    git clone --depth 1 --branch "$GOG_VERSION" https://github.com/openclaw/gogcli.git /src
+RUN groupadd -g 10000 hermes \
+    && useradd -u 10000 -g 10000 -d /home/hermes -m -s /bin/bash hermes \
+    && ln -s /opt/data /home/hermes/.hermes
 
-WORKDIR /src
+COPY --chmod=644 sshd_config /etc/ssh/sshd_config
 
-RUN go build -o /out/gog-full ./cmd/gog && \
-    ./build-safe.sh safety-profiles/agent-safe.yaml -o /out/gog-agent
+EXPOSE 2222
 
-# Stage 2: Final image with agent-safe gog binary
-FROM lscr.io/linuxserver/openssh-server AS openssh-server
+USER hermes
 
-RUN apk add --no-cache \
-    ca-certificates tzdata curl git jq python3 ripgrep ffmpeg nodejs npm tar
+# Shared venv + youtube-transcript-api (youtube-content skill)
+RUN python3 -m venv --system-site-packages /home/hermes/.venv \
+    && /home/hermes/.venv/bin/pip install --no-cache-dir \
+    youtube-transcript-api
 
-RUN npm i -g @steipete/summarize firecrawl-cli
-
-
-# Stage 3: Final image with agent-safe gog binary
-FROM openssh-server AS agent
-
-COPY --from=build /out/gog-agent /usr/local/bin/gog
-
-
-# Stage 4: Final image with full gog binary
-FROM openssh-server AS full
-
-COPY --from=build /out/gog-full /usr/local/bin/gog
+ENTRYPOINT ["/usr/sbin/sshd", "-D", "-e"]

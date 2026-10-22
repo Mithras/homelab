@@ -1,0 +1,8 @@
+[Unit]
+Description=Hermes browser (chat)
+
+[Install]
+WantedBy=default.target
+
+[Network]
+NetworkName=browser-chat

@@ -1,0 +1,39 @@
+[Unit]
+Description=Hermes gateway (mithras)
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+[Container]
+ContainerName=hermes-mithras
+Image=localhost/hermes-agent:20261022
+Pull=never
+Exec=gateway run
+UserNS=keep-id:uid=10000,gid=10000
+DropCapability=NET_RAW NET_ADMIN
+NoNewPrivileges=true
+
+PublishPort=2222:22
+PublishPort=9121:9119
+
+# Sandbox SSH
+Volume=/home/mithras/homelab/sandbox/.ssh/mithras/id_rsa:/opt/data/.ssh/id_rsa:ro
+Volume=/home/mithras/homelab/sandbox/.ssh/mithras/known_hosts:/opt/data/.ssh/known_hosts:ro
+
+# Gateway SSH
+Volume=/home/mithras/homelab/hermes/.ssh/mithras/host_keys:/etc/ssh/host_keys:ro
+Volume=/home/mithras/homelab/hermes/.ssh/mithras/id_rsa.pub:/etc/ssh/authorized_keys:ro
+
+# Gateway
+Volume=/home/mithras/homelab/hermes/mithras:/opt/data
+
+Environment=TZ=America/Los_Angeles
+EnvironmentFile=/home/mithras/homelab/hermes/quadlet/hermes.env
+EnvironmentFile=/home/mithras/homelab/quadlet/profiles/mithras/hermes.env
+
+Network=homelab.network
+Network=sandbox-mithras.network
+Network=browser-mithras.network

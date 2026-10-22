@@ -1,0 +1,35 @@
+[Unit]
+Description=Hermes sandbox (${PROFILE})
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+[Container]
+ContainerName=sandbox-${PROFILE}
+Image=localhost/sandbox
+Pull=never
+UserNS=keep-id:uid=10000,gid=10000
+DropCapability=NET_RAW NET_ADMIN
+NoNewPrivileges=true
+
+# SSH
+Volume=/home/mithras/homelab/sandbox/.ssh/${PROFILE}/host_keys:/etc/ssh/host_keys:ro
+Volume=/home/mithras/homelab/sandbox/.ssh/${PROFILE}/id_rsa.pub:/etc/ssh/authorized_keys:ro
+
+# Hermes
+Volume=/home/mithras/homelab/hermes/${PROFILE}:/opt/data:ro
+Volume=/home/mithras/homelab/hermes/${PROFILE}/cache:/opt/data/cache
+Volume=/home/mithras/homelab/hermes/${PROFILE}/kanban:/opt/data/kanban
+Volume=/home/mithras/homelab/hermes/${PROFILE}/plans:/opt/data/plans
+Volume=/home/mithras/homelab/hermes/${PROFILE}/skills:/opt/data/skills
+Volume=/home/mithras/homelab/hermes/${PROFILE}/price-watches:/opt/data/price-watches
+
+# Extra
+${SANDBOX_EXTRA_VOLUMES}
+
+Environment=TZ=America/Los_Angeles
+
+Network=sandbox-${PROFILE}.network

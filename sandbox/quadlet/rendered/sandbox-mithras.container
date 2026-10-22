@@ -1,0 +1,37 @@
+[Unit]
+Description=Hermes sandbox (mithras)
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+[Container]
+ContainerName=sandbox-mithras
+Image=localhost/sandbox
+Pull=never
+UserNS=keep-id:uid=10000,gid=10000
+DropCapability=NET_RAW NET_ADMIN
+NoNewPrivileges=true
+
+# SSH
+Volume=/home/mithras/homelab/sandbox/.ssh/mithras/host_keys:/etc/ssh/host_keys:ro
+Volume=/home/mithras/homelab/sandbox/.ssh/mithras/id_rsa.pub:/etc/ssh/authorized_keys:ro
+
+# Hermes
+Volume=/home/mithras/homelab/hermes/mithras:/opt/data:ro
+Volume=/home/mithras/homelab/hermes/mithras/cache:/opt/data/cache
+Volume=/home/mithras/homelab/hermes/mithras/kanban:/opt/data/kanban
+Volume=/home/mithras/homelab/hermes/mithras/plans:/opt/data/plans
+Volume=/home/mithras/homelab/hermes/mithras/skills:/opt/data/skills
+Volume=/home/mithras/homelab/hermes/mithras/price-watches:/opt/data/price-watches
+
+# Extra
+Volume=/home/mithras/homelab/syncthing/Obsidian/Main:/home/hermes/obsidian
+Volume=/home/mithras/homelab:/home/hermes/homelab:ro
+Volume=tmpfs:/home/hermes/homelab/hermes/.ssh:ro
+
+Environment=TZ=America/Los_Angeles
+
+Network=sandbox-mithras.network
