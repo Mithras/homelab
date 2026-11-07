@@ -1,0 +1,28 @@
+[Unit]
+Description=AppDaemon
+PartOf=homelab.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=homelab.target
+
+[Container]
+ContainerName=appdaemon
+Image=docker.io/acockburn/appdaemon
+AutoUpdate=registry
+# <none>
+User=10000
+UserNS=keep-id:uid=10000,gid=10000
+NoNewPrivileges=true
+PidsLimit=512
+
+Environment=TZ=America/Los_Angeles
+
+Volume=/home/mithras/homelab/appdaemon:/conf
+Volume=/home/mithras/homelab/tmp:/conf/tmp
+
+# PublishPort=5050:5050
+
+Network=homelab.network

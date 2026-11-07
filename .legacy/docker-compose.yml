@@ -177,3 +177,31 @@
 #     - 53:53/udp
 #     - 3000:3000
 #   user: "${UID}:${GID}"
+
+# openviking:
+#   # restart: unless-stopped
+#   container_name: openviking
+#   image: ghcr.io/volcengine/openviking
+#   command:
+#     - --without-bot
+#   volumes:
+#     - ./openviking:/app/.openviking
+#   ports: 
+#     - 1933:1933
+#   networks:
+#     - homelab
+
+# openvpn-as:
+#   restart: unless-stopped
+#   image: openvpn/openvpn-as
+#   devices:
+#     - /dev/net/tun:/dev/net/tun
+#   cap_add:
+#     - NET_ADMIN
+#     - MKNOD
+#   ports:
+#     - 943:943  # admin
+#     # - 443:443  # user
+#     - 1194:1194/tcp  # openvpn
+#   volumes:
+#     - ./openvpn:/openvpn

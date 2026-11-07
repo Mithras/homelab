@@ -1,0 +1,21 @@
+[Unit]
+Description=Firecrawl redis
+PartOf=firecrawl.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=firecrawl.target
+
+[Container]
+ContainerName=firecrawl-redis
+Image=docker.io/library/redis:alpine
+AutoUpdate=registry
+Exec=redis-server --bind 0.0.0.0
+# redis
+User=999
+NoNewPrivileges=true
+PidsLimit=512
+
+Network=firecrawl.network

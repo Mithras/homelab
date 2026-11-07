@@ -1,34 +1,39 @@
-FROM nousresearch/hermes-agent
+FROM docker.io/nousresearch/hermes-agent
 
-# Install openssh-server
+# Install openssh-server, socat
 RUN apt-get update \ 
-    && apt-get install -y --no-install-recommends openssh-server
+    && apt-get install -y --no-install-recommends openssh-server socat
 
-# Install firecrawl-py and hermes-lcm + optional deps
-RUN chmod -R u+w /opt/hermes && \
-    FC_VERSION=$(python3 -c "from tools.lazy_deps import LAZY_DEPS; print(LAZY_DEPS['search.firecrawl'][0].split('==')[1])") && \
-    uv pip install "firecrawl-py==$FC_VERSION" tiktoken regex && \
-    git clone https://github.com/stephenschoettler/hermes-lcm /opt/hermes/plugins/hermes-lcm && \
-    chmod -R a-w /opt/hermes
-    
-# Install byterover
-RUN npm install -g byterover-cli
+# Install hermes-lcm
+RUN chmod -R u+w /opt/hermes \
+    && git clone https://github.com/stephenschoettler/hermes-lcm /opt/hermes/plugins/hermes-lcm \ 
+    && chmod -R a-w /opt/hermes
+
+# Install firecrawl-py + optional deps
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+RUN chmod -R u+w /opt/hermes \
+    && uv sync --directory /opt/hermes --frozen --inexact --extra firecrawl \
+    && chmod -R a-w /opt/hermes \
+    && rm /usr/local/bin/uv
+# /opt/hermes/.venv/bin/python -c 'import firecrawl; print(firecrawl.__version__)'
 
 # Override sshd config
-RUN cat > /etc/ssh/sshd_config <<EOF
-PubkeyAuthentication yes
-PasswordAuthentication no
-PermitRootLogin no
-AuthorizedKeysFile .ssh/authorized_keys
-AllowUsers hermes
-EOF
+RUN { echo 'PubkeyAuthentication yes'; \
+      echo 'PasswordAuthentication no'; \
+      echo 'PermitRootLogin no'; \
+      echo 'HostKey /etc/ssh/host_keys/ssh_host_ed25519_key'; \
+      echo 'HostKey /etc/ssh/host_keys/ssh_host_ecdsa_key'; \
+      echo 'HostKey /etc/ssh/host_keys/ssh_host_rsa_key'; \
+      echo 'AuthorizedKeysFile /etc/ssh/authorized_keys'; \
+      echo 'AllowUsers hermes'; \
+    } > /etc/ssh/sshd_config \
+    && mkdir -p /run/sshd
 
-# Register sshd as s6-overlay service
-RUN mkdir -p /etc/s6-overlay/s6-rc.d/sshd && \
-echo "longrun" > /etc/s6-overlay/s6-rc.d/sshd/type && \
-printf '#!/command/with-contenv sh\nexec /usr/sbin/sshd -D\n' > /etc/s6-overlay/s6-rc.d/sshd/run && \
-chmod +x /etc/s6-overlay/s6-rc.d/sshd/run && \
-ln -s /etc/s6-overlay/s6-rc.d/sshd /etc/s6-overlay/s6-rc.d/user/contents.d/sshd
+# Register s6-overlay services
+COPY s6/sshd /etc/s6-overlay/s6-rc.d/sshd
+COPY s6/socat-cdp /etc/s6-overlay/s6-rc.d/socat-cdp
+RUN touch /etc/s6-overlay/s6-rc.d/sshd /etc/s6-overlay/s6-rc.d/user/contents.d/sshd \
+    /etc/s6-overlay/s6-rc.d/user/contents.d/socat-cdp
 
 # Allow hermes pubkey authentication
 RUN usermod -p '*' hermes

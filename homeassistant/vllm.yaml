@@ -1,0 +1,173 @@
+resource: http://192.168.1.8:8000/metrics
+scan_interval: 10
+timeout: 5
+sensor:
+  - name: vLLM Running Requests
+    unique_id: vllm_running
+    unit_of_measurement: "req"
+    state_class: measurement
+    value_template: >-
+      {{ value | regex_findall_index('vllm:num_requests_running\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) | int }}
+
+  - name: vLLM Waiting Requests
+    unique_id: vllm_waiting
+    unit_of_measurement: "req"
+    state_class: measurement
+    value_template: >-
+      {{ value | regex_findall_index('vllm:num_requests_waiting\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) | int }}
+
+  - name: vLLM KV Cache Usage
+    unique_id: vllm_kv_cache
+    unit_of_measurement: "%"
+    state_class: measurement
+    value_template: >-
+      {{ ((value | regex_findall_index('vllm:kv_cache_usage_perc\{[^}]*\}\s*([0-9.eE+-]+)') | float(0)) * 100) | round(1) }}
+
+  - name: vLLM Prefix Cache Hit Rate
+    unique_id: vllm_prefix_hit
+    unit_of_measurement: "%"
+    state_class: measurement
+    value_template: >-
+      {% set h = value | regex_findall_index('vllm:prefix_cache_hits_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {% set q = value | regex_findall_index('vllm:prefix_cache_queries_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {{ ((h / q * 100) | round(1)) if q > 0 else 0 }}
+
+  - name: vLLM Prompt Tokens Total
+    unique_id: vllm_prompt_tokens
+    unit_of_measurement: "tokens"
+    state_class: total
+    value_template: >-
+      {{ value | regex_findall_index('vllm:prompt_tokens_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) | int }}
+
+  - name: vLLM Generation Tokens Total
+    unique_id: vllm_gen_tokens
+    unit_of_measurement: "tokens"
+    state_class: total
+    value_template: >-
+      {{ value | regex_findall_index('vllm:generation_tokens_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) | int }}
+
+  - name: vLLM Finished Requests
+    unique_id: vllm_success
+    unit_of_measurement: "req"
+    state_class: total
+    value_template: >-
+      {{ (value | regex_findall('vllm:request_success_total\{[^}]*\}\s*([0-9.eE+-]+)') | map('float') | list | sum) | round(0) }}
+
+  - name: vLLM Preemptions
+    unique_id: vllm_preemptions
+    unit_of_measurement: "req"
+    state_class: total
+    value_template: >-
+      {{ value | regex_findall_index('vllm:num_preemptions_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) | int }}
+
+  - name: vLLM TTFT Average
+    unique_id: vllm_ttft_avg
+    unit_of_measurement: "s"
+    state_class: measurement
+    value_template: >-
+      {% set s = value | regex_findall_index('vllm:time_to_first_token_seconds_sum\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {% set c = value | regex_findall_index('vllm:time_to_first_token_seconds_count\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {{ ((s / c) | round(3)) if c > 0 else 0 }}
+
+  - name: vLLM TPOT Average
+    unique_id: vllm_tpot_avg
+    unit_of_measurement: "s"
+    state_class: measurement
+    value_template: >-
+      {% set s = value | regex_findall_index('vllm:request_time_per_output_token_seconds_sum\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {% set c = value | regex_findall_index('vllm:request_time_per_output_token_seconds_count\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {{ ((s / c) | round(4)) if c > 0 else 0 }}
+
+  - name: vLLM E2E Latency Average
+    unique_id: vllm_e2e_avg
+    unit_of_measurement: "s"
+    state_class: measurement
+    value_template: >-
+      {% set s = value | regex_findall_index('vllm:e2e_request_latency_seconds_sum\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {% set c = value | regex_findall_index('vllm:e2e_request_latency_seconds_count\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {{ ((s / c) | round(2)) if c > 0 else 0 }}
+
+  - name: vLLM Spec Decode Acceptance
+    unique_id: vllm_spec_accept
+    unit_of_measurement: "%"
+    state_class: measurement
+    value_template: >-
+      {% set a = value | regex_findall_index('vllm:spec_decode_num_accepted_tokens_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {% set d = value | regex_findall_index('vllm:spec_decode_num_draft_tokens_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {{ (((a / d) * 100) | round(1)) if d > 0 else 0 }}
+
+  # ── Spec acceptance per draft position (0-6) ──
+  - name: vLLM Spec Accept Pos 0
+    unique_id: vllm_spec_accept_pos0
+    unit_of_measurement: "%"
+    state_class: measurement
+    value_template: >-
+      {{ (((value | regex_findall_index('vllm:spec_decode_num_accepted_tokens_per_pos_total\{[^}]*position="0"[^}]*\}\s*([0-9.eE+-]+)') | float(0)) /
+          (value | regex_findall_index('vllm:spec_decode_num_drafts_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0)) * 100) | round(1)) }}
+
+  - name: vLLM Spec Accept Pos 1
+    unique_id: vllm_spec_accept_pos1
+    unit_of_measurement: "%"
+    state_class: measurement
+    value_template: >-
+      {{ (((value | regex_findall_index('vllm:spec_decode_num_accepted_tokens_per_pos_total\{[^}]*position="1"[^}]*\}\s*([0-9.eE+-]+)') | float(0)) /
+          (value | regex_findall_index('vllm:spec_decode_num_drafts_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0)) * 100) | round(1)) }}
+
+  - name: vLLM Spec Accept Pos 2
+    unique_id: vllm_spec_accept_pos2
+    unit_of_measurement: "%"
+    state_class: measurement
+    value_template: >-
+      {{ (((value | regex_findall_index('vllm:spec_decode_num_accepted_tokens_per_pos_total\{[^}]*position="2"[^}]*\}\s*([0-9.eE+-]+)') | float(0)) /
+          (value | regex_findall_index('vllm:spec_decode_num_drafts_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0)) * 100) | round(1)) }}
+
+  - name: vLLM Spec Accept Pos 3
+    unique_id: vllm_spec_accept_pos3
+    unit_of_measurement: "%"
+    state_class: measurement
+    value_template: >-
+      {{ (((value | regex_findall_index('vllm:spec_decode_num_accepted_tokens_per_pos_total\{[^}]*position="3"[^}]*\}\s*([0-9.eE+-]+)') | float(0)) /
+          (value | regex_findall_index('vllm:spec_decode_num_drafts_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0)) * 100) | round(1)) }}
+
+  - name: vLLM Spec Accept Pos 4
+    unique_id: vllm_spec_accept_pos4
+    unit_of_measurement: "%"
+    state_class: measurement
+    value_template: >-
+      {{ (((value | regex_findall_index('vllm:spec_decode_num_accepted_tokens_per_pos_total\{[^}]*position="4"[^}]*\}\s*([0-9.eE+-]+)') | float(0)) /
+          (value | regex_findall_index('vllm:spec_decode_num_drafts_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0)) * 100) | round(1)) }}
+
+  - name: vLLM Spec Accept Pos 5
+    unique_id: vllm_spec_accept_pos5
+    unit_of_measurement: "%"
+    state_class: measurement
+    value_template: >-
+      {{ (((value | regex_findall_index('vllm:spec_decode_num_accepted_tokens_per_pos_total\{[^}]*position="5"[^}]*\}\s*([0-9.eE+-]+)') | float(0)) /
+          (value | regex_findall_index('vllm:spec_decode_num_drafts_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0)) * 100) | round(1)) }}
+
+  - name: vLLM Spec Accept Pos 6
+    unique_id: vllm_spec_accept_pos6
+    unit_of_measurement: "%"
+    state_class: measurement
+    value_template: >-
+      {{ (((value | regex_findall_index('vllm:spec_decode_num_accepted_tokens_per_pos_total\{[^}]*position="6"[^}]*\}\s*([0-9.eE+-]+)') | float(0)) /
+          (value | regex_findall_index('vllm:spec_decode_num_drafts_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0)) * 100) | round(1)) }}
+
+  # ── Lifetime average throughput (totals ÷ per-request time sums) ──
+  - name: vLLM Average PP
+    unique_id: vllm_average_pp
+    unit_of_measurement: "tokens/s"
+    state_class: measurement
+    value_template: >-
+      {% set s = value | regex_findall_index('vllm:prompt_tokens_by_source_total\{[^}]*source="local_compute"[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {% set t = value | regex_findall_index('vllm:request_prefill_time_seconds_sum\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {{ ((s / t) | round(0)) if t > 0 else 0 }}
+
+  - name: vLLM Average TG
+    unique_id: vllm_average_tg
+    unit_of_measurement: "tokens/s"
+    state_class: measurement
+    value_template: >-
+      {% set s = value | regex_findall_index('vllm:generation_tokens_total\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {% set t = value | regex_findall_index('vllm:request_decode_time_seconds_sum\{[^}]*\}\s*([0-9.eE+-]+)') | float(0) %}
+      {{ ((s / t) | round(1)) if t > 0 else 0 }}

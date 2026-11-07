@@ -1,0 +1,34 @@
+[Unit]
+Description=Litellm proxy
+Wants=litellm-db.service
+After=litellm-db.service
+PartOf=litellm.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=litellm.target
+
+[Container]
+ContainerName=litellm
+Image=docker.litellm.ai/berriai/litellm:main-stable
+AutoUpdate=registry
+Exec=--config=/app/config.yaml
+# <none>
+User=10000
+NoNewPrivileges=true
+PidsLimit=512
+
+EnvironmentFile=/home/mithras/homelab/litellm/quadlet/.env
+
+Volume=/home/mithras/homelab/litellm/config.yaml:/app/config.yaml:ro
+
+Network=homelab.network
+Network=litellm.network
+
+HealthCmd=python3 -c 'import urllib.request; urllib.request.urlopen("http://localhost:4000/health/liveliness")'
+HealthInterval=30s
+HealthTimeout=10s
+HealthRetries=3
+HealthStartPeriod=40s

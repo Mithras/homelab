@@ -1,0 +1,6 @@
+[Unit]
+Description=Firecrawl
+PartOf=homelab.target
+
+[Install]
+WantedBy=homelab.target

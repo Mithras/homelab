@@ -1,0 +1,32 @@
+[Unit]
+Description=Litellm postgres
+PartOf=litellm.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=litellm.target
+
+[Container]
+ContainerName=litellm-db
+Image=docker.io/library/postgres:16
+AutoUpdate=registry
+# postgres
+User=999
+UserNS=keep-id:uid=999,gid=999
+NoNewPrivileges=true
+PidsLimit=512
+
+EnvironmentFile=/home/mithras/homelab/litellm/quadlet/.env
+Environment=POSTGRES_DB=litellm
+Environment=POSTGRES_USER=litellm
+
+Volume=litellm_postgres_data:/var/lib/postgresql/data
+
+Network=litellm.network
+
+HealthCmd=pg_isready -d litellm -U litellm
+HealthInterval=1s
+HealthTimeout=5s
+HealthRetries=10

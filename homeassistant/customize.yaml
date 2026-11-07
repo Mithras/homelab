@@ -228,7 +228,6 @@ sensor.smart_plug_03_power:
   friendly_name: AC Living Room Power
 sensor.smart_plug_03_temperature:
   friendly_name: AC Living Room Temperature
-# Smart Plug 03
 # Smart Plug 04
 switch.smart_plug_04:
   friendly_name: AC Master Bedroom
@@ -240,13 +239,22 @@ sensor.smart_plug_04_temperature:
   friendly_name: AC Master Bedroom Temperature
 # Smart Plug 05
 switch.smart_plug_05:
-  friendly_name: Pyramid
+  friendly_name: DGX Spark 1
 sensor.smart_plug_05_energy:
-  friendly_name: Pyramid Energy
+  friendly_name: DGX Spark 1 Energy
 sensor.smart_plug_05_power:
-  friendly_name: Pyramid Power
+  friendly_name: DGX Spark 1 Power
 sensor.smart_plug_05_temperature:
-  friendly_name: Pyramid Temperature
+  friendly_name: DGX Spark 1 Temperature
+# Smart Plug 06
+switch.smart_plug_06:
+  friendly_name: DGX Spark 2
+sensor.smart_plug_06_energy:
+  friendly_name: DGX Spark 2 Energy
+sensor.smart_plug_06_power:
+  friendly_name: DGX Spark 2 Power
+sensor.smart_plug_06_temperature:
+  friendly_name: DGX Spark 2 Temperature
 
 # Smart Light Switch 01
 switch.smart_light_switch_01:

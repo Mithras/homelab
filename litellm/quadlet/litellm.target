@@ -1,0 +1,6 @@
+[Unit]
+Description=Litellm
+PartOf=homelab.target
+
+[Install]
+WantedBy=homelab.target

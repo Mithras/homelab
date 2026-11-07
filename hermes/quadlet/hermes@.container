@@ -1,0 +1,40 @@
+[Unit]
+Description=Hermes gateway (%i)
+PartOf=homelab.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=homelab.target
+
+[Container]
+ContainerName=hermes-%i
+Image=localhost/hermes-agent:20261022
+Pull=never
+Exec=gateway run
+# root -> hermes
+User=0
+UserNS=keep-id:uid=10000,gid=10000
+NoNewPrivileges=true
+PidsLimit=512
+
+# Sandbox SSH
+Volume=/home/mithras/homelab/sandbox/.ssh/%i/id_rsa:/opt/data/.ssh/id_rsa:ro
+Volume=/home/mithras/homelab/sandbox/.ssh/%i/known_hosts:/opt/data/.ssh/known_hosts:ro
+
+# Gateway SSH
+Volume=/home/mithras/homelab/hermes/.ssh/%i/host_keys:/etc/ssh/host_keys:ro
+Volume=/home/mithras/homelab/hermes/.ssh/%i/id_rsa.pub:/etc/ssh/authorized_keys:ro
+
+# Gateway
+Volume=/home/mithras/homelab/hermes/%i:/opt/data
+Volume=/home/mithras/homelab/hermes/config.yaml:/opt/data/config.yaml
+
+Environment=TZ=America/Los_Angeles
+EnvironmentFile=/home/mithras/homelab/hermes/quadlet/hermes.env
+EnvironmentFile=/home/mithras/homelab/quadlet/profiles/%i/hermes.env
+
+Network=homelab.network
+Network=sandbox@.network
+Network=browser@.network

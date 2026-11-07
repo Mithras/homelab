@@ -1,0 +1,3 @@
+#!/command/with-contenv sh
+
+rm -f /config/profile/Singleton*

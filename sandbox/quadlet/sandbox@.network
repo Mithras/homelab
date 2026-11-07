@@ -1,0 +1,8 @@
+[Unit]
+Description=Hermes sandbox (%i)
+
+[Install]
+WantedBy=default.target
+
+[Network]
+NetworkName=sandbox-%i

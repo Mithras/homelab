@@ -1,0 +1,38 @@
+[Unit]
+Description=Hermes sandbox (%i)
+PartOf=homelab.target
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=homelab.target
+
+[Container]
+ContainerName=sandbox-%i
+Image=localhost/sandbox
+Pull=never
+# hermes
+User=10000
+UserNS=keep-id:uid=10000,gid=10000
+NoNewPrivileges=true
+PidsLimit=512
+Memory=4g
+PodmanArgs=--memory-swap=6g
+
+# SSH
+Volume=/home/mithras/homelab/sandbox/.ssh/%i/host_keys:/etc/ssh/host_keys:ro
+Volume=/home/mithras/homelab/sandbox/.ssh/%i/id_rsa.pub:/etc/ssh/authorized_keys:ro
+
+# Hermes
+Volume=/home/mithras/homelab/hermes/%i:/opt/data:ro
+Volume=/home/mithras/homelab/hermes/config.yaml:/opt/data/config.yaml:ro
+Volume=/home/mithras/homelab/hermes/%i/cache:/opt/data/cache
+Volume=/home/mithras/homelab/hermes/%i/kanban:/opt/data/kanban
+Volume=/home/mithras/homelab/hermes/%i/plans:/opt/data/plans
+Volume=/home/mithras/homelab/hermes/%i/price-watches:/opt/data/price-watches
+
+Environment=TZ=America/Los_Angeles
+
+Network=sandbox@.network
+NetworkAlias=sandbox

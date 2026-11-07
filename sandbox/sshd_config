@@ -1,0 +1,12 @@
+Port 2222
+HostKey /etc/ssh/host_keys/ssh_host_ed25519_key
+HostKey /etc/ssh/host_keys/ssh_host_ecdsa_key
+HostKey /etc/ssh/host_keys/ssh_host_rsa_key
+PidFile /home/hermes/sshd.pid
+AuthorizedKeysFile /etc/ssh/authorized_keys
+PermitRootLogin no
+PasswordAuthentication no
+AllowTcpForwarding no
+
+# Resolve python3/pip to ~/.venv
+SetEnv PATH=/home/hermes/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin

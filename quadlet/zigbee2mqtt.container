@@ -1,0 +1,31 @@
+[Unit]
+Description=Zigbee2MQTT
+PartOf=homelab.target
+
+[Service]
+Restart=always
+# SupplementaryGroups=dialout
+
+[Install]
+WantedBy=homelab.target
+
+[Container]
+ContainerName=zigbee2mqtt
+Image=docker.io/koenkk/zigbee2mqtt
+AutoUpdate=registry
+# <none>
+User=10000
+UserNS=keep-id:uid=10000,gid=10000
+GroupAdd=keep-groups
+NoNewPrivileges=true
+PidsLimit=512
+
+Environment=TZ=America/Los_Angeles
+
+AddDevice=/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_fa78108a5586ec11b33feb3719c2d21c-if00-port0:/dev/zigbee
+
+Volume=/home/mithras/homelab/zigbee2mqtt:/app/data
+
+# PublishPort=8080:8080
+
+Network=homelab.network
