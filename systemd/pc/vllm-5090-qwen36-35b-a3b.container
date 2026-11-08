@@ -1,0 +1,58 @@
+[Unit]
+Description=vLLM Qwen3.6-35B-A3B NVFP4 (RTX 5090)
+PartOf=pc.target
+
+[Service]
+Restart=always
+TimeoutStartSec=600
+
+[Install]
+WantedBy=pc.target
+
+[Container]
+ContainerName=vllm-5090-qwen36-35b-a3b
+Image=docker.io/vllm/vllm-openai:v0.30.0
+AutoUpdate=registry
+Entrypoint=vllm
+Exec=serve /download/nvidia/Qwen3.6-35B-A3B-NVFP4 \
+    --host 0.0.0.0 --port 8000 \
+    --served-model-name qwen3.6-35b-a3b \
+    --async-scheduling \
+    --gpu-memory-utilization 0.85 \
+    --kv-cache-memory-bytes 3221225472 \
+    --max-num-seqs 2 \
+    --kv-offloading-backend native \
+    --kv-offloading-size 32 \
+    --enable-auto-tool-choice \
+    --trust-remote-code \
+    --reasoning-parser qwen3 \
+    --tool-call-parser qwen3_xml \
+    --max-model-len auto \
+    --language-model-only \
+    --kv-cache-dtype fp8 \
+    --default-chat-template-kwargs '{"preserve_thinking":true}' \
+    --speculative-config '{"method":"mtp","num_speculative_tokens":2}'
+# 1gb: GPU KV cache size: 67,502 tokens
+# 3gb: GPU KV cache size: 259,424 tokens
+# 5gb: GPU KV cache size: 429,839 tokens
+# <none>
+User=10000
+UserNS=keep-id:uid=10000,gid=10000
+AddDevice=nvidia.com/gpu=0
+ShmSize=32g
+NoNewPrivileges=true
+PidsLimit=512
+
+Environment=VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=0
+Environment=VLLM_ALLOW_LONG_MAX_MODEL_LEN=1
+
+Volume=vllm-workspace:/vllm-workspace:U
+Volume=/home/mithras/Documents/src/homelab/download/download:/download:ro
+
+PublishPort=8000:8000
+
+HealthCmd=python3 -c 'import urllib.request; urllib.request.urlopen("http://localhost:8000/health")'
+HealthInterval=30s
+HealthTimeout=10s
+HealthRetries=3
+HealthStartPeriod=300s

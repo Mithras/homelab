@@ -38,7 +38,7 @@ Environment=NO_WEBCAM=true
 Environment=SELKIES_MANUAL_WIDTH=1920
 Environment=SELKIES_MANUAL_HEIGHT=1080
 
-EnvironmentFile=/home/mithras/homelab/quadlet/profiles/%i/browser.env
+EnvironmentFile=/home/mithras/homelab/systemd/homelab/profiles/%i/browser.env
 
 Network=browser@.network
 

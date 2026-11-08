@@ -33,7 +33,7 @@ Volume=/home/mithras/homelab/hermes/config.yaml:/opt/data/config.yaml
 
 Environment=TZ=America/Los_Angeles
 EnvironmentFile=/home/mithras/homelab/hermes/quadlet/hermes.env
-EnvironmentFile=/home/mithras/homelab/quadlet/profiles/%i/hermes.env
+EnvironmentFile=/home/mithras/homelab/systemd/homelab/profiles/%i/hermes.env
 
 Network=homelab.network
 Network=sandbox@.network

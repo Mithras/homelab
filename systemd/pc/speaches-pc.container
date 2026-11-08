@@ -1,0 +1,43 @@
+[Unit]
+Description=Speaches TTS/STT (RTX 3090)
+PartOf=pc.target
+
+[Service]
+# Restart=always
+TimeoutStartSec=600
+
+[Install]
+WantedBy=pc.target
+
+[Container]
+ContainerName=speaches-pc
+Image=ghcr.io/speaches-ai/speaches:0.9.0-rc.3-cuda-12.6.3
+AutoUpdate=registry
+# ubuntu
+User=1000
+UserNS=keep-id:uid=1000,gid=1000
+AddDevice=nvidia.com/gpu=1
+NoNewPrivileges=true
+PidsLimit=512
+
+Environment=UVICORN_PORT=8001
+Environment=STT_MODEL_TTL=-1
+Environment=TTS_MODEL_TTL=-1
+
+Volume=/home/mithras/Documents/src/homelab/speaches/cache:/home/ubuntu/.cache/huggingface/hub
+
+PublishPort=8001:8001
+
+HealthCmd=curl -fsS -m 2 http://localhost:8001/health
+HealthInterval=30s
+HealthTimeout=5s
+HealthRetries=3
+HealthStartPeriod=60s
+
+# https://github.com/speaches-ai/speaches/
+# http://localhost:8001/
+# http://localhost:8001/v1/registry?task=text-to-speech
+# + curl http://localhost:8001/v1/models/speaches-ai/Kokoro-82M-v1.0-ONNX -X POST
+# http://localhost:8001/v1/registry?task=automatic-speech-recognition
+# + curl http://localhost:8001/v1/models/Systran/faster-whisper-large-v3 -X POST
+# + curl http://localhost:8001/v1/models/distil-whisper/distil-large-v3.5-ct2 -X POST

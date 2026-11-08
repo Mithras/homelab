@@ -1,0 +1,6 @@
+[Unit]
+Description=PC
+Wants=
+
+[Install]
+WantedBy=default.target

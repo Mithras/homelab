@@ -167,3 +167,8 @@ stt:
 #       fanout: user_turn  # per_iteration | every_n:XXX | user_turn
 #       # reference_max_tokens: XXX
 #   save_traces: true
+telemetry:
+  shared_metrics:
+    enabled: false
+    send: false
+    offer_version: 2
