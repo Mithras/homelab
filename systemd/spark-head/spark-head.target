@@ -1,0 +1,6 @@
+[Unit]
+Description=Spark (head)
+Wants=
+
+[Install]
+WantedBy=default.target

@@ -60,7 +60,9 @@ qd_sweep() {
                 if [ -d "$quadlet_path" ]; then
                     rm -rf "$quadlet_path"
                 else
-                    podman quadlet rm --force --ignore "$quadlet"
+                    if podman quadlet rm --help >/dev/null 2>&1; then
+                        podman quadlet rm --force --ignore "$quadlet"
+                    fi
                     rm -f "$quadlet_path"
                 fi
             ;;

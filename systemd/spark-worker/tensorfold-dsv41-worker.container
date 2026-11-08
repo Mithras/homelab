@@ -1,0 +1,50 @@
+[Unit]
+Description=TensorFold DSV4.1 (worker)
+After=network-online.target
+Wants=network-online.target
+PartOf=spark-worker.target
+
+[Install]
+WantedBy=spark-worker.target
+
+[Service]
+Restart=always
+TimeoutStartSec=600
+
+[Container]
+ContainerName=tensorfold-dsv41-worker
+Image=localhost/tensorfold-dsv41:exl3-tp2-03d5b88f05ef
+Exec=/download/Mia-AiLab/DeepSeek-V4.1-Flash-1017-EXL3-EAQ-v1-2.9-bpw \
+    /cache/45ee5d0f/rank-cache 1 2 \
+    192.168.100.1 29620 \
+    /cache/kit-abe07c7d/kit \
+    --engram /download/deepseek-ai/DeepSeek-V4.1-Flash-1017 \
+    --token-map /cache/45ee5d0f/dsv41_token_map.json \
+    --pool 1048576 \
+    --streams 4 \
+    --drafts 1 \
+    --graphs 1 \
+    --side 1 \
+    --prefetch 1 \
+    --aio 1 \
+    --graph-cap 512 \
+    --rdma rocep1s0f0,roceP2p1s0f0
+# <none>
+User=10000
+UserNS=keep-id:uid=10000,gid=10000
+AddDevice=nvidia.com/gpu=all
+AddDevice=/dev/infiniband
+ShmSize=32g
+Ulimit=memlock=-1
+Ulimit=stack=67108864
+PodmanArgs=--entrypoint tf-dsv41-lanes --memory=118g
+
+NoNewPrivileges=true
+PidsLimit=512
+
+EnvironmentFile=/home/mithras/homelab/systemd/lib/tensorfold-dsv41.env
+
+Volume=/home/mithras/homelab/download/download:/download:ro
+Volume=/home/mithras/homelab/tensorfold/cache:/cache:ro
+
+Network=host

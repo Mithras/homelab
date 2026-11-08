@@ -1,0 +1,65 @@
+[Unit]
+Description=TensorFold DSV4.1 (head)
+After=network-online.target
+Wants=network-online.target
+PartOf=spark-head.target
+
+[Install]
+WantedBy=spark-head.target
+
+[Service]
+Restart=always
+TimeoutStartSec=600
+
+[Container]
+ContainerName=tensorfold-dsv41-head
+Image=localhost/tensorfold-dsv41:exl3-tp2-03d5b88f05ef
+Exec=serve /download/Mia-AiLab/DeepSeek-V4.1-Flash-1017-EXL3-EAQ-v1-2.9-bpw \
+    --backend cuda \
+    --host 0.0.0.0 \
+    --port 8000 \
+    --name deepseek-v41-flash-1017 \
+    --context 1048576 \
+    --parallel 4 \
+    --max-tokens 16384 \
+    --temperature 1.0 \
+    --top-p 0.95 \
+    --top-k 20 \
+    --prompt-cache-gib 4 \
+    --prompt-cache-over-cap
+# --drop-reasoning-history
+# --thinking
+# --reasoning-effort high
+# <none>
+User=10000
+UserNS=keep-id:uid=10000,gid=10000
+AddDevice=nvidia.com/gpu=all
+AddDevice=/dev/infiniband
+ShmSize=32g
+Ulimit=memlock=-1
+Ulimit=stack=67108864
+PodmanArgs=--entrypoint tensorfold-native --memory=118g
+NoNewPrivileges=true
+PidsLimit=512
+
+EnvironmentFile=/home/mithras/homelab/systemd/lib/tensorfold-dsv41.env
+Environment=TF_TP_WORLD=2
+Environment=TF_TP_MASTER=192.168.100.1
+Environment=TF_TP_PORT=29620
+Environment=TF_DS_RANK_CACHE=/cache/45ee5d0f/rank-cache
+Environment=TF_DS_KIT=/cache/kit-abe07c7d/kit
+Environment=TENSORFOLD_CUDA_KERNELS=/cache/kit-abe07c7d/kit/aot
+Environment=TF_DS_ENGRAM=/download/deepseek-ai/DeepSeek-V4.1-Flash-1017
+Environment=TF_DS_TOKEN_MAP=/cache/45ee5d0f/dsv41_token_map.json
+Environment=TF_DS_GRAPHS=1
+Environment=TF_DS_GRAPH_CAP=512
+Environment=TF_DS_HC_SIDE=1
+Environment=TF_DS_L2_PREFETCH=1
+Environment=TF_DS_ENGRAM_AIO=1
+Environment=TF_RDMA_DEVICES=rocep1s0f0,roceP2p1s0f0
+Environment=TF_DS_T25_DRAFT_CAL=0.05
+
+Volume=/home/mithras/homelab/download/download:/download:ro
+Volume=/home/mithras/homelab/tensorfold/cache:/cache:ro
+
+Network=host

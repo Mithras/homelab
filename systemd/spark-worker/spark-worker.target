@@ -1,0 +1,6 @@
+[Unit]
+Description=Spark (worker)
+Wants=
+
+[Install]
+WantedBy=default.target
