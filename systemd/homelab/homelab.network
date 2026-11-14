@@ -1,2 +1,8 @@
+[Unit]
+Description=Homelab network
+
+[Install]
+WantedBy=homelab.target
+
 [Network]
 NetworkName=homelab

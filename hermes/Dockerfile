@@ -17,6 +17,10 @@ RUN chmod -R u+w /opt/hermes \
     && rm /usr/local/bin/uv
 # /opt/hermes/.venv/bin/python -c 'import firecrawl; print(firecrawl.__version__)'
 
+# Install mcp-excalidraw-server
+RUN npm install -g --prefix /usr/local mcp-excalidraw-server \
+    && test -x /usr/local/bin/mcp-excalidraw-server
+
 # Override sshd config
 RUN { echo 'PubkeyAuthentication yes'; \
       echo 'PasswordAuthentication no'; \

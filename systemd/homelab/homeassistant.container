@@ -30,3 +30,4 @@ Volume=/home/mithras/homelab/tmp:/config/tmp
 # PublishPort=8123:8123
 
 Network=homelab.network
+Network=edge.network

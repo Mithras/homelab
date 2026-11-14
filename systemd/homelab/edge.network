@@ -1,0 +1,8 @@
+[Unit]
+Description=Edge network for NPM
+
+[Install]
+WantedBy=homelab.target
+
+[Network]
+NetworkName=edge

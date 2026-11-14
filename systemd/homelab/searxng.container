@@ -20,6 +20,8 @@ PidsLimit=512
 
 EnvironmentFile=/home/mithras/homelab/systemd/homelab/searxng.env
 
+# PublishPort=8080:8080
+
 Volume=/home/mithras/homelab/searxng:/etc/searxng
 
 Network=homelab.network

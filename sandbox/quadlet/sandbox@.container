@@ -34,5 +34,4 @@ Volume=/home/mithras/homelab/hermes/%i/price-watches:/opt/data/price-watches
 
 Environment=TZ=America/Los_Angeles
 
-Network=sandbox@.network
-NetworkAlias=sandbox
+Network=sandbox@.network:alias=sandbox

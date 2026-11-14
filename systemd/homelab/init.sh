@@ -38,8 +38,9 @@ ensure_known_hosts() {
 HERMES="$BASE/hermes"
 SANDBOX="$BASE/sandbox"
 BROWSER="$BASE/browser"
+EXCALIDRAW="$BASE/excalidraw"
 
-COMPONENT_DIRS=("$BROWSER/quadlet" "$SANDBOX/quadlet" "$HERMES/quadlet")
+COMPONENT_DIRS=("$BROWSER/quadlet" "$SANDBOX/quadlet" "$HERMES/quadlet" "$EXCALIDRAW/quadlet")
 QUADLET_DIRS=("${COMPONENT_DIRS[@]}" "$APP_DIR" "$BASE/firecrawl/quadlet" "$BASE/litellm/quadlet")
 
 PROFILE_DIRS=("$PROFILES_DIR"/*/)
@@ -72,6 +73,11 @@ for profile_dir in "${PROFILE_DIRS[@]}"; do
     if [ -f "$profile_dir/browser.conf" ]; then
         mkdir -p "$BROWSER/config/$profile"
     fi
+
+    # Excalidraw
+    if [ -f "$profile_dir/excalidraw.conf" ]; then
+        mkdir -p "$EXCALIDRAW/data/$profile"
+    fi
 done
 
 # Systemd
@@ -91,8 +97,6 @@ for profile_dir in "${PROFILE_DIRS[@]}"; do
             qd_link_conf "$conf" "$comp@$profile.container"
         }
     done
-    [ -f "$profile_dir/sandbox.conf" ] && qd_link_instance "sandbox@.network" "sandbox@$profile.network"
-    [ -f "$profile_dir/browser.conf" ] && qd_link_instance "browser@.network" "browser@$profile.network"
 done
 
 if [ "${1:-}" = "--systemd" ]; then

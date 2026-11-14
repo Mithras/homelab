@@ -25,6 +25,7 @@ EnvironmentFile=/home/mithras/homelab/litellm/quadlet/.env
 Volume=/home/mithras/homelab/litellm/config.yaml:/app/config.yaml:ro
 
 Network=homelab.network
+Network=edge.network
 Network=litellm.network
 
 HealthCmd=python3 -c 'import urllib.request; urllib.request.urlopen("http://localhost:4000/health/liveliness")'

@@ -4,7 +4,7 @@
 #   - mcp: linkedin
 #   - pdf
 
-_config_version: 51
+_config_version: 53
 
 terminal:
   # ssh -p 2222 -i /opt/data/.ssh/id_rsa -o UserKnownHostsFile=/opt/data/.ssh/known_hosts hermes@sandbox-mithras
@@ -106,6 +106,8 @@ onboarding:
     profile_build_offered: true
 compression:
   context_total_ceiling_seconds: 1800
+voice:
+  auto_tts: true
 
 model:
   default: primary
@@ -127,6 +129,8 @@ auxiliary:
   vision:
     provider: litellm
     model: primary
+    extra_body:
+      reasoning_effort: none
   compression:
     provider: litellm
     model: secondary
@@ -172,3 +176,14 @@ telemetry:
     enabled: false
     send: false
     offer_version: 2
+
+mcp_servers:
+  excalidraw:
+    enabled: "${env:EXCALIDRAW_ENABLED}"
+    command: /usr/local/bin/mcp-excalidraw-server
+    env:
+      EXPRESS_SERVER_URL: http://excalidraw:3000
+      EXCALIDRAW_NO_AUTOSTART: "1"
+      EXCALIDRAW_EXPORT_DIR: /opt/data/plans
+    lazy: true
+    idle_timeout_seconds: 900

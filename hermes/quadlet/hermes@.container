@@ -10,7 +10,7 @@ WantedBy=homelab.target
 
 [Container]
 ContainerName=hermes-%i
-Image=localhost/hermes-agent:20261022
+Image=localhost/hermes-agent:20261113
 Pull=never
 Exec=gateway run
 # root -> hermes
@@ -36,5 +36,7 @@ EnvironmentFile=/home/mithras/homelab/hermes/quadlet/hermes.env
 EnvironmentFile=/home/mithras/homelab/systemd/homelab/profiles/%i/hermes.env
 
 Network=homelab.network
+Network=edge.network
 Network=sandbox@.network
 Network=browser@.network
+Network=excalidraw@.network

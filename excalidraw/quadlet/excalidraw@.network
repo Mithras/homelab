@@ -1,0 +1,8 @@
+[Unit]
+Description=Hermes Excalidraw (%i)
+
+[Install]
+WantedBy=default.target
+
+[Network]
+NetworkName=excalidraw-%i

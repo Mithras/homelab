@@ -18,7 +18,6 @@ UserNS=keep-id:uid=10000,gid=10000
 NoNewPrivileges=true
 PidsLimit=512
 ShmSize=1g
-NetworkAlias=browser
 Memory=8g
 PodmanArgs=--memory-swap=10g
 
@@ -40,7 +39,8 @@ Environment=SELKIES_MANUAL_HEIGHT=1080
 
 EnvironmentFile=/home/mithras/homelab/systemd/homelab/profiles/%i/browser.env
 
-Network=browser@.network
+Network=edge.network
+Network=browser@.network:alias=browser
 
 HealthCmd=curl -fsS -m 2 http://127.0.0.1:9222/json/version
 HealthInterval=30s

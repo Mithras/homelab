@@ -21,3 +21,5 @@ PidsLimit=512
 PublishPort=9443:9443
 
 Volume=/home/mithras/homelab/xray:/usr/local/etc/xray:ro
+
+Network=pasta
