@@ -2,17 +2,19 @@ FROM docker.io/nousresearch/hermes-agent
 
 # Install openssh-server, socat
 RUN apt-get update \ 
-    && apt-get install -y --no-install-recommends openssh-server socat
+    && apt-get install -y --no-install-recommends \
+    openssh-server socat \
+    libportaudio2 libasound2-plugins alsa-utils pulseaudio-utils
 
 # Install hermes-lcm
 RUN chmod -R u+w /opt/hermes \
     && git clone https://github.com/stephenschoettler/hermes-lcm /opt/hermes/plugins/hermes-lcm \ 
     && chmod -R a-w /opt/hermes
 
-# Install firecrawl-py + optional deps
+# Install firecrawl and voice
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 RUN chmod -R u+w /opt/hermes \
-    && uv sync --directory /opt/hermes --frozen --inexact --extra firecrawl \
+    && uv sync --directory /opt/hermes --frozen --inexact --extra firecrawl --extra audio-io --extra wake-openwakeword \
     && chmod -R a-w /opt/hermes \
     && rm /usr/local/bin/uv
 # /opt/hermes/.venv/bin/python -c 'import firecrawl; print(firecrawl.__version__)'

@@ -106,8 +106,6 @@ onboarding:
     profile_build_offered: true
 compression:
   context_total_ceiling_seconds: 1800
-voice:
-  auto_tts: true
 
 model:
   default: primary
@@ -187,3 +185,6 @@ mcp_servers:
       EXCALIDRAW_EXPORT_DIR: /opt/data/plans
     lazy: true
     idle_timeout_seconds: 900
+wake_word:
+  enabled: "${env:HERMES_WAKE_ENABLED}"
+  start_new_session: false

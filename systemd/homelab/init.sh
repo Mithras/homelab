@@ -7,33 +7,9 @@ APP="homelab"
 APP_DIR="$BASE/systemd/$APP"
 PROFILES_DIR="$APP_DIR/profiles"
 
+source "$BASE/systemd/lib/ssh.sh"
 source "$BASE/systemd/lib/quadlet.sh"
 
-
-ensure_host_keys() {
-    local dir="$1" t
-    mkdir -p "$dir" && chmod 700 "$dir"
-    for t in ed25519 ecdsa rsa; do
-        [ -f "$dir/ssh_host_${t}_key" ] || ssh-keygen -t "$t" -f "$dir/ssh_host_${t}_key" -N '' -q
-    done
-}
-
-ensure_key() {
-    [ -f "$1" ] || ssh-keygen -t "$2" -b "$3" -f "$1" -N '' -q
-    chmod 600 "$1"
-}
-
-ensure_known_hosts() {
-    local out="$1" host="$2" dir="$3" key
-    rm -f "$out" "$out.old"
-    for key in "$dir/"*.pub; do
-        printf '[%s]:2222 ' "$host" >> "$out"
-        cat "$key" >> "$out"
-    done
-    ssh-keygen -H -f "$out" 2>/dev/null
-    rm -f "$out.old"
-    chmod 600 "$out"
-}
 
 HERMES="$BASE/hermes"
 SANDBOX="$BASE/sandbox"

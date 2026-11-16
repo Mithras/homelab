@@ -1,0 +1,24 @@
+[Unit]
+Description=Hermes voice (SSH)
+After=network-online.target
+Wants=network-online.target
+PartOf=homelab.target
+
+[Install]
+WantedBy=homelab.target
+
+[Service]
+Restart=always
+RestartSec=5
+ExecStartPre=/bin/mkdir -p /home/mithras/homelab/hermes-voice/pulse
+ExecStartPre=/bin/rm -f /home/mithras/homelab/hermes-voice/pulse/native
+ExecStart=/usr/bin/ssh \
+    -i /home/mithras/homelab/hermes-voice/.ssh/id_rsa \
+    -o IdentitiesOnly=yes \
+    -o ExitOnForwardFailure=yes \
+    -o ServerAliveInterval=30 \
+    -o ServerAliveCountMax=3 \
+    -o StrictHostKeyChecking=yes \
+    -o UserKnownHostsFile=/home/mithras/homelab/hermes-voice/.ssh/known_hosts \
+    -N -L /home/mithras/homelab/hermes-voice/pulse/native:/run/user/1000/pulse/native \
+    mithras@192.168.2.208

@@ -24,10 +24,10 @@ qd_link_dir() {
         qd_keep "$quadlet"
         ln -sf "$quadlet_path" "$QD_DIR/$quadlet"
     done
-    for target_path in "$source_dir"/*.target; do
-        target="$(basename "$target_path")"
-        qd_keep "$target"
-        ln -sf "$target_path" "$QD_UNIT_DIR/$target"
+    for unit_path in "$source_dir"/*.target "$source_dir"/*.service; do
+        unit="$(basename "$unit_path")"
+        qd_keep "$unit"
+        ln -sf "$unit_path" "$QD_UNIT_DIR/$unit"
     done
 }
 
@@ -68,11 +68,11 @@ qd_sweep() {
             ;;
         esac
     done
-    for target_path in "$QD_UNIT_DIR"/*.target; do
-        target="$(basename "$target_path")"
+    for unit_path in "$QD_UNIT_DIR"/*.target "$QD_UNIT_DIR"/*.service; do
+        unit="$(basename "$unit_path")"
         case "$QD_KEEP" in
-            *" $target "*) ;;
-            *) rm -f "$target_path" ;;
+            *" $unit "*) ;;
+            *) rm -f "$unit_path" ;;
         esac
     done
 }

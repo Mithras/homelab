@@ -10,7 +10,7 @@ WantedBy=homelab.target
 
 [Container]
 ContainerName=hermes-%i
-Image=localhost/hermes-agent:20261113
+Image=localhost/hermes-agent:20261116
 Pull=never
 Exec=gateway run
 # root -> hermes
@@ -30,6 +30,7 @@ Volume=/home/mithras/homelab/hermes/.ssh/%i/id_rsa.pub:/etc/ssh/authorized_keys:
 # Gateway
 Volume=/home/mithras/homelab/hermes/%i:/opt/data
 Volume=/home/mithras/homelab/hermes/config.yaml:/opt/data/config.yaml
+Volume=/home/mithras/homelab/hermes/asound.conf:/etc/asound.conf:ro
 
 Environment=TZ=America/Los_Angeles
 EnvironmentFile=/home/mithras/homelab/hermes/quadlet/hermes.env

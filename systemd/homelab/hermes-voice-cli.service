@@ -1,0 +1,18 @@
+[Unit]
+Description=Hermes voice (CLI)
+After=hermes-chat.service hermes-voice-ssh.service
+Wants=hermes-chat.service hermes-voice-ssh.service
+PartOf=homelab.target
+
+[Install]
+WantedBy=homelab.target
+
+[Service]
+Restart=always
+RestartSec=5
+ExecStart=/bin/sh -c \
+    'tmux new-session -d -s hermes-voice -x 200 -y 50 "podman exec -it -e TERM=xterm-256color hermes-chat hermes --cli; tmux wait-for -S hermes-voice-done"; sleep 60; tmux send-keys -t hermes-voice "/voice off" Enter; sleep 2; tmux send-keys -t hermes-voice "/voice on" Enter; sleep 2; tmux send-keys -t hermes-voice "/voice tts" Enter; exec tmux wait-for hermes-voice-done'
+ExecStop=-/usr/bin/tmux kill-session -t hermes-voice
+ExecStop=-/usr/bin/podman exec -u hermes hermes-chat pkill -f 'hermes --cli'
+
+# tmux attach -t hermes-voice

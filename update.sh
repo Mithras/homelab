@@ -9,5 +9,5 @@ podman system prune -af
 # podman system df
 
 
-# sudo loginctl enable-linger mithras
+# sudo loginctl enable-linger
 # loginctl show-user mithras | grep Linger
