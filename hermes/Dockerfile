@@ -1,7 +1,7 @@
 FROM docker.io/nousresearch/hermes-agent
 
 # Install openssh-server, socat
-RUN apt-get update \ 
+RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     openssh-server socat \
     libportaudio2 libasound2-plugins alsa-utils pulseaudio-utils

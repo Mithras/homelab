@@ -1,6 +1,6 @@
 [Unit]
 Description=Homelab
-Wants=firecrawl.target litellm.target
+Wants=firecrawl.target litellm.target hermes-voice-ssh.service hermes-voice-cli.service
 
 [Install]
 WantedBy=default.target

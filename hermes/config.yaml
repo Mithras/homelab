@@ -104,6 +104,7 @@ onboarding:
   seen:
     busy_input_prompt: true
     profile_build_offered: true
+    tool_progress_prompt: true
 compression:
   context_total_ceiling_seconds: 1800
 
@@ -187,4 +188,6 @@ mcp_servers:
     idle_timeout_seconds: 900
 wake_word:
   enabled: "${env:HERMES_WAKE_ENABLED}"
+  sensitivity: 0.5
+  confirmation_frames: 4
   start_new_session: false

@@ -82,7 +82,4 @@ qd_apply() {
     systemctl --user daemon-reload
     systemctl --user enable "$target_unit"
     systemctl --user restart "$target_unit"
-    systemctl --user mask --now podman.socket
-    systemctl --user stop podman.service
-    systemctl --user enable --now podman-auto-update.timer
 }

@@ -41,7 +41,7 @@ for profile_dir in "${PROFILE_DIRS[@]}"; do
 
         # SSH
         ensure_host_keys "$SANDBOX/.ssh/$profile/host_keys"
-        ensure_known_hosts "$SANDBOX/.ssh/$profile/known_hosts" 'sandbox' "$SANDBOX/.ssh/$profile/host_keys"
+        ensure_known_hosts "$SANDBOX/.ssh/$profile/known_hosts" 'sandbox' "$SANDBOX/.ssh/$profile/host_keys" 2222
         ensure_key "$SANDBOX/.ssh/$profile/id_rsa" rsa 4096
     fi
 
