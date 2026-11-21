@@ -4,7 +4,7 @@
 #   - mcp: linkedin
 #   - pdf
 
-_config_version: 53
+_config_version: 54
 
 terminal:
   # ssh -p 2222 -i /opt/data/.ssh/id_rsa -o UserKnownHostsFile=/opt/data/.ssh/known_hosts hermes@sandbox-mithras
@@ -66,7 +66,7 @@ platform_toolsets:
     - tts
     - vision
     - web
-    # - homeassistant
+    - homeassistant
     # - image_gen
     # - kanban
   telegram:
@@ -85,7 +85,7 @@ platform_toolsets:
     - tts
     - vision
     - web
-    # - homeassistant
+    - homeassistant
     # - image_gen
     # - kanban
   cron:
@@ -94,6 +94,13 @@ platform_toolsets:
     - terminal
     - web
     # - kanban
+known_plugin_toolsets:
+  cron:
+    - homeassistant
+  acp:
+    - homeassistant
+  webhook:
+    - homeassistant
 security:
   allow_lazy_installs: false
 approvals:
@@ -149,6 +156,8 @@ tts:
     speed: 1.25
     base_url: http://192.168.1.2:8001/v1
     api_key: none
+  streaming:
+    provider: none  # BUG: streaming doesn't pass `speed` arg
 stt:
   enabled: true
   provider: openai
@@ -191,3 +200,8 @@ wake_word:
   sensitivity: 0.5
   confirmation_frames: 4
   start_new_session: false
+
+_left_core_installed:
+  - homeassistant
+_left_core_scoped:
+  - homeassistant

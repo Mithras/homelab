@@ -23,6 +23,14 @@ RUN chmod -R u+w /opt/hermes \
 RUN npm install -g --prefix /usr/local mcp-excalidraw-server \
     && test -x /usr/local/bin/mcp-excalidraw-server
 
+# Install Home Assistant plugin
+RUN chmod -R u+w /opt/hermes \
+    && git clone https://github.com/NousResearch/hermes-official-plugins /tmp/hermes-official-plugins \
+    && mkdir -p /opt/hermes/plugins/platforms \
+    && cp -a /tmp/hermes-official-plugins/homeassistant /opt/hermes/plugins/platforms/homeassistant \
+    && rm -rf /tmp/hermes-official-plugins \
+    && chmod -R a-w /opt/hermes
+
 # Override sshd config
 RUN { echo 'PubkeyAuthentication yes'; \
       echo 'PasswordAuthentication no'; \
