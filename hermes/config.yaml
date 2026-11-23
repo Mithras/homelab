@@ -151,19 +151,20 @@ web:
 tts:
   provider: openai
   openai:
-    model: speaches-ai/Kokoro-82M-v1.0-ONNX
-    voice: af_heart
-    speed: 1.25
-    base_url: http://192.168.1.2:8001/v1
+    model: supertonic-3
+    base_url: http://192.168.1.2:8080/v1
     api_key: none
-  streaming:
-    provider: none  # BUG: streaming doesn't pass `speed` arg
+    voice: F1
+    speed: 1.25
+    pcm_sample_rate: 44100
+  # streaming:
+  #   provider: none  # BUG: streaming doesn't pass `speed` arg
 stt:
   enabled: true
   provider: openai
   openai:
-    model: istupakov/parakeet-tdt-0.6b-v3-onnx
-    base_url: http://192.168.1.2:8001/v1
+    model: parakeet-cpp-tdt-0.6b-v3
+    base_url: http://192.168.1.2:8080/v1
     api_key: none
 # moa:
 #   default_preset: default
