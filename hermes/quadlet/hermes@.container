@@ -10,7 +10,7 @@ WantedBy=homelab.target
 
 [Container]
 ContainerName=hermes-%i
-Image=localhost/hermes-agent:20261121
+Image=localhost/hermes-agent:20261125
 Pull=never
 Exec=gateway run
 # root -> hermes

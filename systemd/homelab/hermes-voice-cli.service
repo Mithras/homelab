@@ -16,3 +16,4 @@ ExecStop=-/usr/bin/tmux kill-session -t hermes-voice
 ExecStop=-/usr/bin/podman exec -u hermes hermes-chat pkill -f 'hermes --cli'
 
 # tmux attach -t hermes-voice
+# PULSE_SERVER=unix:/home/mithras/homelab/hermes-voice/pulse ...

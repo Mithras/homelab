@@ -14,7 +14,7 @@ RUN chmod -R u+w /opt/hermes \
 # Install firecrawl and voice
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 RUN chmod -R u+w /opt/hermes \
-    && uv sync --directory /opt/hermes --frozen --inexact --extra firecrawl --extra audio-io --extra wake-openwakeword \
+    && uv sync --directory /opt/hermes --frozen --inexact --extra acp --extra firecrawl --extra audio-io --extra wake-openwakeword \
     && chmod -R a-w /opt/hermes \
     && rm /usr/local/bin/uv
 # /opt/hermes/.venv/bin/python -c 'import firecrawl; print(firecrawl.__version__)'
@@ -46,8 +46,10 @@ RUN { echo 'PubkeyAuthentication yes'; \
 # Register s6-overlay services
 COPY s6/sshd /etc/s6-overlay/s6-rc.d/sshd
 COPY s6/socat-cdp /etc/s6-overlay/s6-rc.d/socat-cdp
-RUN touch /etc/s6-overlay/s6-rc.d/sshd /etc/s6-overlay/s6-rc.d/user/contents.d/sshd \
-    /etc/s6-overlay/s6-rc.d/user/contents.d/socat-cdp
+COPY s6/acp-sock /etc/s6-overlay/s6-rc.d/acp-sock
+RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/sshd \
+    /etc/s6-overlay/s6-rc.d/user/contents.d/socat-cdp \
+    /etc/s6-overlay/s6-rc.d/user/contents.d/acp-sock
 
 # Allow hermes pubkey authentication
 RUN usermod -p '*' hermes

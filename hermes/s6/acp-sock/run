@@ -1,0 +1,8 @@
+#!/command/with-contenv sh
+
+rm -f /opt/data/acp.sock
+
+# export PYTHONFAULTHANDLER=1
+
+exec s6-setuidgid hermes socat UNIX-LISTEN:/opt/data/acp.sock,fork,mode=0660 \
+  EXEC:'/opt/hermes/.venv/bin/hermes acp',pipes 2>/opt/data/acp-trace.log
