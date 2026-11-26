@@ -31,6 +31,8 @@ Volume=/home/mithras/homelab/hermes/.ssh/%i/id_rsa.pub:/etc/ssh/authorized_keys:
 Volume=/home/mithras/homelab/hermes/%i:/opt/data
 Volume=/home/mithras/homelab/hermes/config.yaml:/opt/data/config.yaml
 Volume=/home/mithras/homelab/hermes/asound.conf:/etc/asound.conf:ro
+Volume=/home/mithras/.tmux.conf:/opt/data/.tmux.conf
+Volume=/home/mithras/homelab/hermes/hermes-ssh.sh:/usr/local/bin/hermes-ssh
 
 Environment=TZ=America/Los_Angeles
 EnvironmentFile=/home/mithras/homelab/hermes/quadlet/hermes.env

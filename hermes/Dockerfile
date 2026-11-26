@@ -53,7 +53,3 @@ RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/sshd \
 
 # Allow hermes pubkey authentication
 RUN usermod -p '*' hermes
-
-# Setup hermes-ssh
-COPY hermes-ssh.sh /usr/local/bin/hermes-ssh
-RUN chmod +x /usr/local/bin/hermes-ssh

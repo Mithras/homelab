@@ -4,6 +4,7 @@ PartOf=homelab.target
 
 [Service]
 Restart=always
+ExecStartPre=/usr/bin/rm -rf /home/mithras/homelab/excalidraw/data/%i/canvas-state.lock
 
 [Install]
 WantedBy=homelab.target
@@ -12,9 +13,9 @@ WantedBy=homelab.target
 ContainerName=excalidraw-%i
 Image=ghcr.io/yctimlin/mcp_excalidraw-canvas
 AutoUpdate=registry
-# <none>
+# nodejs
 User=1001
-UserNS=keep-id:uid=10000,gid=10000
+UserNS=keep-id:uid=1001,gid=1001
 NoNewPrivileges=true
 PidsLimit=512
 Memory=4g
